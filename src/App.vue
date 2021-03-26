@@ -32,7 +32,8 @@ export default class App extends Vue {
 
   &::after {
     content: "";
-    background-image: url("~@/assets/images/bricks-bg.jpeg");
+    background: url("~@/assets/images/bricks-bg.jpeg");
+    background-size: cover;
     opacity: 0.65;
     top: 0;
     left: 0;

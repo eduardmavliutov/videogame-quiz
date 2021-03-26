@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import Home from '@/views/Home.vue'
 import Quiz from '@/components/Quiz/Quiz.vue'
+import QuizActiveQuestion from '@/components/Quiz/QuizActiveQuestion.vue'
 
 Vue.use(VueRouter)
 
@@ -13,7 +14,14 @@ const routes: Array<RouteConfig> = [
   },
   {
     path: '/quiz/:quizId',
-    component: Quiz
+    component: Quiz,
+    children: [
+      {
+        path: ':questionId',
+        props: true,
+        component: QuizActiveQuestion
+      }
+    ]
   }
 ]
 

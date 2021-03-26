@@ -16,7 +16,6 @@ export const state: QuizState = {
       },
       questions: [
         {
-          id: 'sasa22',
           done: false,
           rightAnswer: 'god of war',
           image: {
@@ -25,7 +24,6 @@ export const state: QuizState = {
           }
         },
         {
-          id: 'sasggga22',
           done: false,
           rightAnswer: 'uncharted 4',
           image: {
@@ -34,7 +32,6 @@ export const state: QuizState = {
           }
         },
         {
-          id: 'sasadsd22',
           done: false,
           rightAnswer: 'god of war',
           image: {

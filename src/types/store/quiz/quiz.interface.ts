@@ -1,7 +1,6 @@
 import { ImageProps } from '@/types/image'
 
 export interface QuizQuestion {
-  id: string;
   image: ImageProps;
   done: boolean;
   rightAnswer: string;

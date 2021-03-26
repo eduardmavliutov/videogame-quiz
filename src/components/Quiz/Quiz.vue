@@ -3,14 +3,16 @@
     <h1 class="quiz__title">{{ computedQuiz.title }}</h1>
     <v-grid>
       <quiz-question
-        v-for="question in computedQuiz.questions"
-        :key="question.id"
-        :id="question.id"
+        v-for="(question, index) in computedQuiz.questions"
+        :key="index"
+        :id="index"
         :image="question.image"
+        :quizId="$route.params.quizId"
         class="v-grid-item"
-        @click.native="quizQuestionClickHandler()"
+        @click.native="quizQuestionClickHandler(index)"
       ></quiz-question>
     </v-grid>
+    <router-view></router-view>
   </div>
 </template>
 <script lang="ts">
@@ -37,16 +39,15 @@ export default class Quiz extends Vue {
     return this.quiz(`${this.$route.params.quizId}`)
   }
 
-  quizQuestionClickHandler () {
-    this.SHOW_POPUP()
-    this.SET_POPUP_COMPONENT_NAME({
-      activeComponent: 'PopupQuizQuestion'
-    })
+  quizQuestionClickHandler (questionId: number) {
+    const quizId = this.$route.params.quizId
+    this.$router.push(`/quiz/${quizId}/${questionId}`)
   }
 }
 </script>
 <style lang="scss">
 .quiz {
+  position: relative;
   &__title {
     text-align: center;
     color: $color-complementary--dark;
