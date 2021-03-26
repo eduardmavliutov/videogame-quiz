@@ -1,32 +1,45 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+  <div id="app" class="app">
+    <the-header />
+    <router-view />
+    <popup-controller />
   </div>
 </template>
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator'
+import TheHeader from '@/components/TheHeader/TheHeader.vue'
+import PopupController from '@/components/PopupController/PopupController.vue'
+
+@Component({
+  components: {
+    TheHeader,
+    PopupController
+  }
+})
+export default class App extends Vue {
+}
+</script>
 
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+.app {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+  display: flex;
+  flex-flow: column nowrap;
+  height: 100%;
 
-#nav {
-  padding: 30px;
+  backdrop-filter: blur(10px);
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
+  &::after {
+    content: "";
+    background-image: url("~@/assets/images/bricks-bg.jpeg");
+    opacity: 0.65;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    position: absolute;
+    z-index: -1;
   }
 }
 </style>
