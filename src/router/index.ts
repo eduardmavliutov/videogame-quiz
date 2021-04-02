@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import Home from '@/views/Home.vue'
 import Quiz from '@/components/Quiz/Quiz.vue'
-import QuizActiveQuestion from '@/components/Quiz/QuizActiveQuestion.vue'
+import ActiveQuestion from '@/components/ActiveQuestion/ActiveQuestion.vue'
 
 Vue.use(VueRouter)
 
@@ -19,7 +19,7 @@ const routes: Array<RouteConfig> = [
       {
         path: ':questionId',
         props: true,
-        component: QuizActiveQuestion
+        component: ActiveQuestion
       }
     ]
   }

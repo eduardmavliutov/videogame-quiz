@@ -6,7 +6,7 @@
         v-for="(question, index) in computedQuiz.questions"
         :key="index"
         :id="index"
-        :image="question.image"
+        :image="question.imagePreview"
         :quizId="$route.params.quizId"
         class="v-grid-item"
         @click.native="quizQuestionClickHandler(index)"

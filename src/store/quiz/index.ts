@@ -21,7 +21,36 @@ export const state: QuizState = {
           image: {
             src: require('@/assets/images/quizes/ps4-exclusives/god-of-war.jpeg'),
             alt: 'quiz-picture-alt'
-          }
+          },
+          imagePreview: {
+            src: require('@/assets/images/quizes/ps4-exclusives/god-of-war-thumb.jpeg'),
+            alt: 'quiz-picture-alt'
+          },
+          letterPool: [
+            { value: 'f' },
+            { value: 'g' },
+            { value: 'o' },
+            { value: 'a' },
+            { value: 'w' },
+            { value: 'r' },
+            { value: 'f' },
+            { value: '3' },
+            { value: '6' },
+            { value: 'j' },
+            { value: 'l' }
+          ],
+          openedLetters: [
+            { value: '' },
+            { value: '' },
+            { value: '' },
+            { value: ' ' },
+            { value: '' },
+            { value: '' },
+            { value: ' ' },
+            { value: '' },
+            { value: '' },
+            { value: '' }
+          ]
         },
         {
           done: false,
@@ -29,15 +58,76 @@ export const state: QuizState = {
           image: {
             src: require('@/assets/images/quizes/ps4-exclusives/uncharted-4.jpeg'),
             alt: 'quiz-picture-alt'
-          }
+          },
+          imagePreview: {
+            src: require('@/assets/images/quizes/ps4-exclusives/uncharted-4-thumb.jpeg'),
+            alt: 'quiz-picture-alt'
+          },
+          letterPool: [
+            { value: 'c' },
+            { value: 'h' },
+            { value: 'u' },
+            { value: 'a' },
+            { value: 'n' },
+            { value: '4' },
+            { value: 'y' },
+            { value: 'n' },
+            { value: '4' },
+            { value: 'y' },
+            { value: '3' }
+          ],
+          openedLetters: [
+            { value: '' },
+            { value: '' },
+            { value: '' },
+            { value: '' },
+            { value: '' },
+            { value: '' },
+            { value: '' },
+            { value: '' },
+            { value: '' },
+            { value: ' ' },
+            { value: '' }
+          ]
         },
         {
           done: false,
-          rightAnswer: 'god of war',
+          rightAnswer: 'persona 5',
           image: {
             src: require('@/assets/images/quizes/ps4-exclusives/persona-5.jpeg'),
             alt: 'quiz-picture-alt'
-          }
+          },
+          imagePreview: {
+            src: require('@/assets/images/quizes/ps4-exclusives/persona-5-thumb.jpeg'),
+            alt: 'quiz-picture-alt'
+          },
+          letterPool: [
+            { value: 'e' },
+            { value: 'p' },
+            { value: 'r' },
+            { value: 'o' },
+            { value: 's' },
+            { value: 'n' },
+            { value: '5' },
+            { value: '3' },
+            { value: 'a' },
+            { value: 'a' },
+            { value: 's' },
+            { value: 'a' },
+            { value: 'w' },
+            { value: 'm' }
+          ],
+          openedLetters: [
+            { value: '' },
+            { value: '' },
+            { value: '' },
+            { value: '' },
+            { value: '' },
+            { value: '' },
+            { value: '' },
+            { value: ' ' },
+            { value: '' }
+          ]
         }
       ],
       done: false

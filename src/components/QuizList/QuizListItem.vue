@@ -31,7 +31,6 @@ export default class QuizListItem extends Vue {
   display: flex;
   flex-flow: column nowrap;
   justify-content: space-between;
-  // border: 2px solid $color-analogous-two;
   border-radius: 10px;
   width: 15rem;
   overflow: hidden;
