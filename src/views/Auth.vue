@@ -1,30 +1,29 @@
 <template>
   <v-page name="auth">
     <v-title :title="computedTitle" />
-    <validation-observer
-      class="auth-form-container"
-      v-slot="{ handleSubmit }"
-    >
-      <form
-        class="auth-form"
-        @submit.prevent="handleSubmit(submitHandler)"
-      >
-        <v-input
-          v-for="input in form"
-          :key="`${input.name}-${input.rules}`"
-          :rules="input.rules"
-          :name="input.name"
-          :type="input.type"
-          :model.sync="form[input.type].value"
-        />
-        <div class="auth-form-buttons">
-          <button
-            class="auth-form-submit"
-            type="submit"
-          >{{ buttonText }}</button>
-        </div>
-      </form>
-    </validation-observer>
+    <v-card name="auth">
+      <validation-observer v-slot="{ handleSubmit }">
+        <form
+          class="auth-form"
+          @submit.prevent="handleSubmit(submitHandler)"
+        >
+          <v-input
+            v-for="input in form"
+            :key="`${input.name}-${input.rules}`"
+            :rules="input.rules"
+            :name="input.name"
+            :type="input.type"
+            :model.sync="form[input.type].value"
+          />
+          <div class="auth-form-buttons">
+            <button
+              class="auth-form-submit"
+              type="submit"
+            >{{ buttonText }}</button>
+          </div>
+        </form>
+      </validation-observer>
+    </v-card>
   </v-page>
 </template>
 <script lang="ts">
@@ -32,6 +31,7 @@ import { Vue, Prop, Component } from 'vue-property-decorator'
 import VPage from '@/components/VPage/VPage.vue'
 import VTitle from '@/components/VTitle/VTitle.vue'
 import VInput from '@/components/VInput/VInput.vue'
+import VCard from '@/components/VCard/VCard.vue'
 import { extend, ValidationObserver } from 'vee-validate'
 import { required, email, min } from 'vee-validate/dist/rules'
 import { PASSWORD_MIN_LENGTH } from '@/helpers/constants'
@@ -65,6 +65,7 @@ extend('password', {
     VPage,
     VTitle,
     VInput,
+    VCard,
     ValidationObserver
   }
 })
@@ -108,30 +109,6 @@ export default class Auth extends Vue {
   display: flex;
   justify-content: center;
   flex-flow: column nowrap;
-
-  &-container {
-    width: 60%;
-    padding: 1rem;
-    background-color: $main-color;
-    box-shadow: $box-shadow--dark;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    backdrop-filter: blur(2px);
-    flex-flow: column nowrap;
-    &::after {
-      content: "";
-      background: url("~@/assets/images/questions.png");
-      background-size: 10%;
-      opacity: 0.05;
-      top: 0;
-      left: 0;
-      bottom: 0;
-      right: 0;
-      position: absolute;
-      z-index: -1;
-    }
-  }
 
   &-buttons {
     display: flex;

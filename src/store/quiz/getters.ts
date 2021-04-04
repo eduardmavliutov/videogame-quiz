@@ -21,6 +21,6 @@ export const getters: GetterTree<QuizState, RootState> = {
     throw new Error(`No quiz with ${quizId} was found!`)
   },
 
-  quizQuestion: (state, getters) => (quizId: string, questionId: number): QuizQuestion =>
+  quizQuestion: (_, getters) => (quizId: string, questionId: number): QuizQuestion =>
     getters.quiz(quizId).questions[questionId]
 }

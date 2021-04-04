@@ -15,14 +15,12 @@ const routes: Array<RouteConfig> = [
   },
   {
     path: '/quiz/:quizId',
-    component: Quiz,
-    children: [
-      {
-        path: ':questionId',
-        props: true,
-        component: ActiveQuestion
-      }
-    ]
+    component: Quiz
+  },
+  {
+    path: '/quiz/:quizId/:questionId',
+    props: true,
+    component: ActiveQuestion
   },
   {
     path: '/auth/:mode',
