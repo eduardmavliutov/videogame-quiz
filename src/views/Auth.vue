@@ -110,19 +110,19 @@ export default class Auth extends Vue {
   flex-flow: column nowrap;
 
   &-container {
-    margin: 0rem 3rem;
+    width: 60%;
     padding: 1rem;
     background-color: $main-color;
-    backdrop-filter: blur(2px);
     box-shadow: $box-shadow--dark;
     position: relative;
     display: flex;
     justify-content: center;
+    backdrop-filter: blur(2px);
     flex-flow: column nowrap;
     &::after {
       content: "";
       background: url("~@/assets/images/questions.png");
-      background-size: 5%;
+      background-size: 10%;
       opacity: 0.05;
       top: 0;
       left: 0;
