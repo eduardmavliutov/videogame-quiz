@@ -16,5 +16,7 @@ export default class VTitle extends Vue {
   background: url("~@/assets/images/white-brush-stroke.png") 50% 50%;
   background-size: 90%;
   font-size: 2rem;
+  margin: 2rem 0rem;
+  align-self: stretch;
 }
 </style>
