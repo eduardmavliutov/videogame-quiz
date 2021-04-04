@@ -3,11 +3,13 @@ $main-color: #bf360c;
 $color-analogous-one: #00d5ff8c;
 $color-analogous-two: #005872;
 $color-complementary--dark: #4C1200;
+$color-complementary--light: #e6dab9;
 
 $color-white: #ffffff;
 $color-lightgrey: lightgrey;
 $color-dark: #000000c2;
 $color-black: #000000;
+$color-red: red;
 
 $transparent-background-color: rgba(0, 0, 0, 0.589);
 
@@ -19,6 +21,6 @@ $font-color--main: #2c3e50;
 // Box shadows
 $box-shadow--default: 0 0 5px 5px $color-lightgrey;
 $box-shadow--dark: 0 0 5px 5px $color-dark;
-$box-shadow--quiz-list-item: 0 0 5px 5px $color-white;
+$box-shadow--white: 0 0 5px 5px $color-white;
 
 $font-family: Roboto, Georgia, serif, Arial;

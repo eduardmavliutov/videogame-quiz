@@ -7,17 +7,17 @@
           src="@/assets/images/gpad.png"
         >
       </router-link>
-      <h1 class="header__logo-title">Videogame Quiz!</h1>
+      <h2 class="header__logo-title">Videogame Quiz!</h2>
     </div>
     <div class="header__auth">
       <router-link
         class="header__auth-button"
-        to="/"
+        to="/auth/login"
       >Login</router-link>
       <router-link
         class="header__auth-button"
-        to="/"
-      >Sign in</router-link>
+        to="/auth/sign-up"
+      >Sign up</router-link>
     </div>
   </header>
 </template>

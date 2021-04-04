@@ -10,11 +10,11 @@ import { Component, Vue } from 'vue-property-decorator'
 import { namespace } from 'vuex-class'
 
 const popupModule = namespace('popup')
-const PopupQuizQuestion = () => import('./PopupQuizQuestion.vue')
+const PopupAuth = () => import('./PopupAuth.vue')
 
 @Component({
   components: {
-    PopupQuizQuestion
+    PopupAuth
   }
 })
 export default class PopupController extends Vue {

@@ -1,6 +1,6 @@
 <template>
   <div class="quiz">
-    <h1 class="quiz__title">{{ computedQuiz.title }}</h1>
+    <v-title :title="computedQuiz.title" />
     <v-grid>
       <quiz-question
         v-for="(question, index) in computedQuiz.questions"
@@ -20,6 +20,7 @@ import { Component, Vue } from 'vue-property-decorator'
 import { namespace } from 'vuex-class'
 import QuizQuestion from '@/components/Quiz/QuizQuestion.vue'
 import VGrid from '@/components/VGrid/VGrid.vue'
+import VTitle from '@/components/VTitle/VTitle.vue'
 
 const quizModule = namespace('quiz')
 const popupModule = namespace('popup')
@@ -27,7 +28,8 @@ const popupModule = namespace('popup')
 @Component({
   components: {
     QuizQuestion,
-    VGrid
+    VGrid,
+    VTitle
   }
 })
 export default class Quiz extends Vue {
@@ -48,11 +50,5 @@ export default class Quiz extends Vue {
 <style lang="scss">
 .quiz {
   position: relative;
-  &__title {
-    text-align: center;
-    color: $color-complementary--dark;
-    background: url("~@/assets/images/white-brush-stroke.png") 50% 50%;
-    background-size: 90%;
-  }
 }
 </style>

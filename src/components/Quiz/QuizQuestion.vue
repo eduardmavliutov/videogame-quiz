@@ -34,7 +34,7 @@ export default class QuizQuestion extends Vue {
   text-decoration: none;
 
   &:hover {
-    box-shadow: $box-shadow--quiz-list-item;
+    box-shadow: $box-shadow--white;
   }
 
   &__image {

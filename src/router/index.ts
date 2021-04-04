@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import Home from '@/views/Home.vue'
 import Quiz from '@/components/Quiz/Quiz.vue'
+import Auth from '@/views/Auth.vue'
 import ActiveQuestion from '@/components/ActiveQuestion/ActiveQuestion.vue'
 
 Vue.use(VueRouter)
@@ -22,6 +23,11 @@ const routes: Array<RouteConfig> = [
         component: ActiveQuestion
       }
     ]
+  },
+  {
+    path: '/auth/:mode',
+    props: true,
+    component: Auth
   }
 ]
 
