@@ -29,6 +29,10 @@ export default class VPage extends Vue {
     display: flex;
     flex-flow: column nowrap;
     align-items: center;
+
+    @include mobile {
+      padding: 0 16px;
+    }
   }
 }
 </style>

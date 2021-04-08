@@ -1,10 +1,10 @@
 <template>
   <div :class="`v-card v-card--${name}`">
     <slot
-      class="v-card-image"
+      class="v-card--image"
       name="image"
     ></slot>
-    <div class="v-card-content">
+    <div class="v-card--content">
       <slot></slot>
     </div>
   </div>
@@ -24,7 +24,16 @@ export default class VCard extends Vue {
   flex-flow: row nowrap;
   box-shadow: $box-shadow--dark;
 
-  &-content {
+  @include mobile {
+    flex-flow: column nowrap;
+  }
+
+  &--image {
+    // max-width: 30vw;
+    // max-height: 30vw;
+  }
+
+  &--content {
     padding: 1rem;
     background-color: $main-color;
     position: relative;
@@ -49,10 +58,20 @@ export default class VCard extends Vue {
 
   &--quiz-active-question {
     width: 80%;
+
+    @include mobile {
+      flex-grow: 1;
+      width: 100%;
+      height: 50%;
+    }
   }
 
   &--auth {
     width: 60%;
+
+    @include mobile {
+      width: 100%;
+    }
   }
 }
 </style>

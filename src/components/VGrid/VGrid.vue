@@ -1,21 +1,28 @@
 <template>
-  <transition name="grid">
-    <div class="v-grid">
-      <slot></slot>
-    </div>
-  </transition>
+  <div :class="`v-grid v-grid--${name}`">
+    <slot></slot>
+  </div>
 </template>
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue, Prop } from 'vue-property-decorator'
 
 @Component({})
-export default class VGrid extends Vue { }
+export default class VGrid extends Vue {
+  @Prop({ required: false, type: String }) name!: string
+}
 </script>
 <style lang="scss">
 .v-grid {
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
+  width: 100%;
+
+  @include mobile {
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: space-around;
+  }
 
   &-item {
     margin-bottom: 1rem;
@@ -23,6 +30,20 @@ export default class VGrid extends Vue { }
 
   &-item:not(:last-child) {
     margin-right: 1rem;
+
+    @include mobile {
+      margin-right: 0;
+    }
+  }
+}
+
+.v-grid.v-grid--quiz {
+  @include mobile {
+    flex-flow: row wrap;
+  }
+
+  .v-grid-item:not(:last-child) {
+    // margin-right: 1rem;
   }
 }
 

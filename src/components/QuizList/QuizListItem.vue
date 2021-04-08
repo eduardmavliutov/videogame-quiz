@@ -36,8 +36,20 @@ export default class QuizListItem extends Vue {
   overflow: hidden;
   text-decoration: none;
 
+  @include mobile {
+    flex-flow: row-reverse nowrap;
+    height: 5rem;
+    width: 100%;
+  }
+
   &:hover {
     box-shadow: $box-shadow--white;
+  }
+
+  &__inner {
+    @include mobile {
+      width: 5rem;
+    }
   }
 
   &__title {
@@ -46,6 +58,14 @@ export default class QuizListItem extends Vue {
     background-color: $color-analogous-two;
     color: $color-white;
     line-height: 2.5rem;
+    display: flex;
+    justify-content: center;
+    flex-flow: column nowrap;
+
+    @include mobile {
+      flex-grow: 2;
+      font-size: 24px;
+    }
   }
 
   &__image {

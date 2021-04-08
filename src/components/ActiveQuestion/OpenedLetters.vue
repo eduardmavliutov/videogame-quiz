@@ -26,10 +26,14 @@ export default class OpenedLetters extends Vue {
 .opened-letters {
   display: flex;
   justify-content: center;
+  flex-flow: row wrap;
   padding: 1.5rem 0 1rem;
 
   .quiz-letter:not(:last-child) {
     margin-right: 1px;
+  }
+  .quiz-letter {
+    margin-bottom: 1px;
   }
 }
 </style>

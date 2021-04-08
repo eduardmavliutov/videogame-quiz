@@ -1,6 +1,6 @@
 <template>
   <v-page name="auth">
-    <v-title :title="computedTitle" />
+    <v-title title="Authentication" />
     <v-card name="auth">
       <validation-observer v-slot="{ handleSubmit }">
         <form
@@ -19,7 +19,11 @@
             <button
               class="auth-form-submit"
               type="submit"
-            >{{ buttonText }}</button>
+            >Login</button>
+            <button
+              class="auth-form-submit"
+              type="submit"
+            >Sign up</button>
           </div>
         </form>
       </validation-observer>
@@ -27,7 +31,7 @@
   </v-page>
 </template>
 <script lang="ts">
-import { Vue, Prop, Component } from 'vue-property-decorator'
+import { Vue, Component } from 'vue-property-decorator'
 import VPage from '@/components/VPage/VPage.vue'
 import VTitle from '@/components/VTitle/VTitle.vue'
 import VInput from '@/components/VInput/VInput.vue'
@@ -70,8 +74,6 @@ extend('password', {
   }
 })
 export default class Auth extends Vue {
-  @Prop({ required: true, type: String }) mode!: string
-
   private form: AuthForm = {
     email: {
       value: '',
@@ -87,18 +89,6 @@ export default class Auth extends Vue {
     }
   }
 
-  get computedTitle (): string {
-    return this.mode === 'login'
-      ? 'Login'
-      : 'Sing up'
-  }
-
-  get buttonText () {
-    return this.mode === 'login'
-      ? 'Login'
-      : 'Sign up'
-  }
-
   submitHandler () {
     console.log('submitted!')
   }
@@ -109,6 +99,7 @@ export default class Auth extends Vue {
   display: flex;
   justify-content: center;
   flex-flow: column nowrap;
+  margin-bottom: 1rem;
 
   &-buttons {
     display: flex;
@@ -121,6 +112,10 @@ export default class Auth extends Vue {
     padding: 0.5rem 2rem;
     font-weight: bold;
     font-size: 1rem;
+  }
+
+  &-submit:not(:last-child) {
+    margin-right: 1rem;
   }
 }
 </style>

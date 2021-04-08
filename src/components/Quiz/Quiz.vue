@@ -1,7 +1,7 @@
 <template>
-  <div class="quiz">
+  <v-page name="quiz">
     <v-title :title="computedQuiz.title" />
-    <v-grid>
+    <v-grid name="quiz">
       <quiz-question
         v-for="(question, index) in computedQuiz.questions"
         :key="index"
@@ -13,13 +13,14 @@
       ></quiz-question>
     </v-grid>
     <router-view></router-view>
-  </div>
+  </v-page>
 </template>
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import { namespace } from 'vuex-class'
 import QuizQuestion from '@/components/Quiz/QuizQuestion.vue'
 import VGrid from '@/components/VGrid/VGrid.vue'
+import VPage from '@/components/VPage/VPage.vue'
 import VTitle from '@/components/VTitle/VTitle.vue'
 
 const quizModule = namespace('quiz')
@@ -29,7 +30,8 @@ const popupModule = namespace('popup')
   components: {
     QuizQuestion,
     VGrid,
-    VTitle
+    VTitle,
+    VPage
   }
 })
 export default class Quiz extends Vue {
@@ -47,8 +49,3 @@ export default class Quiz extends Vue {
   }
 }
 </script>
-<style lang="scss">
-.quiz {
-  position: relative;
-}
-</style>

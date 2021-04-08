@@ -23,8 +23,7 @@ const routes: Array<RouteConfig> = [
     component: ActiveQuestion
   },
   {
-    path: '/auth/:mode',
-    props: true,
+    path: '/auth/',
     component: Auth
   }
 ]

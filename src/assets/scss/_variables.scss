@@ -24,3 +24,5 @@ $box-shadow--dark: 0 0 5px 5px $color-dark;
 $box-shadow--white: 0 0 5px 5px $color-white;
 
 $font-family: Roboto, Georgia, serif, Arial;
+
+@import "~bulma/sass/utilities/_all";

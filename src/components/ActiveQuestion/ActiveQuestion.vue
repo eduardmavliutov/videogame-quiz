@@ -1,15 +1,15 @@
 <template>
   <v-page name="quiz-active-question">
-    <!-- <v-back-drop @click.native="$router.back()" /> -->
     <v-title :title="`${quizTitle} / #${quizQuestionIdForTitle}`" />
-    <!-- <div class="quiz-active-question__inner"> -->
     <v-card name="quiz-active-question">
       <template #image>
-        <img
-          :src="image.src"
-          :alt="image.alt"
-          class="quiz-active-question__image"
-        >
+        <div class="quiz-active-question__image-wrapper">
+          <img
+            :src="image.src"
+            :alt="image.alt"
+            class="quiz-active-question__image"
+          >
+        </div>
       </template>
       <div class="quiz-active-question__bottom">
         <opened-letters
@@ -84,35 +84,9 @@ export default class ActiveQuestion extends Vue {
 </script>
 <style lang="scss">
 .quiz-active-question {
-
-  &__inner {
+  &__image-wrapper {
     display: flex;
-    background-color: $color-complementary--light;
-    border-radius: 10px;
-    overflow: hidden;
-
-    background-color: $main-color;
-    box-shadow: $box-shadow--dark;
-    position: relative;
-    backdrop-filter: blur(2px);
-    &::after {
-      content: "";
-      background: url("~@/assets/images/questions.png");
-      background-size: 10%;
-      opacity: 0.05;
-      top: 0;
-      left: 0;
-      bottom: 0;
-      right: 0;
-      position: absolute;
-      z-index: -1;
-    }
-  }
-
-  &__image {
-    max-width: 30vw;
-    height: 30vw;
-    flex-grow: 1;
+    justify-content: center;
   }
 }
 </style>

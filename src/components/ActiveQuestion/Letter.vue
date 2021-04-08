@@ -21,8 +21,8 @@ export default class QuizQuestionLetter extends Vue {
 </script>
 <style lang="scss">
 .quiz-letter {
-  width: 1rem;
-  height: 1rem;
+  width: 2rem;
+  height: 2rem;
   background-color: $color-black;
   color: $color-white;
   padding: 0.5rem;

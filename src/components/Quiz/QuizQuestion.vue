@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="quiz-question"
-  >
+  <div class="quiz-question">
     <div class="quiz-question__inner">
       <img
         :src="image.src"
@@ -26,15 +24,22 @@ export default class QuizQuestion extends Vue {
 .quiz-question {
   display: flex;
   flex-flow: column nowrap;
-  justify-content: space-between;
-  // border: 2px solid $color-analogous-two;
+  justify-content: center;
   border-radius: 10px;
   width: 15rem;
   overflow: hidden;
   text-decoration: none;
 
+  @include mobile {
+    max-width: 10rem;
+  }
+
   &:hover {
     box-shadow: $box-shadow--white;
+  }
+
+  &__inner {
+    display: flex;
   }
 
   &__image {

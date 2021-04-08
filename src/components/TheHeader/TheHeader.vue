@@ -12,12 +12,8 @@
     <div class="header__auth">
       <router-link
         class="header__auth-button"
-        to="/auth/login"
+        to="/auth"
       >Login</router-link>
-      <router-link
-        class="header__auth-button"
-        to="/auth/sign-up"
-      >Sign up</router-link>
     </div>
   </header>
 </template>
@@ -49,6 +45,11 @@ export default class TheHeader extends Vue {
   padding: 0px 1rem;
   position: relative;
   box-shadow: $box-shadow--dark;
+  transition: all 0.4s ease-in;
+
+  @include mobile {
+    padding: 0 8px;
+  }
 
   &::after {
     content: "";
@@ -68,6 +69,11 @@ export default class TheHeader extends Vue {
     justify-content: center;
     align-items: center;
 
+    @include mobile {
+      justify-content: flex-start;
+      flex-grow: 1;
+    }
+
     &-image {
       filter: invert(100%);
       width: 5rem;
@@ -79,6 +85,14 @@ export default class TheHeader extends Vue {
 
     &-title {
       font-size: $font-size-title-desktop;
+      color: $color-white;
+
+      @include mobile {
+        text-align: center;
+        font-size: 1.5rem;
+        line-height: 2rem;
+        flex-grow: 1;
+      }
     }
   }
 
@@ -88,6 +102,10 @@ export default class TheHeader extends Vue {
       padding: 1rem;
       font-weight: bold;
       color: $color-white;
+
+      @include mobile {
+        padding: 0.5rem;
+      }
     }
   }
 }
