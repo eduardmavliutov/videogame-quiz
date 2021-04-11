@@ -26,6 +26,7 @@ export default class VCard extends Vue {
   background-color: $main-color;
   position: relative;
   backdrop-filter: blur(2px);
+  transition: all 0.5s ease-in-out;
 
   &::before {
     content: "";
