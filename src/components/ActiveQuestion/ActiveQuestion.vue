@@ -1,29 +1,30 @@
 <template>
   <v-page name="quiz-active-question">
     <v-title :title="`${quizTitle} / #${quizQuestionIdForTitle}`" />
-    <v-card name="quiz-active-question">
-      <template #image>
-        <div class="quiz-active-question__image-wrapper">
-          <img
-            :src="image.src"
-            :alt="image.alt"
-            class="quiz-active-question__image"
-          >
+    <div class="quiz-active-question__main">
+      <v-card name="quiz-active-question">
+        <template #image>
+          <div class="quiz-active-question__image-wrapper">
+            <img
+              :src="image.src"
+              :alt="image.alt"
+              class="quiz-active-question__image"
+            >
+          </div>
+        </template>
+        <div class="quiz-active-question__bottom">
+          <opened-letters
+            :openedLetters="openedLetters"
+            @remove-letter="REMOVE_LETTER"
+          />
+          <letter-pool
+            :letterPool="letterPool"
+            @add-letter="ADD_LETTER"
+          />
+          <div class="quiz-active-question__opened-letters"></div>
         </div>
-      </template>
-      <div class="quiz-active-question__bottom">
-        <opened-letters
-          :openedLetters="openedLetters"
-          @remove-letter="REMOVE_LETTER"
-        />
-        <letter-pool
-          :letterPool="letterPool"
-          @add-letter="ADD_LETTER"
-        />
-        <div class="quiz-active-question__opened-letters"></div>
-      </div>
-    </v-card>
-
+      </v-card>
+    </div>
   </v-page>
 </template>
 <script lang="ts">
@@ -84,9 +85,27 @@ export default class ActiveQuestion extends Vue {
 </script>
 <style lang="scss">
 .quiz-active-question {
-  &__image-wrapper {
+  &__main {
     display: flex;
-    justify-content: center;
+    align-items: center;
+    flex-flow: column nowrap;
+    flex-grow: 1;
+
+    @include mobile {
+      justify-content: center;
+    }
+  }
+
+  &__image {
+    @media screen and (max-width: 320px) {
+      width: 90%;
+      padding: 1rem 1rem 0rem;
+    }
+
+    &-wrapper {
+      display: flex;
+      justify-content: center;
+    }
   }
 }
 </style>

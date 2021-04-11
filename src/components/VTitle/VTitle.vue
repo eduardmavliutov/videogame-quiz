@@ -14,7 +14,7 @@ export default class VTitle extends Vue {
   text-align: center;
   color: $color-complementary--dark;
   background: url("~@/assets/images/white-brush-stroke.png") 50% 50%;
-  background-size: 90%;
+  background-size: cover;
   font-size: 2rem;
   font-weight: 600;
   margin: 2rem 0rem;
@@ -22,7 +22,10 @@ export default class VTitle extends Vue {
 
   @include mobile {
     margin: 1rem 0rem;
-    background-size: 100%;
+  }
+
+  @media screen and (max-width: 320px) {
+    margin: 0.5rem 0rem;
   }
 }
 </style>

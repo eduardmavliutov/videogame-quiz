@@ -46,7 +46,7 @@ export default class VInput extends Vue {
     display: flex;
     flex-flow: column nowrap;
     justify-content: center;
-    margin: 1rem 1rem;
+    margin-bottom: 1rem;
   }
 
   &__label {
@@ -58,6 +58,8 @@ export default class VInput extends Vue {
     font-size: 1.5rem;
     transition: all 0.3s ease-in;
     margin: 0.5rem 0;
+    padding: 0px;
+    box-sizing: content-box;
 
     &--error {
       border: 2px solid $color-red;

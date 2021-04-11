@@ -35,6 +35,12 @@ export default class QuizQuestionLetter extends Vue {
   font-weight: bold;
   cursor: pointer;
 
+  @include mobile {
+    width: 1.6rem;
+    height: 1.6rem;
+    font-size: 15px;
+  }
+
   &.space {
     background-color: transparent;
   }

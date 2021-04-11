@@ -27,7 +27,7 @@ export default class OpenedLetters extends Vue {
   display: flex;
   justify-content: center;
   flex-flow: row wrap;
-  padding: 1.5rem 0 1rem;
+  padding: 1rem 0 1rem;
 
   .quiz-letter:not(:last-child) {
     margin-right: 1px;

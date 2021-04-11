@@ -23,36 +23,39 @@ export default class VCard extends Vue {
   justify-content: center;
   flex-flow: row nowrap;
   box-shadow: $box-shadow--dark;
+  background-color: $main-color;
+  position: relative;
+  backdrop-filter: blur(2px);
+
+  &::before {
+    content: "";
+    background: url("~@/assets/images/questions.png");
+    background-size: 10%;
+    opacity: 0.05;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    position: absolute;
+    z-index: -1;
+  }
 
   @include mobile {
     flex-flow: column nowrap;
-  }
-
-  &--image {
-    // max-width: 30vw;
-    // max-height: 30vw;
+    justify-content: flex-start;
   }
 
   &--content {
     padding: 1rem;
-    background-color: $main-color;
-    position: relative;
     display: flex;
     justify-content: center;
-    backdrop-filter: blur(2px);
     flex-flow: column nowrap;
     flex-grow: 2;
-    &::after {
-      content: "";
-      background: url("~@/assets/images/questions.png");
-      background-size: 10%;
-      opacity: 0.05;
-      top: 0;
-      left: 0;
-      bottom: 0;
-      right: 0;
-      position: absolute;
-      z-index: -1;
+
+    @include mobile {
+      padding: 0;
+      flex-grow: 0;
+      flex-shrink: 2;
     }
   }
 
@@ -60,9 +63,7 @@ export default class VCard extends Vue {
     width: 80%;
 
     @include mobile {
-      flex-grow: 1;
       width: 100%;
-      height: 50%;
     }
   }
 

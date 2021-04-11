@@ -28,6 +28,7 @@ export default class LetterPool extends Vue {
   justify-content: center;
   padding: 1rem 0;
   flex-flow: row wrap;
+
   .quiz-letter {
     margin-bottom: 1px;
   }

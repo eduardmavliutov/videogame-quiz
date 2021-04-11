@@ -99,7 +99,10 @@ export default class Auth extends Vue {
   display: flex;
   justify-content: center;
   flex-flow: column nowrap;
-  margin-bottom: 1rem;
+
+  @include mobile {
+    padding: 1rem;
+  }
 
   &-buttons {
     display: flex;
