@@ -41,19 +41,21 @@
 </template>
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
+import { extend, ValidationObserver } from 'vee-validate'
+import { required, email, min } from 'vee-validate/dist/rules'
+import { namespace } from 'vuex-class'
 import VPage from '@/components/VPage/VPage.vue'
 import VTitle from '@/components/VTitle/VTitle.vue'
 import VInput from '@/components/VInput/VInput.vue'
 import VCard from '@/components/VCard/VCard.vue'
-import { extend, ValidationObserver } from 'vee-validate'
-import { required, email, min } from 'vee-validate/dist/rules'
 import { PASSWORD_MIN_LENGTH } from '@/helpers/constants'
-import { AuthForm } from '@/types/views/auth.interface'
 import api from '@/helpers/api'
-import { namespace } from 'vuex-class'
+import { AuthForm } from '@/types/views/auth.interface'
 import { SetTokensPayload } from '@/types/store/auth/auth.interface'
+import { SetUserPayload } from '@/types/store/user/user.interface'
 
 const authModule = namespace('auth')
+const userModule = namespace('user')
 
 extend('required', {
   ...required,
@@ -89,11 +91,27 @@ extend('password', {
 })
 export default class Auth extends Vue {
   @authModule.Mutation('SET_TOKENS') SET_TOKENS!: (payload: SetTokensPayload) => void
+  @userModule.Mutation('SET_USER') SET_USER!: (payload: SetUserPayload) => void
 
+  /**
+   * Might be 'login' or 'signUp', defines handler that will be used
+   */
   private submitType = ''
+
+  /**
+   * Info message in the bottom of the auth form
+   */
   private message = ''
+
+  /**
+   * Might be 'info' or 'error', defines styles that will be used
+   * for message
+   */
   private messageStyle = ''
 
+  /**
+   * Represents auth form for a new or an existing user
+   */
   private form: AuthForm = {
     email: {
       value: '',
@@ -115,52 +133,108 @@ export default class Auth extends Vue {
       : this.signUpHandler()
   }
 
-  async signUpHandler () {
+  /**
+   * Signs up a new user, then creates a user directory using received created user id.
+   * Puts received tokens and user info in store
+   */
+  async signUpHandler (): Promise<void> {
     try {
-      await api.post(`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${process.env.VUE_APP_API_KEY}`, {
+      const signUpResponse = await api.post(`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${process.env.VUE_APP_API_KEY}`, {
         email: this.form.email.value,
         password: this.form.password.value,
         returnSecureToken: true
       })
-      this.showMessage('Registration is successful!', 'info')
-      // TODO: Может сразу делать login после регистрации?
-    } catch (e) {
-      this.handleError(e.response.data.error.message)
-    }
-  }
+      const { data: { idToken: accessToken, refreshToken, localId: userId } } = signUpResponse
 
-  async loginHandler () {
-    console.log('login')
-    try {
-      const response = await api.post(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.VUE_APP_API_KEY}`, {
-        email: this.form.email.value,
-        password: this.form.password.value,
-        returnSecureToken: true
-      })
-      const { data: { idToken: accessToken, refreshToken } } = response
       this.SET_TOKENS({
         accessToken,
         refreshToken
       })
-      this.$router.push('/')
+
+      await api.put(`/users/${userId}.json?auth=${accessToken}`, {
+        email: this.form.email.value.toLowerCase(),
+        name: ''
+      })
+
+      this.SET_USER({
+        email: this.form.email.value.toLowerCase(),
+        name: '',
+        points: 0,
+        quizes: []
+      })
+
+      this.showMessage('Registration is successful!', 'info')
+
+      const timeout = setTimeout(() => {
+        this.$router.push('/')
+        clearTimeout(timeout)
+      }, 1000)
     } catch (e) {
       this.handleError(e.response.data.error.message)
     }
   }
 
-  handleError (message: string) {
+  /**
+   * Logins existing user, then fetches their data. Stores authdata and userdata in the store
+   */
+  async loginHandler (): Promise<void> {
+    const authData = {
+      email: this.form.email.value.toLowerCase(),
+      password: this.form.password.value,
+      returnSecureToken: true
+    }
+    try {
+      const loginResponse = await api.post(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.VUE_APP_API_KEY}`, authData)
+
+      const { data: { idToken: accessToken, refreshToken, localId: userId } } = loginResponse
+
+      this.SET_TOKENS({
+        accessToken,
+        refreshToken
+      })
+
+      const userInfoResponse = await api.get(`/users/${userId}.json`)
+
+      const { data: { name, quizes = [], points } } = userInfoResponse
+
+      this.SET_USER({
+        email: authData.email,
+        name,
+        quizes,
+        points
+      })
+      this.showMessage('Authentication is successful!', 'info')
+
+      const timeout = setTimeout(() => {
+        this.$router.push('/')
+        clearTimeout(timeout)
+      }, 1000)
+    } catch (e) {
+      this.handleError(e.response.data.error.message)
+    }
+  }
+
+  /**
+   * Error handler, shows message depending on type of error
+   */
+  handleError (message: string): void {
     const errorMessage = message === 'EMAIL_EXISTS'
       ? this.message = 'User with this email is already exists!'
       : this.message = 'Server error, try later.'
     this.showMessage(errorMessage, 'error')
   }
 
-  showMessage (message: string, style: string) {
+  /**
+   * Set value for message variable and shows it for 2 seconds
+   * @param {string} message - text that is to be shown,
+   * @param {string} style - class that will be applied to the given message (info/error)
+   */
+  showMessage (message: string, style: string): void {
     this.message = message
     this.messageStyle = style
     setTimeout(() => {
       this.message = ''
-    }, 3000)
+    }, 2000)
   }
 }
 </script>

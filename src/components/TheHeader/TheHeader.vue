@@ -11,18 +11,50 @@
     </div>
     <div class="header__auth">
       <router-link
+        v-if="!isAuthenticated"
         class="header__auth-button"
         to="/auth"
-      >Login</router-link>
+      >
+        Login
+      </router-link>
+      <!-- <h2
+        v-else
+        class="header__active-user"
+      >
+        {{ activeUser }}
+      </h2> -->
+      <user-info
+        v-else
+        :userName="activeUser"
+        :points="points"
+        :completed-quizes="completedQuizes"
+      />
     </div>
   </header>
 </template>
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
+import UserInfo from '@/components/TheHeader/UserInfo.vue'
+import { namespace } from 'vuex-class'
 
-@Component({})
+const authModule = namespace('auth')
+const userModule = namespace('user')
+
+@Component({
+  components: {
+    UserInfo
+  }
+})
 export default class TheHeader extends Vue {
+  @authModule.Getter('isAuthenticated') isAuthenticated!: boolean
+  @userModule.State('email') userEmail!: string
+  @userModule.State('name') userName!: string
+  @userModule.State('points') points!: number
+  @userModule.Getter('completedQuizes') completedQuizes!: number
 
+  get activeUser (): string {
+    return this.userName || this.userEmail
+  }
 }
 </script>
 <style lang="scss">
@@ -41,14 +73,13 @@ export default class TheHeader extends Vue {
   flex-flow: row nowrap;
   background: $main-color;
   backdrop-filter: blur(2px);
-  height: 5rem;
-  padding: 0px 1rem;
+  padding: 0.5rem;
   position: relative;
   box-shadow: $box-shadow--dark;
   transition: all 0.4s ease-in;
 
   @include mobile {
-    padding: 0 8px;
+    padding: 8px;
   }
 
   &::after {
@@ -68,9 +99,11 @@ export default class TheHeader extends Vue {
     display: flex;
     justify-content: center;
     align-items: center;
+    padding-right: 16px;
 
     @include mobile {
       justify-content: flex-start;
+      padding-right: 8px;
       flex-grow: 1;
     }
 
@@ -86,12 +119,17 @@ export default class TheHeader extends Vue {
     &-title {
       font-size: $font-size-title-desktop;
       color: $color-white;
+      font-weight: bold;
 
       @include mobile {
         text-align: center;
-        font-size: 1.5rem;
+        font-size: 2rem;
         line-height: 2rem;
         flex-grow: 1;
+      }
+
+      @media screen and (max-width: 320px) {
+        font-size: 1.5rem;
       }
     }
   }
@@ -107,6 +145,17 @@ export default class TheHeader extends Vue {
         padding: 0.5rem;
       }
     }
+  }
+
+  &__active-user {
+    color: $color-analogous-two;
+    font-weight: bold;
+    cursor: pointer;
+    max-width: 8rem;
+    flex-shrink: 2;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 }
 </style>
