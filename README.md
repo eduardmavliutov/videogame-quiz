@@ -1,9 +1,8 @@
-# videogame-quiz
-Videogame Quiz
+# Videogame Quiz
 
 Quiz for videogame lovers (as I am). Optimized for mobile browsers. Currently in development. Release is coming soon!
 
-Stack: Vue, Vuex, Firebase
+**Stack**: Vue, Vuex, TypeScript, Firebase
 
 # serve
 ```
