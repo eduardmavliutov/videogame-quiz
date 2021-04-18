@@ -1,29 +1,20 @@
 # videogame-quiz
+Videogame Quiz
 
-## Project setup
-```
-npm install
-```
+Quiz for videogame lovers (as I am). Optimized for mobile browsers. Currently in development. Release is coming soon!
 
-### Compiles and hot-reloads for development
+Stack: Vue, Vuex, Firebase
+
+# serve
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
+# build
 ```
 npm run build
 ```
-
-### Run your unit tests
+# test
 ```
 npm run test:unit
 ```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
