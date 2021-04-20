@@ -4,7 +4,7 @@
       v-for="(letter, index) in openedLetters"
       :key="index"
       :letter="letter.value"
-      @click.native="$emit('remove-letter', { value: index })"
+      @click.native="$emit('remove-letter', index)"
     />
   </div>
 </template>

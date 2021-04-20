@@ -4,7 +4,7 @@
       v-for="(letter, index) in letterPool"
       :key="index"
       :letter="letter.value"
-      @click.native="$emit('add-letter', { value: index })"
+      @click.native="$emit('add-letter', index)"
     />
   </div>
 </template>

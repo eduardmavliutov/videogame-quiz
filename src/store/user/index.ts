@@ -8,7 +8,7 @@ import { Module } from 'vuex'
 export const state: UserState = {
   email: '',
   name: '',
-  quizes: [],
+  quizes: {},
   points: 0
 }
 

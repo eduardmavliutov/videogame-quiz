@@ -17,17 +17,12 @@
       >
         Login
       </router-link>
-      <!-- <h2
-        v-else
-        class="header__active-user"
-      >
-        {{ activeUser }}
-      </h2> -->
       <user-info
         v-else
         :userName="activeUser"
         :points="points"
         :completed-quizes="completedQuizes"
+        @click.native="logout"
       />
     </div>
   </header>
@@ -47,13 +42,23 @@ const userModule = namespace('user')
 })
 export default class TheHeader extends Vue {
   @authModule.Getter('isAuthenticated') isAuthenticated!: boolean
+  @authModule.Mutation('REMOVE_TOKENS') REMOVE_TOKENS!: () => void
   @userModule.State('email') userEmail!: string
   @userModule.State('name') userName!: string
   @userModule.State('points') points!: number
   @userModule.Getter('completedQuizes') completedQuizes!: number
+  @userModule.Mutation('REMOVE_USER') REMOVE_USER!: () => void
 
   get activeUser (): string {
     return this.userName || this.userEmail
+  }
+
+  logout () {
+    this.REMOVE_TOKENS()
+    this.REMOVE_USER()
+    if (this.$route.path !== '/') {
+      this.$router.push('/')
+    }
   }
 }
 </script>

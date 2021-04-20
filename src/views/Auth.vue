@@ -160,7 +160,7 @@ export default class Auth extends Vue {
         email: this.form.email.value.toLowerCase(),
         name: '',
         points: 0,
-        quizes: []
+        quizes: {}
       })
 
       this.showMessage('Registration is successful!', 'info')
@@ -193,6 +193,7 @@ export default class Auth extends Vue {
         refreshToken
       })
 
+      // TODO: move fetching and setting user`s info to action
       const userInfoResponse = await api.get(`/users/${userId}.json`)
 
       const { data: { name, quizes = [], points } } = userInfoResponse
