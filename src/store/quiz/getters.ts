@@ -5,7 +5,6 @@ import {
   QuizState
 } from '@/types/store/quiz/quiz.interface'
 import { RootState } from '@/types/store/rootState.interface'
-import { quiz } from '.'
 import { ImageProps } from '@/types/image'
 
 export const getters: GetterTree<QuizState, RootState> = {

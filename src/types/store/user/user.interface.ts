@@ -22,7 +22,7 @@ export interface ParticipatedQuestion {
   openedLetters: QuizQuestionLetter[];
 }
 
-export interface CreateParticipatedQuizPaylod {
+export interface CreateParticipatedQuizPayload {
   quiz: Quiz;
   quizId: string;
 }

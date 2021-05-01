@@ -22,7 +22,7 @@
         :userName="activeUser"
         :points="points"
         :completed-quizes="completedQuizes"
-        @click.native="logout"
+        @click.native="logoutHandler"
       />
     </div>
   </header>
@@ -32,7 +32,6 @@ import { Component, Vue } from 'vue-property-decorator'
 import UserInfo from '@/components/TheHeader/UserInfo.vue'
 import { namespace } from 'vuex-class'
 
-const authModule = namespace('auth')
 const userModule = namespace('user')
 
 @Component({
@@ -41,21 +40,19 @@ const userModule = namespace('user')
   }
 })
 export default class TheHeader extends Vue {
-  @authModule.Getter('isAuthenticated') isAuthenticated!: boolean
-  @authModule.Mutation('REMOVE_TOKENS') REMOVE_TOKENS!: () => void
+  @userModule.Getter('isAuthenticated') isAuthenticated!: boolean
   @userModule.State('email') userEmail!: string
   @userModule.State('name') userName!: string
   @userModule.State('points') points!: number
   @userModule.Getter('completedQuizes') completedQuizes!: number
-  @userModule.Mutation('REMOVE_USER') REMOVE_USER!: () => void
+  @userModule.Action('logout') logout!: () => Promise<void>
 
   get activeUser (): string {
     return this.userName || this.userEmail
   }
 
-  logout () {
-    this.REMOVE_TOKENS()
-    this.REMOVE_USER()
+  logoutHandler () {
+    this.logout()
     if (this.$route.path !== '/') {
       this.$router.push('/')
     }

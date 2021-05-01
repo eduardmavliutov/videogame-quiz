@@ -20,19 +20,25 @@
               class="auth-form--submit"
               type="submit"
               @click="submitType = 'login'"
-            >Login</button>
+            >
+              Login
+            </button>
             <button
               class="auth-form--submit"
               type="submit"
               @click="submitType = 'signUp'"
-            >Sign up</button>
+            >
+              Sign up
+            </button>
           </div>
           <transition name="error">
             <span
               v-if="message"
               class="auth-form--message"
               :class="{ error: messageStyle === 'error', info: messageStyle === 'info' }"
-            >{{ message }}</span>
+            >
+              {{ message }}
+            </span>
           </transition>
         </form>
       </validation-observer>
@@ -49,10 +55,10 @@ import VTitle from '@/components/VTitle/VTitle.vue'
 import VInput from '@/components/VInput/VInput.vue'
 import VCard from '@/components/VCard/VCard.vue'
 import { PASSWORD_MIN_LENGTH } from '@/helpers/constants'
-import api from '@/helpers/api'
 import { AuthForm } from '@/types/views/auth.interface'
 import { SetTokensPayload } from '@/types/store/auth/auth.interface'
 import { SetUserPayload } from '@/types/store/user/user.interface'
+import firebase from '@/firebase/firebase'
 
 const authModule = namespace('auth')
 const userModule = namespace('user')
@@ -138,40 +144,39 @@ export default class Auth extends Vue {
    * Puts received tokens and user info in store
    */
   async signUpHandler (): Promise<void> {
-    try {
-      const signUpResponse = await api.post(`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${process.env.VUE_APP_API_KEY}`, {
-        email: this.form.email.value,
-        password: this.form.password.value,
-        returnSecureToken: true
+    firebase.auth().createUserWithEmailAndPassword(this.form.email.value, this.form.password.value)
+      .then((loginStatus) => {
+        const userId = `${loginStatus.user?.uid}`
+        firebase.database().ref(`/users/${userId}/`).set({
+          email: this.form.email.value,
+          name: '',
+          quizes: [],
+          points: 0
+        })
+        return firebase.database().ref(`/users/${userId}`)
       })
-      const { data: { idToken: accessToken, refreshToken, localId: userId } } = signUpResponse
-
-      this.SET_TOKENS({
-        accessToken,
-        refreshToken
+      .then((result) => {
+        console.log('result', result)
+        result.on('value', (snapshot) => {
+          const { email, name, points, quizes = [] } = snapshot.val()
+          this.SET_USER({
+            email,
+            name,
+            quizes,
+            points
+          })
+        })
+      })
+      .catch((error) => {
+        this.handleError(error.response.data.error.message)
       })
 
-      await api.put(`/users/${userId}.json?auth=${accessToken}`, {
-        email: this.form.email.value.toLowerCase(),
-        name: ''
-      })
+    this.showMessage('Registration is successful!', 'info')
 
-      this.SET_USER({
-        email: this.form.email.value.toLowerCase(),
-        name: '',
-        points: 0,
-        quizes: {}
-      })
-
-      this.showMessage('Registration is successful!', 'info')
-
-      const timeout = setTimeout(() => {
-        this.$router.push('/')
-        clearTimeout(timeout)
-      }, 1000)
-    } catch (e) {
-      this.handleError(e.response.data.error.message)
-    }
+    const timeout = setTimeout(() => {
+      this.$router.push('/')
+      clearTimeout(timeout)
+    }, 1000)
   }
 
   /**
@@ -183,36 +188,32 @@ export default class Auth extends Vue {
       password: this.form.password.value,
       returnSecureToken: true
     }
-    try {
-      const loginResponse = await api.post(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.VUE_APP_API_KEY}`, authData)
-
-      const { data: { idToken: accessToken, refreshToken, localId: userId } } = loginResponse
-
-      this.SET_TOKENS({
-        accessToken,
-        refreshToken
+    firebase.auth().signInWithEmailAndPassword(authData.email, authData.password)
+      .then((loginStatus) => {
+        const userId = `${loginStatus.user?.uid}`
+        return firebase.database().ref(`/users/${userId}`)
+      })
+      .then((result) => {
+        result.on('value', (snapshot) => {
+          const { email, name, points, quizes = [] } = snapshot.val()
+          this.SET_USER({
+            email,
+            name,
+            quizes,
+            points
+          })
+        })
+      })
+      .catch((error) => {
+        console.log(error)
       })
 
-      // TODO: move fetching and setting user`s info to action
-      const userInfoResponse = await api.get(`/users/${userId}.json`)
+    this.showMessage('Authentication is successful!', 'info')
 
-      const { data: { name, quizes = [], points } } = userInfoResponse
-
-      this.SET_USER({
-        email: authData.email,
-        name,
-        quizes,
-        points
-      })
-      this.showMessage('Authentication is successful!', 'info')
-
-      const timeout = setTimeout(() => {
-        this.$router.push('/')
-        clearTimeout(timeout)
-      }, 1000)
-    } catch (e) {
-      this.handleError(e.response.data.error.message)
-    }
+    const timeout = setTimeout(() => {
+      this.$router.push('/')
+      clearTimeout(timeout)
+    }, 1000)
   }
 
   /**

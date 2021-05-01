@@ -14,5 +14,7 @@ export const getters: GetterTree<UserState, RootState> = {
 
   participatedQuestion: (state) => (quizId: string, questionId: number): ParticipatedQuestion => {
     return state.quizes[quizId][questionId]
-  }
+  },
+
+  isAuthenticated: (state) => !!state.email
 }

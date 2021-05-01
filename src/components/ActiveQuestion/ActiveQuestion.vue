@@ -37,7 +37,7 @@ import VCard from '@/components/VCard/VCard.vue'
 import { namespace } from 'vuex-class'
 import { Quiz, QuizQuestion } from '@/types/store/quiz/quiz.interface'
 import { ImageProps } from '@/types/image'
-import { CreateParticipatedQuizPaylod, EditLetterPayload, ParticipatedQuestion } from '@/types/store/user/user.interface'
+import { CreateParticipatedQuizPayload, EditLetterPayload, ParticipatedQuestion } from '@/types/store/user/user.interface'
 
 const quizModule = namespace('quiz')
 const userModule = namespace('user')
@@ -59,30 +59,29 @@ export default class ActiveQuestion extends Vue {
   @quizModule.Getter('quiz') quiz!: (quizId: string) => Quiz
   @quizModule.Getter('quizQuestionImage') image!: (quizId: string, questionId: number) => ImageProps
 
+  @userModule.State('quizes') participatedQuizes!: { [key: string]: ParticipatedQuestion[] }
   @userModule.Getter('isQuizParticipated') isQuizParticipated!: (quizId: string) => boolean
   @userModule.Getter('participatedQuestion') participatedQuestion!: (quizId: string, questionId: number) => ParticipatedQuestion
-  @userModule.Mutation('CREATE_PARTICIPATED_QUIZ') CREATE_PARTICIPATED_QUIZ!: (payload: CreateParticipatedQuizPaylod) => void
-  @userModule.Mutation('ADD_LETTER') ADD_LETTER!: (payload: EditLetterPayload) => void
-  @userModule.Mutation('REMOVE_LETTER') REMOVE_LETTER!: (payload: EditLetterPayload) => void
+  @userModule.Action('createParticipatedQuiz') createParticipatedQuiz!: (payload: CreateParticipatedQuizPayload) => Promise<void>
+  @userModule.Action('addLetter') addLetter!: (payload: EditLetterPayload) => void
+  @userModule.Action('removeLetter') removeLetter!: (payload: EditLetterPayload) => void
 
-  addLetterHandler (index: number) {
-    this.ADD_LETTER({
+  addLetterHandler (index: number): void {
+    this.addLetter({
       questionId: Number(this.questionId),
       quizId: this.quizId,
       value: index
     })
   }
 
-  removeLetterHandler (index: number) {
-    this.REMOVE_LETTER({
+  removeLetterHandler (index: number): void {
+    this.removeLetter({
       questionId: Number(this.questionId),
       quizId: this.quizId,
       value: index
     })
   }
 
-  // НАМ НАДО НА КАЖДЫЙ КЛИК ДЕЛАТЬ ЭКШН С ОТПРАВКОЙ
-  // ДАННЫХ НА СЕРВЕР И ЗАГРУЖАТЬ ОБНОВЛЕННЫЕ ДАННЫЕ (НО Я НЕ УВЕРЕН)
   get quizTitle (): string {
     return this.quiz(this.quizId).title
   }
@@ -99,20 +98,15 @@ export default class ActiveQuestion extends Vue {
     return this.image(this.quizId, Number(this.questionId))
   }
 
-  created (): void {
-    // проверяем, что есть ли указанный квиз в списке квизов,
-    // в которых участвовал пользователь
-    // если у него нет ни квиза, ни вопроса,
-    // то создаем и квиз, и вопрос
-
+  async created (): Promise<void> {
+    // Checking if current quiz is in participated quizes
     if (!this.isQuizParticipated(this.quizId)) {
-      this.CREATE_PARTICIPATED_QUIZ({
+      // if current quiz is not participated we create new participated
+      // quiz and then we send that blank quiz to the server
+      this.createParticipatedQuiz({
         quiz: this.quiz(this.quizId),
         quizId: this.quizId
       })
-      console.log('создали квиз', this.participatedQuestion(this.quizId, Number(this.questionId)))
-    } else {
-      console.log('квиз не создавали', this.participatedQuestion(this.quizId, Number(this.questionId)))
     }
   }
 }
