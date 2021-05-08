@@ -74,7 +74,7 @@ export default class ActiveQuestion extends Vue {
   @userModule.Action('markQuestionAsDone') markQuestionAsDone!: (payload: MarkQuestionDonePayload) => void
 
   @Prop({ required: true, type: String }) quizId!: string
-  @Prop({ required: true, type: String }) questionId!: string
+  @Prop({ required: true, type: Number }) questionId!: number
 
   /**
    * Retrieves the title of current quiz
@@ -89,7 +89,7 @@ export default class ActiveQuestion extends Vue {
    * @returns {number} active quiz question id
    */
   get activeQuestionIdForTitle (): number {
-    return +this.questionId + 1
+    return this.questionId + 1
   }
 
   /**
@@ -97,7 +97,7 @@ export default class ActiveQuestion extends Vue {
    * @returns {ParticipatedQuestion} current participated quiz question
    */
   get activeQuizQuestion (): ParticipatedQuestion {
-    return this.participatedQuestion(this.quizId, Number(this.questionId))
+    return this.participatedQuestion(this.quizId, this.questionId)
   }
 
   /**
@@ -105,7 +105,7 @@ export default class ActiveQuestion extends Vue {
    * @returns {string} image url for current active question
    */
   get activeQuestionImage () {
-    return this.image(this.quizId, Number(this.questionId))
+    return this.image(this.quizId, this.questionId)
   }
 
   /**
@@ -115,12 +115,12 @@ export default class ActiveQuestion extends Vue {
    */
   @Watch('participatedQuizes', { deep: true })
   onParticipatedQuizesChange (): void {
-    const answer = this.computedAnswer(this.quizId, Number(this.questionId))
+    const answer = this.computedAnswer(this.quizId, this.questionId)
     const rightAnswer = this.activeQuizQuestion.rightAnswer
     if (answer === rightAnswer) {
       this.markQuestionAsDone({
         quizId: this.quizId,
-        questionId: Number(this.questionId)
+        questionId: this.questionId
       })
     }
   }
@@ -131,7 +131,7 @@ export default class ActiveQuestion extends Vue {
    */
   addLetterHandler (index: number): void {
     this.addLetter({
-      questionId: Number(this.questionId),
+      questionId: this.questionId,
       quizId: this.quizId,
       value: index
     })
@@ -143,7 +143,7 @@ export default class ActiveQuestion extends Vue {
    */
   removeLetterHandler (index: number): void {
     this.removeLetter({
-      questionId: Number(this.questionId),
+      questionId: this.questionId,
       quizId: this.quizId,
       value: index
     })

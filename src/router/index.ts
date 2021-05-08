@@ -19,7 +19,10 @@ const routes: Array<RouteConfig> = [
   },
   {
     path: '/quiz/:quizId/:questionId',
-    props: true,
+    props: ({ params }) => ({
+      quizId: params.quizId,
+      questionId: Number(params.questionId)
+    }),
     component: ActiveQuestion
   },
   {
