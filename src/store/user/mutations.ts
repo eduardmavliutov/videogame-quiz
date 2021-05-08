@@ -27,7 +27,6 @@ export const mutations: MutationTree<UserState> = {
 
   CREATE_PARTICIPATED_QUIZ (state, payload): void {
     const { quiz, quizId } = payload
-    console.log(quiz)
     const quizes = {
       ...state.quizes
     }
@@ -65,7 +64,6 @@ export const mutations: MutationTree<UserState> = {
   },
 
   REMOVE_LETTER (state, payload: EditLetterPayload) {
-    console.log(payload)
     const { quizId, questionId, value } = payload
     const choosenLetter =
       state.quizes[quizId][questionId].openedLetters[value]
@@ -76,7 +74,6 @@ export const mutations: MutationTree<UserState> = {
       const openedLetters = ([] as QuizQuestionLetter[]).concat(
         state.quizes[quizId][questionId].openedLetters
       )
-      console.log(openedLetters)
       openedLetters[value] = {
         value: EMPTY_LETTER_BOX_SYMBOL
       }

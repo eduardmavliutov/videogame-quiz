@@ -14,6 +14,10 @@ export interface UserState {
 
 export type SetUserPayload = UserState
 
+export interface ParticipatedQuizes {
+  [key: string]: ParticipatedQuestion;
+}
+
 export interface ParticipatedQuestion {
   id: number;
   done: boolean;
@@ -31,4 +35,9 @@ export interface EditLetterPayload {
   quizId: string;
   questionId: number;
   value: number;
+}
+
+export interface MarkQuestionDonePayload {
+  quizId: string;
+  questionId: number;
 }

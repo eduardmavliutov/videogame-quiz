@@ -2,6 +2,7 @@ import { RootState } from '@/types/store/rootState.interface'
 import {
   CreateParticipatedQuizPayload,
   EditLetterPayload,
+  MarkQuestionDonePayload,
   UserState
 } from '@/types/store/user/user.interface'
 import { ActionTree } from 'vuex'
@@ -18,7 +19,6 @@ export const actions: ActionTree<UserState, RootState> = {
     payload: CreateParticipatedQuizPayload
   ): Promise<void> {
     const { quizId, quiz } = payload
-    console.log('CREATE PARTICIPATED QUIZ ACTION, QUIZ PROP', quiz)
     const computedQuizes = {
       ...state.quizes
     }
@@ -57,7 +57,6 @@ export const actions: ActionTree<UserState, RootState> = {
       ].letterPool.splice(value, 1)
       openedLetters[freeSpot] = choosenLetter
       state.quizes[quizId][questionId].openedLetters = openedLetters
-      console.log('ACTION: ADD LETTER, STATE: ', state)
       await firebase
         .database()
         .ref(`users/${firebase.auth().currentUser?.uid}/quizes`)
@@ -76,7 +75,6 @@ export const actions: ActionTree<UserState, RootState> = {
       const openedLetters = ([] as QuizQuestionLetter[]).concat(
         state.quizes[quizId][questionId].openedLetters
       )
-      console.log(openedLetters)
       openedLetters[value] = {
         value: EMPTY_LETTER_BOX_SYMBOL
       }
@@ -89,6 +87,18 @@ export const actions: ActionTree<UserState, RootState> = {
           ...state.quizes
         })
     }
+  },
+
+  async markQuestionAsDone ({ state }, payload: MarkQuestionDonePayload) {
+    const { quizId, questionId } = payload
+    const { quizes } = state
+    quizes[quizId][questionId].done = true
+    await firebase
+      .database()
+      .ref(`users/${firebase.auth().currentUser?.uid}/quizes`)
+      .set({
+        ...quizes
+      })
   },
 
   async logout ({ commit }): Promise<void> {

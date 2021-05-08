@@ -30,14 +30,17 @@ export const state: QuizState = {
             { value: 'f' },
             { value: 'g' },
             { value: 'o' },
-            { value: 'a' },
+            { value: 'd' },
             { value: 'w' },
-            { value: 'r' },
+            { value: 'o' },
             { value: 'f' },
-            { value: '3' },
+            { value: 'a' },
             { value: '6' },
-            { value: 'j' },
-            { value: 'l' }
+            { value: 'r' },
+            { value: 'n' },
+            { value: 'm' },
+            { value: 'u' },
+            { value: '5' }
           ],
           openedLetters: [
             { value: '' },
@@ -70,11 +73,11 @@ export const state: QuizState = {
             { value: 'a' },
             { value: 'n' },
             { value: '4' },
-            { value: 'y' },
+            { value: 'd' },
             { value: 'n' },
-            { value: '4' },
-            { value: 'y' },
-            { value: '3' }
+            { value: 'e' },
+            { value: 't' },
+            { value: 'r' }
           ],
           openedLetters: [
             { value: '' },
