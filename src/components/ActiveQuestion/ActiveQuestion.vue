@@ -18,6 +18,7 @@
         >
           <opened-letters
             :openedLetters="activeQuizQuestion.openedLetters"
+            :isQuestionDone="activeQuizQuestion.done"
             @remove-letter="removeLetterHandler"
           />
           <letter-pool
@@ -29,7 +30,10 @@
           v-else
           class="quiz-active-question__bottom"
         >
-          <opened-letters :openedLetters="activeQuizQuestion.openedLetters" />
+          <opened-letters
+            :openedLetters="activeQuizQuestion.openedLetters"
+            :isQuestionDone="activeQuizQuestion.done"
+          />
           <letter-pool :letterPool="activeQuizQuestion.letterPool" />
         </div>
       </v-card>

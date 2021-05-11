@@ -5,6 +5,7 @@
       :key="index"
       :letter="letter.value"
       @click.native="$emit('remove-letter', index)"
+      :class="{ 'question-is-done' : isQuestionDone }"
     />
   </div>
 </template>
@@ -20,6 +21,7 @@ import { QuizQuestionLetter } from '@/types/store/quiz/quiz.interface'
 })
 export default class OpenedLetters extends Vue {
   @Prop({ required: true, type: Array }) openedLetters!: QuizQuestionLetter[]
+  @Prop({ required: true, type: Boolean, default: false }) isQuestionDone!: boolean
 }
 </script>
 <style lang="scss">
@@ -32,6 +34,7 @@ export default class OpenedLetters extends Vue {
   .quiz-letter:not(:last-child) {
     margin-right: 1px;
   }
+
   .quiz-letter {
     margin-bottom: 1px;
   }
