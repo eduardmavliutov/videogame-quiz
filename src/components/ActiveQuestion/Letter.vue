@@ -26,7 +26,7 @@ export default class QuizQuestionLetter extends Vue {
   }
 
   50% {
-    transform: translateY(5px);
+    transform:  translateY(5px);
   }
 
   100% {

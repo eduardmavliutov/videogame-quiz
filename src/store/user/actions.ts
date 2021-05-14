@@ -1,5 +1,6 @@
 import { RootState } from '@/types/store/rootState.interface'
 import {
+  AddPointsPayload,
   CreateParticipatedQuizPayload,
   EditLetterPayload,
   MarkQuestionDonePayload,
@@ -65,6 +66,7 @@ export const actions: ActionTree<UserState, RootState> = {
         })
     }
   },
+
   async removeLetter ({ state }, payload: EditLetterPayload): Promise<void> {
     const { quizId, questionId, value } = payload
     const choosenLetter = state.quizes[quizId][questionId].openedLetters[value]
@@ -99,6 +101,14 @@ export const actions: ActionTree<UserState, RootState> = {
       .set({
         ...quizes
       })
+  },
+
+  async addPoints ({ state }, payload: AddPointsPayload) {
+    const points = Number(state.points) + payload.points
+    await firebase
+      .database()
+      .ref(`users/${firebase.auth().currentUser?.uid}/points`)
+      .set(points)
   },
 
   async logout ({ commit }): Promise<void> {

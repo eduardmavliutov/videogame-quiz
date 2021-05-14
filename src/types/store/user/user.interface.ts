@@ -41,3 +41,7 @@ export interface MarkQuestionDonePayload {
   quizId: string;
   questionId: number;
 }
+
+export interface AddPointsPayload {
+  points: number;
+}

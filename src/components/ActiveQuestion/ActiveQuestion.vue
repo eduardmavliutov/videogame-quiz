@@ -37,6 +37,7 @@
           <letter-pool :letterPool="activeQuizQuestion.letterPool" />
         </div>
       </v-card>
+      <button @click="addPoints({points: 10})">add points</button>
     </div>
   </v-page>
 </template>
@@ -50,7 +51,7 @@ import VCard from '@/components/VCard/VCard.vue'
 import { namespace } from 'vuex-class'
 import { Quiz } from '@/types/store/quiz/quiz.interface'
 import { ImageProps } from '@/types/image'
-import { CreateParticipatedQuizPayload, EditLetterPayload, MarkQuestionDonePayload, ParticipatedQuestion, ParticipatedQuizes } from '@/types/store/user/user.interface'
+import { AddPointsPayload, CreateParticipatedQuizPayload, EditLetterPayload, MarkQuestionDonePayload, ParticipatedQuestion, ParticipatedQuizes } from '@/types/store/user/user.interface'
 
 const quizModule = namespace('quiz')
 const userModule = namespace('user')
@@ -76,6 +77,7 @@ export default class ActiveQuestion extends Vue {
   @userModule.Action('addLetter') addLetter!: (payload: EditLetterPayload) => void
   @userModule.Action('removeLetter') removeLetter!: (payload: EditLetterPayload) => void
   @userModule.Action('markQuestionAsDone') markQuestionAsDone!: (payload: MarkQuestionDonePayload) => void
+  @userModule.Action('addPoints') addPoints!: (payload: AddPointsPayload) => void
 
   @Prop({ required: true, type: String }) quizId!: string
   @Prop({ required: true, type: Number }) questionId!: number
