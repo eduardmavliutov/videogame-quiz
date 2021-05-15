@@ -2,7 +2,11 @@
   <v-page name="quiz-active-question">
     <v-title :title="`${quizTitle} / #${activeQuestionIdForTitle}`" />
     <div class="quiz-active-question__main">
-      <button class="quiz-active-question__previous-question-button" type="button"></button>
+      <button
+        class="quiz-active-question__previous-question-button"
+        type="button"
+        @click="previousQuizQuestionHandler()"
+      ></button>
       <v-card name="quiz-active-question">
         <template #image>
           <div class="quiz-active-question__image-wrapper">
@@ -38,6 +42,11 @@
           <letter-pool :letterPool="activeQuizQuestion.letterPool" />
         </div>
       </v-card>
+      <button
+        class="quiz-active-question__next-question-button"
+        type="button"
+        @click="nextQuizQuestionHandler()"
+      ></button>
     </div>
   </v-page>
 </template>
@@ -165,6 +174,27 @@ export default class ActiveQuestion extends Vue {
   }
 
   /**
+   * Navigates to previous quiz question and resets questionWasCounted property
+   */
+  previousQuizQuestionHandler (): void {
+    if (this.questionId >= 1) {
+      this.$router.push(`/quiz/${this.quizId}/${this.questionId - 1}`)
+      this.questionWasCounted = false
+    }
+  }
+
+  /**
+   * Navigates to next quiz question and resets questionWasCounted property
+   */
+  nextQuizQuestionHandler (): void {
+    const currentQuizLength = this.quiz(this.quizId).questions.length
+    if (this.questionId < (currentQuizLength - 1)) {
+      this.$router.push(`/quiz/${this.quizId}/${this.questionId + 1}`)
+      this.questionWasCounted = false
+    }
+  }
+
+  /**
    * When component is created we check if the current quiz was
    * participated before. If it was not we create such record in
    * user`s data
@@ -184,17 +214,97 @@ export default class ActiveQuestion extends Vue {
 </script>
 <style lang="scss">
 .quiz-active-question {
-  &__previous-question-button {
-    background: url("~@/assets/images/arrow-left.png");
+  &__previous-question-button,
+  &__next-question-button {
+    position: relative;
+    width: 5rem;
+    align-self: stretch;
+    border: none;
+    filter: blur(3px);
+    transition: 0.3s all ease-out;
+    opacity: 0;
+    box-shadow: inset 0px 0px 10px 5px rgba(0, 0, 0, 0.50);
+
+    &:after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: 0.3s all ease-out;
+    }
+
+    &:hover {
+      filter: none;
+      opacity: 1;
+
+      &:after {
+        opacity: 1;
+      }
+    }
+
+    &:active {
+      filter: invert(100%);
+      opacity: 1;
+      box-shadow: inset 0px 0px 10px 5px $color-dark;
+    }
   }
+
+  &__previous-question-button {
+    background: url("~@/assets/images/arrow-left.png") no-repeat center
+      transparent;
+    background-size: contain;
+    border-top-left-radius: 50%;
+    border-bottom-left-radius: 50%;
+
+    &:after {
+      border-top-left-radius: 50%;
+      border-bottom-left-radius: 50%;
+
+      border-left: 1px solid rgba(255, 255, 255, 0.212);
+      background: linear-gradient(
+        to left,
+        rgba(255, 255, 255, 0.01) 0%,
+        rgba(255, 255, 255, 0.4) 20%,
+        rgba(255, 255, 255, 0.1) 70%,
+        rgba(255, 255, 255, 0.05) 90%
+      );
+    }
+  }
+
+  &__next-question-button {
+    background: url("~@/assets/images/arrow-right.png") no-repeat center
+      transparent;
+    background-size: contain;
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
+
+    &:after {
+      border-top-right-radius: 50%;
+      border-bottom-right-radius: 50%;
+      border-right: 1px solid rgba(255, 255, 255, 0.212);
+      background: linear-gradient(
+        to right,
+        rgba(255, 255, 255, 0.01) 0%,
+        rgba(255, 255, 255, 0.4) 10%,
+        rgba(255, 255, 255, 0.1) 70%,
+        rgba(255, 255, 255, 0.05) 90%
+      );
+    }
+  }
+
   &__main {
     display: flex;
-    align-items: center;
-    flex-flow: column nowrap;
-    flex-grow: 1;
+    align-items: flex-start;
+    justify-content: center;
+    flex-flow: row nowrap;
 
     @include mobile {
       justify-content: center;
+      align-items: center;
+      flex-grow: 1;
     }
   }
 

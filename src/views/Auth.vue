@@ -156,7 +156,6 @@ export default class Auth extends Vue {
         return firebase.database().ref(`/users/${userId}`)
       })
       .then((result) => {
-        console.log('result', result)
         result.on('value', (snapshot) => {
           const { email, name, points, quizes = [] } = snapshot.val()
           this.SET_USER({
