@@ -59,16 +59,18 @@ export default class UserInfo extends Vue {
    * to user
    */
   animatePoints (): void {
-    this.animateCoin = true
-    const interval = setInterval(() => {
-      this.points - this.pointsToDisplay >= 100
-        ? this.pointsToDisplay += 100
-        : this.pointsToDisplay += 1
-      if (this.pointsToDisplay === this.points) {
-        clearInterval(interval)
-        this.animateCoin = false
-      }
-    }, 50)
+    if (this.points !== 0) {
+      this.animateCoin = true
+      const interval = setInterval(() => {
+        this.points - this.pointsToDisplay >= 100
+          ? this.pointsToDisplay += 100
+          : this.pointsToDisplay += 1
+        if (this.pointsToDisplay >= this.points) {
+          clearInterval(interval)
+          this.animateCoin = false
+        }
+      }, 50)
+    }
   }
 
   /**

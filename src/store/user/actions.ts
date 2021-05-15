@@ -35,7 +35,7 @@ export const actions: ActionTree<UserState, RootState> = {
       }
     )
     // then we send that blank quiz with all quizes to the server
-    await firebase
+    firebase.auth().currentUser?.uid && await firebase
       .database()
       .ref(`users/${firebase.auth().currentUser?.uid}/quizes`)
       .set({
@@ -58,7 +58,7 @@ export const actions: ActionTree<UserState, RootState> = {
       ].letterPool.splice(value, 1)
       openedLetters[freeSpot] = choosenLetter
       state.quizes[quizId][questionId].openedLetters = openedLetters
-      await firebase
+      firebase.auth().currentUser?.uid && await firebase
         .database()
         .ref(`users/${firebase.auth().currentUser?.uid}/quizes`)
         .set({
@@ -82,7 +82,7 @@ export const actions: ActionTree<UserState, RootState> = {
       }
       state.quizes[quizId][questionId].openedLetters = openedLetters
       state.quizes[quizId][questionId].letterPool.push(choosenLetter)
-      await firebase
+      firebase.auth().currentUser?.uid && await firebase
         .database()
         .ref(`users/${firebase.auth().currentUser?.uid}/quizes`)
         .set({
@@ -95,7 +95,7 @@ export const actions: ActionTree<UserState, RootState> = {
     const { quizId, questionId } = payload
     const { quizes } = state
     quizes[quizId][questionId].done = true
-    await firebase
+    firebase.auth().currentUser?.uid && await firebase
       .database()
       .ref(`users/${firebase.auth().currentUser?.uid}/quizes`)
       .set({
@@ -105,7 +105,7 @@ export const actions: ActionTree<UserState, RootState> = {
 
   async addPoints ({ state }, payload: AddPointsPayload) {
     const points = Number(state.points) + payload.points
-    await firebase
+    firebase.auth().currentUser?.uid && await firebase
       .database()
       .ref(`users/${firebase.auth().currentUser?.uid}/points`)
       .set(points)

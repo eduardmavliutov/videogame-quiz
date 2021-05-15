@@ -2,6 +2,7 @@
   <v-page name="quiz-active-question">
     <v-title :title="`${quizTitle} / #${activeQuestionIdForTitle}`" />
     <div class="quiz-active-question__main">
+      <button class="quiz-active-question__previous-question-button" type="button"></button>
       <v-card name="quiz-active-question">
         <template #image>
           <div class="quiz-active-question__image-wrapper">
@@ -37,7 +38,6 @@
           <letter-pool :letterPool="activeQuizQuestion.letterPool" />
         </div>
       </v-card>
-      <button @click="addPoints({points: 10})">add points</button>
     </div>
   </v-page>
 </template>
@@ -83,6 +83,11 @@ export default class ActiveQuestion extends Vue {
   @Prop({ required: true, type: Number }) questionId!: number
 
   /**
+   * Prevents infinite operations in participatedQuizes watcher
+   */
+  private questionWasCounted = false
+
+  /**
    * Retrieves the title of current quiz
    * @returns {string} - the title of current quiz
    */
@@ -123,10 +128,14 @@ export default class ActiveQuestion extends Vue {
   onParticipatedQuizesChange (): void {
     const answer = this.computedAnswer(this.quizId, this.questionId)
     const rightAnswer = this.activeQuizQuestion.rightAnswer
-    if (answer === rightAnswer) {
+    if (!this.questionWasCounted && answer === rightAnswer) {
+      this.questionWasCounted = true
       this.markQuestionAsDone({
         quizId: this.quizId,
         questionId: this.questionId
+      })
+      this.addPoints({
+        points: 10
       })
     }
   }
@@ -175,6 +184,9 @@ export default class ActiveQuestion extends Vue {
 </script>
 <style lang="scss">
 .quiz-active-question {
+  &__previous-question-button {
+    background: url("~@/assets/images/arrow-left.png");
+  }
   &__main {
     display: flex;
     align-items: center;
