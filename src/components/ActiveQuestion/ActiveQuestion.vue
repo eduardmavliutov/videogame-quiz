@@ -2,11 +2,10 @@
   <v-page name="quiz-active-question">
     <v-title :title="`${quizTitle} / #${activeQuestionIdForTitle}`" />
     <div class="quiz-active-question__main">
-      <button
-        class="quiz-active-question__previous-question-button"
-        type="button"
-        @click="previousQuizQuestionHandler()"
-      ></button>
+      <change-question-button
+        type="previous"
+        @change-question="previousQuizQuestionHandler()"
+      ></change-question-button>
       <v-card name="quiz-active-question">
         <template #image>
           <div class="quiz-active-question__image-wrapper">
@@ -42,11 +41,10 @@
           <letter-pool :letterPool="activeQuizQuestion.letterPool" />
         </div>
       </v-card>
-      <button
-        class="quiz-active-question__next-question-button"
-        type="button"
-        @click="nextQuizQuestionHandler()"
-      ></button>
+      <change-question-button
+        type="next"
+        @change-question="nextQuizQuestionHandler()"
+      ></change-question-button>
     </div>
   </v-page>
 </template>
@@ -54,6 +52,7 @@
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 import LetterPool from '@/components/ActiveQuestion/LetterPool.vue'
 import OpenedLetters from '@/components/ActiveQuestion/OpenedLetters.vue'
+import ChangeQuestionButton from '@/components/ActiveQuestion/ChangeQuestionButton.vue'
 import VPage from '@/components/VPage/VPage.vue'
 import VTitle from '@/components/VTitle/VTitle.vue'
 import VCard from '@/components/VCard/VCard.vue'
@@ -71,7 +70,8 @@ const userModule = namespace('user')
     OpenedLetters,
     VPage,
     VTitle,
-    VCard
+    VCard,
+    ChangeQuestionButton
   }
 })
 export default class ActiveQuestion extends Vue {
@@ -214,88 +214,7 @@ export default class ActiveQuestion extends Vue {
 </script>
 <style lang="scss">
 .quiz-active-question {
-  &__previous-question-button,
-  &__next-question-button {
-    position: relative;
-    width: 5rem;
-    align-self: stretch;
-    border: none;
-    filter: blur(3px);
-    transition: 0.3s all ease-out;
-    opacity: 0;
-    box-shadow: inset 0px 0px 10px 5px rgba(0, 0, 0, 0.50);
-
-    &:after {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      opacity: 0;
-      transition: 0.3s all ease-out;
-    }
-
-    &:hover {
-      filter: none;
-      opacity: 1;
-
-      &:after {
-        opacity: 1;
-      }
-    }
-
-    &:active {
-      filter: invert(100%);
-      opacity: 1;
-      box-shadow: inset 0px 0px 10px 5px $color-dark;
-    }
-  }
-
-  &__previous-question-button {
-    background: url("~@/assets/images/arrow-left.png") no-repeat center
-      transparent;
-    background-size: contain;
-    border-top-left-radius: 50%;
-    border-bottom-left-radius: 50%;
-
-    &:after {
-      border-top-left-radius: 50%;
-      border-bottom-left-radius: 50%;
-
-      border-left: 1px solid rgba(255, 255, 255, 0.212);
-      background: linear-gradient(
-        to left,
-        rgba(255, 255, 255, 0.01) 0%,
-        rgba(255, 255, 255, 0.4) 20%,
-        rgba(255, 255, 255, 0.1) 70%,
-        rgba(255, 255, 255, 0.05) 90%
-      );
-    }
-  }
-
-  &__next-question-button {
-    background: url("~@/assets/images/arrow-right.png") no-repeat center
-      transparent;
-    background-size: contain;
-    border-top-right-radius: 50%;
-    border-bottom-right-radius: 50%;
-
-    &:after {
-      border-top-right-radius: 50%;
-      border-bottom-right-radius: 50%;
-      border-right: 1px solid rgba(255, 255, 255, 0.212);
-      background: linear-gradient(
-        to right,
-        rgba(255, 255, 255, 0.01) 0%,
-        rgba(255, 255, 255, 0.4) 10%,
-        rgba(255, 255, 255, 0.1) 70%,
-        rgba(255, 255, 255, 0.05) 90%
-      );
-    }
-  }
-
-  &__main {
+    &__main {
     display: flex;
     align-items: flex-start;
     justify-content: center;
