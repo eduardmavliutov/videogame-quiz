@@ -214,13 +214,14 @@ export default class ActiveQuestion extends Vue {
 </script>
 <style lang="scss">
 .quiz-active-question {
-    &__main {
+  &__main {
     display: flex;
     align-items: flex-start;
     justify-content: center;
     flex-flow: row nowrap;
 
     @include mobile {
+      flex-flow: column nowrap;
       justify-content: center;
       align-items: center;
       flex-grow: 1;
