@@ -46,6 +46,10 @@
         @change-question="nextQuizQuestionHandler()"
       ></change-question-button>
     </div>
+    <question-control-panel
+      @previous-question="previousQuizQuestionHandler"
+      @next-question="nextQuizQuestionHandler"
+    />
   </v-page>
 </template>
 <script lang="ts">
@@ -53,6 +57,7 @@ import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 import LetterPool from '@/components/ActiveQuestion/LetterPool.vue'
 import OpenedLetters from '@/components/ActiveQuestion/OpenedLetters.vue'
 import ChangeQuestionButton from '@/components/ActiveQuestion/ChangeQuestionButton.vue'
+import QuestionControlPanel from '@/components/ActiveQuestion/QuestionControlPanel.vue'
 import VPage from '@/components/VPage/VPage.vue'
 import VTitle from '@/components/VTitle/VTitle.vue'
 import VCard from '@/components/VCard/VCard.vue'
@@ -71,7 +76,8 @@ const userModule = namespace('user')
     VPage,
     VTitle,
     VCard,
-    ChangeQuestionButton
+    ChangeQuestionButton,
+    QuestionControlPanel
   }
 })
 export default class ActiveQuestion extends Vue {

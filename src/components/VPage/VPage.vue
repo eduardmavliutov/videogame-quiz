@@ -32,7 +32,6 @@ export default class VPage extends Vue {
 
     @include mobile {
       padding: 0 16px;
-      padding-bottom: 16px;
     }
   }
 }
