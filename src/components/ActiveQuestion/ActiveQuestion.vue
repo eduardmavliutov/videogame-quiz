@@ -1,21 +1,19 @@
 <template>
   <v-page name="quiz-active-question">
     <v-title :title="`${quizTitle} / #${activeQuestionIdForTitle}`" />
-    <div class="quiz-active-question__main">
+    <article class="quiz-active-question__main">
       <change-question-button
         type="previous"
         @change-question="previousQuizQuestionHandler()"
       ></change-question-button>
-      <v-card name="quiz-active-question">
-        <template #image>
-          <div class="quiz-active-question__image-wrapper">
-            <img
-              :src="activeQuestionImage.src"
-              :alt="activeQuestionImage.alt"
-              class="quiz-active-question__image"
-            >
-          </div>
-        </template>
+      <div class="quiz-active-question__card">
+        <div class="quiz-active-question__image-wrapper">
+          <img
+            :src="activeQuestionImage.src"
+            :alt="activeQuestionImage.alt"
+            class="quiz-active-question__image"
+          >
+        </div>
         <div
           v-if="!activeQuizQuestion.done"
           class="quiz-active-question__bottom"
@@ -40,12 +38,12 @@
           />
           <letter-pool :letterPool="activeQuizQuestion.letterPool" />
         </div>
-      </v-card>
+      </div>
       <change-question-button
         type="next"
         @change-question="nextQuizQuestionHandler()"
       ></change-question-button>
-    </div>
+    </article>
     <question-control-panel
       @previous-question="previousQuizQuestionHandler"
       @next-question="nextQuizQuestionHandler"
@@ -60,7 +58,6 @@ import ChangeQuestionButton from '@/components/ActiveQuestion/ChangeQuestionButt
 import QuestionControlPanel from '@/components/ActiveQuestion/QuestionControlPanel.vue'
 import VPage from '@/components/VPage/VPage.vue'
 import VTitle from '@/components/VTitle/VTitle.vue'
-import VCard from '@/components/VCard/VCard.vue'
 import { namespace } from 'vuex-class'
 import { Quiz } from '@/types/store/quiz/quiz.interface'
 import { ImageProps } from '@/types/image'
@@ -75,7 +72,6 @@ const userModule = namespace('user')
     OpenedLetters,
     VPage,
     VTitle,
-    VCard,
     ChangeQuestionButton,
     QuestionControlPanel
   }
@@ -234,6 +230,38 @@ export default class ActiveQuestion extends Vue {
     }
   }
 
+  &__card {
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    flex-flow: row nowrap;
+    box-shadow: $box-shadow--dark;
+    background-color: $main-color;
+    position: relative;
+    backdrop-filter: blur(2px);
+    transition: all 0.5s ease-in-out;
+    z-index: 10;
+
+    &::before {
+      content: "";
+      background: url("~@/assets/images/questions.png");
+      background-size: 10%;
+      opacity: 0.05;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      position: absolute;
+      z-index: -1;
+    }
+
+    @include mobile {
+      width: 100%;
+      flex-flow: column nowrap;
+      justify-content: flex-start;
+    }
+  }
+
   &__image {
     @media screen and (max-width: 320px) {
       width: 90%;
@@ -243,6 +271,20 @@ export default class ActiveQuestion extends Vue {
     &-wrapper {
       display: flex;
       justify-content: center;
+    }
+  }
+
+  &__bottom {
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    flex-flow: column nowrap;
+    flex-grow: 2;
+
+    @include mobile {
+      padding: 0;
+      flex-grow: 0;
+      flex-shrink: 2;
     }
   }
 }

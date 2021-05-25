@@ -1,9 +1,9 @@
 <template>
-  <div :class="`v-page v-page-${name}`">
+  <main :class="`v-page v-page-${name}`">
     <div class="v-page-container">
       <slot></slot>
     </div>
-  </div>
+  </main>
 </template>
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator'

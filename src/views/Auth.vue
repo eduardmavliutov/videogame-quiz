@@ -52,7 +52,6 @@ import { Vue, Component } from 'vue-property-decorator'
 import VPage from '@/components/VPage/VPage.vue'
 import VTitle from '@/components/VTitle/VTitle.vue'
 import VInput from '@/components/VInput/VInput.vue'
-import VCard from '@/components/VCard/VCard.vue'
 import { extend, ValidationObserver } from 'vee-validate'
 import { required, email, min } from 'vee-validate/dist/rules'
 import { namespace } from 'vuex-class'
@@ -91,7 +90,6 @@ extend('password', {
     VPage,
     VTitle,
     VInput,
-    VCard,
     ValidationObserver
   }
 })
