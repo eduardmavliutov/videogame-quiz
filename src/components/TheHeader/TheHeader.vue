@@ -7,7 +7,12 @@
           src="@/assets/images/gpad.png"
         >
       </router-link>
-      <h2 class="header__logo-title">Videogame Quiz!</h2>
+      <h1 class="header__logo-title">Videogame Quiz!</h1>
+      <v-title
+        :title="quizTitle"
+        primary
+        class="header__logo-title--mobile"
+      />
     </div>
     <div class="header__auth">
       <router-link
@@ -30,13 +35,17 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import UserInfo from '@/components/TheHeader/UserInfo.vue'
+import VTitle from '@/components/VTitle/VTitle.vue'
 import { namespace } from 'vuex-class'
+import { Quiz } from '@/types/store/quiz/quiz.interface'
 
 const userModule = namespace('user')
+const quizModule = namespace('quiz')
 
 @Component({
   components: {
-    UserInfo
+    UserInfo,
+    VTitle
   }
 })
 export default class TheHeader extends Vue {
@@ -46,12 +55,28 @@ export default class TheHeader extends Vue {
   @userModule.State('points') points!: number
   @userModule.Getter('completedQuizes') completedQuizes!: number
   @userModule.Action('logout') logout!: () => Promise<void>
+  @quizModule.Getter('quiz') quiz!: (quizId: string) => Quiz
 
+  /**
+   * Retrieves current user`s name if there is one set or their email
+   * @returns {string} user`s name or email
+   */
   get activeUser (): string {
     return this.userName || this.userEmail
   }
 
-  logoutHandler () {
+  /**
+   * Retrieves the title of current quiz
+   * @returns {string} the title of quiz
+   */
+  get quizTitle (): string {
+    return this.quiz(this.$route.params.quizId).title
+  }
+
+  /**
+   * Handler for logout event
+   */
+  logoutHandler (): void {
     this.logout()
     if (this.$route.path !== '/') {
       this.$router.push('/')
@@ -116,18 +141,29 @@ export default class TheHeader extends Vue {
       animation-name: logo;
       animation-fill-mode: forwards;
       animation-duration: 0.5s;
+
+      @media screen and (max-width: 320px) {
+        display: none;
+      }
     }
 
     &-title {
-      font-size: $font-size-title-desktop;
+      font-size: $font-size-title-desktop--primary;
       color: $color-white;
       font-weight: bold;
 
       @include mobile {
-        text-align: center;
-        font-size: 2rem;
-        line-height: 2rem;
-        flex-grow: 1;
+        display: none;
+      }
+
+      &--mobile {
+        display: none;
+
+        @include mobile {
+          display: block;
+          flex-grow: 1;
+          text-align: center;
+        }
       }
 
       @media screen and (max-width: 320px) {

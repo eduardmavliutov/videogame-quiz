@@ -1,6 +1,9 @@
 <template>
   <v-page name="quiz-active-question">
-    <v-title :title="`${quizTitle} / #${activeQuestionIdForTitle}`" />
+    <v-title
+      :title="`${quizTitle} / #${activeQuestionIdForTitle}`"
+      :hideInMobileMode="true"
+    />
     <article class="quiz-active-question__main">
       <change-question-button
         type="previous"
