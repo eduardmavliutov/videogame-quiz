@@ -231,16 +231,16 @@ export default class ActiveQuestion extends Vue {
   }
 
   &__card {
+    position: relative;
+    z-index: 10;
     width: 80%;
     display: flex;
     justify-content: center;
     flex-flow: row nowrap;
     box-shadow: $box-shadow--dark;
     background-color: $main-color;
-    position: relative;
     backdrop-filter: blur(2px);
     transition: all 0.5s ease-in-out;
-    z-index: 10;
 
     &::before {
       content: "";
@@ -263,6 +263,8 @@ export default class ActiveQuestion extends Vue {
   }
 
   &__image {
+    max-height: 70vh;
+
     @media screen and (max-width: 320px) {
       width: 90%;
       padding: 1rem 1rem 0rem;
@@ -275,13 +277,14 @@ export default class ActiveQuestion extends Vue {
   }
 
   &__bottom {
+    width: 25rem;
     padding: 1rem;
     display: flex;
     justify-content: center;
     flex-flow: column nowrap;
-    flex-grow: 2;
 
     @include mobile {
+      width: auto;
       padding: 0;
       flex-grow: 0;
       flex-shrink: 2;
