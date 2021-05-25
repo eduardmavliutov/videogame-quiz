@@ -1,66 +1,66 @@
 <template>
   <v-page name="auth">
     <v-title title="Authentication" />
-    <v-card name="auth">
-      <validation-observer v-slot="{ handleSubmit }">
-        <form
-          class="auth-form"
-          @submit.prevent="handleSubmit(submitHandler)"
-        >
-          <v-input
-            v-for="input in form"
-            :key="`${input.name}-${input.rules}`"
-            :rules="input.rules"
-            :name="input.name"
-            :type="input.type"
-            :model.sync="form[input.type].value"
-          />
-          <div class="auth-form--buttons">
-            <button
-              class="auth-form--submit"
-              type="submit"
-              @click="submitType = 'login'"
-            >
-              Login
-            </button>
-            <button
-              class="auth-form--submit"
-              type="submit"
-              @click="submitType = 'signUp'"
-            >
-              Sign up
-            </button>
-          </div>
-          <transition name="error">
-            <span
-              v-if="message"
-              class="auth-form--message"
-              :class="{ error: messageStyle === 'error', info: messageStyle === 'info' }"
-            >
-              {{ message }}
-            </span>
-          </transition>
-        </form>
-      </validation-observer>
-    </v-card>
+    <validation-observer
+      v-slot="{ handleSubmit }"
+      tag="div"
+      class="auth-form__wrapper"
+    >
+      <form
+        class="auth-form"
+        @submit.prevent="handleSubmit(submitHandler)"
+      >
+        <v-input
+          v-for="input in form"
+          :key="`${input.name}-${input.rules}`"
+          :rules="input.rules"
+          :name="input.name"
+          :type="input.type"
+          :model.sync="form[input.type].value"
+        />
+        <div class="auth-form--buttons">
+          <button
+            class="auth-form--submit"
+            type="submit"
+            @click="submitType = 'login'"
+          >
+            Login
+          </button>
+          <button
+            class="auth-form--submit"
+            type="submit"
+            @click="submitType = 'signUp'"
+          >
+            Sign up
+          </button>
+        </div>
+        <transition name="error">
+          <span
+            v-if="message"
+            class="auth-form--message"
+            :class="{ error: messageStyle === 'error', info: messageStyle === 'info' }"
+          >
+            {{ message }}
+          </span>
+        </transition>
+      </form>
+    </validation-observer>
   </v-page>
 </template>
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
-import { extend, ValidationObserver } from 'vee-validate'
-import { required, email, min } from 'vee-validate/dist/rules'
-import { namespace } from 'vuex-class'
 import VPage from '@/components/VPage/VPage.vue'
 import VTitle from '@/components/VTitle/VTitle.vue'
 import VInput from '@/components/VInput/VInput.vue'
 import VCard from '@/components/VCard/VCard.vue'
+import { extend, ValidationObserver } from 'vee-validate'
+import { required, email, min } from 'vee-validate/dist/rules'
+import { namespace } from 'vuex-class'
+import firebase from '@/firebase/firebase'
 import { PASSWORD_MIN_LENGTH } from '@/helpers/constants'
 import { AuthForm } from '@/types/views/auth.interface'
-import { SetTokensPayload } from '@/types/store/auth/auth.interface'
 import { SetUserPayload } from '@/types/store/user/user.interface'
-import firebase from '@/firebase/firebase'
 
-const authModule = namespace('auth')
 const userModule = namespace('user')
 
 extend('required', {
@@ -96,7 +96,6 @@ extend('password', {
   }
 })
 export default class Auth extends Vue {
-  @authModule.Mutation('SET_TOKENS') SET_TOKENS!: (payload: SetTokensPayload) => void
   @userModule.Mutation('SET_USER') SET_USER!: (payload: SetUserPayload) => void
 
   /**
@@ -133,7 +132,10 @@ export default class Auth extends Vue {
     }
   }
 
-  async submitHandler () {
+  /**
+   * Submit handler for auth form
+   */
+  async submitHandler (): Promise<void> {
     this.submitType === 'login'
       ? this.loginHandler()
       : this.signUpHandler()
@@ -241,10 +243,38 @@ export default class Auth extends Vue {
 </script>
 <style lang="scss">
 .auth-form {
+  padding: 1rem;
   display: flex;
   justify-content: center;
   flex-flow: column nowrap;
+  flex-grow: 1;
   transition: height 0.5s ease-in-out;
+
+  &__wrapper {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-self: stretch;
+    flex-flow: row nowrap;
+    box-shadow: $box-shadow--dark;
+    background-color: $main-color;
+    backdrop-filter: blur(2px);
+    transition: all 0.5s ease-in-out;
+
+    &::before {
+      content: "";
+      background: url("~@/assets/images/questions.png");
+      background-size: 10%;
+      opacity: 0.05;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      position: absolute;
+      z-index: -1;
+    }
+  }
 
   @include mobile {
     padding: 1rem;

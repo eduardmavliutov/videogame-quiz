@@ -58,7 +58,7 @@ export default class VInput extends Vue {
     font-size: 1.5rem;
     transition: all 0.3s ease-in;
     margin: 0.5rem 0;
-    padding: 0px;
+    padding: 0 0.5rem;
     box-sizing: content-box;
 
     &--error {
