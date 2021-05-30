@@ -1,8 +1,8 @@
 <template>
   <div class="user-info">
-    <h2 class="user-info__name">
+    <p class="user-info__name">
       {{ userName }}
-    </h2>
+    </p>
     <div class="user-info__stats">
       <div class="user-info__points">
         <img
@@ -106,6 +106,11 @@ export default class UserInfo extends Vue {
     padding: 0 8px;
   }
 
+  @media screen and (max-width: 320px) {
+    font-size: $font-size-normal-mobile;
+    line-height: $line-height-mobile--320px;
+  }
+
   &__name {
     cursor: pointer;
     max-width: 8rem;
@@ -126,7 +131,7 @@ export default class UserInfo extends Vue {
   &__finished-quizes {
     display: flex;
     justify-content: space-around;
-    align-items: baseline;
+    align-items: center;
   }
 
   &__stat-image-quizes,

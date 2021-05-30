@@ -51,6 +51,10 @@ export default class QuestionControlPanel extends Vue {
   backdrop-filter: blur(2px);
   box-shadow: $box-shadow--dark;
 
+  @media screen and (max-width: 320px) {
+    height: 3rem;
+  }
+
   &::after {
     content: "";
     background: url("~@/assets/images/questions.png");

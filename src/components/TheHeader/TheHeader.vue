@@ -112,6 +112,10 @@ export default class TheHeader extends Vue {
     padding: 8px;
   }
 
+  @media screen and (max-width: 320px) {
+    height: 3rem;
+  }
+
   &::after {
     content: "";
     background: url("~@/assets/images/questions.png");

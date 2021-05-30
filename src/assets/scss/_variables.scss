@@ -17,14 +17,21 @@ $transparent-background-color: rgba(0, 0, 0, 0.589);
 // Font sizes
 $font-size-title-desktop--primary: 2.5rem;
 $font-size-title-desktop--secondary: 1.8rem;
+$font-size-title-mobile--320px: 1.2rem;
 $font-size-normal-desktop: 18px;
+$font-size-normal-mobile: 16px;
 $font-color--main: #2c3e50;
+
+// Line height
+$line-height-mobile: 2rem;
+$line-height-mobile--320px: 1.3rem;
 
 // Box shadows
 $box-shadow--default: 0 0 5px 5px $color-lightgrey;
 $box-shadow--dark: 0 0 5px 5px $color-dark;
 $box-shadow--white: 0 0 5px 5px $color-white;
 
+// Font-family
 $font-family: Roboto, Georgia, serif, Arial;
 
 @import "~bulma/sass/utilities/_all";

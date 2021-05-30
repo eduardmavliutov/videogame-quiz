@@ -48,8 +48,13 @@ export default class VTitle extends Vue {
 
     @include mobile {
       font-size: $font-size-title-desktop--secondary;
-      line-height: 2rem;
+      line-height: $line-height-mobile;
       margin: 0px;
+    }
+
+    @media screen and (max-width: 320px) {
+      font-size: $font-size-title-mobile--320px;
+      line-height: $line-height-mobile--320px;
     }
   }
 
