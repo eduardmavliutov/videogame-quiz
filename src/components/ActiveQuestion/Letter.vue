@@ -64,6 +64,7 @@ export default class QuizQuestionLetter extends Vue {
 
   &.question-is-done {
     animation: 1.2s infinite alternate forwards win-animation;
+    animation-iteration-count: 5;
   }
 
   @for $i from 1 through 30 {
