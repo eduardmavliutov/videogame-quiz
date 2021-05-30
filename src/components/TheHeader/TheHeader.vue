@@ -66,11 +66,14 @@ export default class TheHeader extends Vue {
   }
 
   /**
-   * Retrieves the title of current quiz
-   * @returns {string} the title of quiz
+   * Retrieves the title of current quiz if there is quizId in route params.
+   * @returns {string} the title of current quiz or default app title (depending on presence
+   * of `quizId` param in $route)
    */
   get quizTitle (): string {
-    return this.quiz(this.$route.params.quizId).title
+    return this.$route.params.quizId
+      ? this.quiz(this.$route.params.quizId).title
+      : 'Videogame Quiz'
   }
 
   /**
