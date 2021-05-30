@@ -18,8 +18,9 @@
         <img
           width="16px"
           src="~@/assets/icons/completed-quizes.svg"
-          alt="points"
+          alt="completed-quizes"
           class="user-info__stat-image-quizes"
+          :class="{ animate: animateCompletedQuizes }"
         >
         <span class="user-info__finished-quizes-counter">{{ completedQuizes }}</span>
       </div>
@@ -47,11 +48,29 @@ export default class UserInfo extends Vue {
   private animateCoin = false
 
   /**
+   * Defines whether animation for completed quizes image
+   * will be applied or not
+   */
+  private animateCompletedQuizes = false
+
+  /**
    * Watcher for points property
    */
   @Watch('points')
   onPointsChange (): void {
     this.animatePoints()
+  }
+
+  /**
+   * Watcher for compoletedQuizes property
+   */
+  @Watch('completedQuizes')
+  onCompletedQuizesChange (): void {
+    this.animateCompletedQuizes = true
+    const timerId = setTimeout(() => {
+      this.animateCompletedQuizes = false
+      clearTimeout(timerId)
+    }, 600) // after animation is over we clear timer
   }
 
   /**
@@ -82,7 +101,7 @@ export default class UserInfo extends Vue {
 }
 </script>
 <style lang="scss">
-@keyframes coin-animation {
+@keyframes stat-animation {
   50% {
     filter: drop-shadow(0px 0px 5px $main-color);
     transform: scale(1.3);
@@ -139,7 +158,7 @@ export default class UserInfo extends Vue {
     margin-right: 0.2rem;
 
     &.animate {
-      animation-name: coin-animation;
+      animation-name: stat-animation;
       animation-duration: 0.6s;
       animation-fill-mode: backwards;
       animation-iteration-count: infinite;

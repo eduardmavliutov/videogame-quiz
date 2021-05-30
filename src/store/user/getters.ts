@@ -9,7 +9,15 @@ export const getters: GetterTree<UserState, RootState> = {
    * @param state
    * @returns {number} - number of quizes that are compoleted by current user
    */
-  completedQuizes: (state): number => Object.keys(state.quizes).length,
+  completedQuizes: (state): number => {
+    let completedCounter = 0
+    Object.keys(state.quizes).forEach((quizId: string) => {
+      if (state.quizes[quizId].every((quiz: ParticipatedQuestion) => quiz.done)) {
+        completedCounter++
+      }
+    })
+    return completedCounter
+  },
 
   /**
    * Checks whether opened quiz was participated or not
