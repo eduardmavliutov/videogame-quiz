@@ -1,7 +1,16 @@
 <template>
-  <div id="app" class="app">
+  <div
+    id="app"
+    class="app"
+  >
     <the-header />
-    <router-view />
+    <transition
+      name="route-change"
+      mode="out-in"
+      appear
+    >
+      <router-view />
+    </transition>
     <popup-controller />
   </div>
 </template>
@@ -41,6 +50,22 @@ export default class App extends Vue {
     right: 0;
     position: absolute;
     z-index: -1;
+  }
+}
+
+.route-change {
+  &-enter-active,
+  &-leave-active {
+    transition: 0.3s opacity ease;
+  }
+  &-enter,
+  &-leave-to {
+    opacity: 0;
+  }
+
+  &-enter-to,
+  &-leave {
+    opacity: 1;
   }
 }
 </style>

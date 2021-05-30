@@ -1,16 +1,22 @@
 <template>
-  <div class="question-control-panel">
-    <button
-      class="question-control-panel__previous-button"
-      @click="$emit('previous-question')"
-    >
-    </button>
-    <button
-      class="question-control-panel__next-button"
-      @click="$emit('next-question')"
-    >
-    </button>
-  </div>
+  <transition
+    name="question-control-panel"
+    mode="in-out"
+    appear
+  >
+    <div class="question-control-panel">
+      <button
+        class="question-control-panel__previous-button"
+        @click="$emit('previous-question')"
+      >
+      </button>
+      <button
+        class="question-control-panel__next-button"
+        @click="$emit('next-question')"
+      >
+      </button>
+    </div>
+  </transition>
 </template>
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
@@ -105,6 +111,19 @@ export default class QuestionControlPanel extends Vue {
       animation-fill-mode: forwards;
       animation-duration: 0.8s;
     }
+  }
+
+  &-enter {
+    transform: translateY(120%);
+  }
+
+  &-enter-to {
+    transform: translateY(0%);
+  }
+
+  &-enter-active,
+  &-leave-active {
+    transition: all 0.5s ease-in;
   }
 }
 </style>

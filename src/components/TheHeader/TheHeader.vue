@@ -150,7 +150,7 @@ export default class TheHeader extends Vue {
       animation-duration: 0.5s;
 
       @media screen and (max-width: 320px) {
-        display: none;
+        width: 3rem;
       }
     }
 
