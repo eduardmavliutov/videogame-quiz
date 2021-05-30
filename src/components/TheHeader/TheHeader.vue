@@ -71,7 +71,7 @@ export default class TheHeader extends Vue {
    * of `quizId` param in $route)
    */
   get quizTitle (): string {
-    return this.$route.params.quizId
+    return this.$route.params.quizId && this.$route.params.questionId
       ? this.quiz(this.$route.params.quizId).title
       : 'Videogame Quiz'
   }

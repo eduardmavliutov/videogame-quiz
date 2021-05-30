@@ -47,6 +47,7 @@ export default class QuizListItem extends Vue {
   }
 
   &__inner {
+    height: 100%;
     @include mobile {
       width: 5rem;
     }

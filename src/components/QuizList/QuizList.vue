@@ -1,5 +1,5 @@
 <template>
-  <v-grid>
+  <v-grid name="quiz-list">
     <quiz-list-item
       v-for="quiz in quizes"
       :key="quiz.id"

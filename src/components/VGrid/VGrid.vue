@@ -13,52 +13,20 @@ export default class VGrid extends Vue {
 </script>
 <style lang="scss">
 .v-grid {
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: center;
-  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  justify-items: center;
+  gap: 1rem;
 
   @include mobile {
-    flex-flow: column nowrap;
-    align-items: center;
-    justify-content: space-around;
+    width: 100%;
+    grid-template-columns: repeat(2, 1fr);
   }
 
-  &-item {
-    margin-bottom: 1rem;
-  }
-
-  &-item:not(:last-child) {
-    margin-right: 1rem;
-
+  &--quiz-list {
     @include mobile {
-      margin-right: 0;
+      grid-template-columns: 100%;
     }
   }
-}
-
-.v-grid.v-grid--quiz {
-  @include mobile {
-    flex-flow: row wrap;
-  }
-
-  .v-grid-item:not(:last-child) {
-    // margin-right: 1rem;
-  }
-}
-
-.grid-enter,
-.grid-leave {
-  transition: all 0.5s ease-in;
-}
-
-.grid-enter-to,
-.grid-leave-from {
-  opacity: 1;
-}
-
-.grid-enter-from,
-.grid-leave-to {
-  opacity: 0;
 }
 </style>
