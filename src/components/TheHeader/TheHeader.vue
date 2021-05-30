@@ -97,19 +97,19 @@ export default class TheHeader extends Vue {
   }
 }
 .header {
+  padding: 0.5rem;
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-flow: row nowrap;
   background: $main-color;
   backdrop-filter: blur(2px);
-  padding: 0.5rem;
-  position: relative;
   box-shadow: $box-shadow--dark;
   transition: all 0.4s ease-in;
 
   @include mobile {
-    padding: 8px;
+    padding: 8px 8px 8px 0px;
   }
 
   @media screen and (max-width: 320px) {
