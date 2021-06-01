@@ -253,12 +253,17 @@ export default class Auth extends Vue {
     z-index: 10;
     display: flex;
     justify-content: center;
-    align-self: stretch;
+    justify-self: center;
+    width: 60vw;
     flex-flow: row nowrap;
     box-shadow: $box-shadow--dark;
     background-color: $main-color;
-    backdrop-filter: blur(2px);
     transition: all 0.5s ease-in-out;
+
+    @include mobile {
+      width: unset;
+      align-self: stretch;
+    }
 
     &::before {
       content: "";
