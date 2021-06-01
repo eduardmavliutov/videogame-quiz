@@ -165,17 +165,16 @@ export default class Auth extends Vue {
             points
           })
         })
+        this.showMessage('Registration is successful!', 'info')
+
+        const timeout = setTimeout(() => {
+          this.$router.push('/')
+          clearTimeout(timeout)
+        }, 1000)
       })
       .catch((error) => {
-        this.handleError(error.response.data.error.message)
+        this.showMessage(error.message, 'error')
       })
-
-    this.showMessage('Registration is successful!', 'info')
-
-    const timeout = setTimeout(() => {
-      this.$router.push('/')
-      clearTimeout(timeout)
-    }, 1000)
   }
 
   /**
@@ -202,27 +201,16 @@ export default class Auth extends Vue {
             points
           })
         })
+        this.showMessage('Authentication is successful!', 'info')
+
+        const timeout = setTimeout(() => {
+          this.$router.push('/')
+          clearTimeout(timeout)
+        }, 1000)
       })
       .catch((error) => {
-        console.log(error)
+        this.showMessage(error.message, 'error')
       })
-
-    this.showMessage('Authentication is successful!', 'info')
-
-    const timeout = setTimeout(() => {
-      this.$router.push('/')
-      clearTimeout(timeout)
-    }, 1000)
-  }
-
-  /**
-   * Error handler, shows message depending on type of error
-   */
-  handleError (message: string): void {
-    const errorMessage = message === 'EMAIL_EXISTS'
-      ? this.message = 'User with this email is already exists!'
-      : this.message = 'Server error, try later.'
-    this.showMessage(errorMessage, 'error')
   }
 
   /**
