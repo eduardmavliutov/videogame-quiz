@@ -37,8 +37,6 @@ export default class App extends Vue {
   flex-flow: column nowrap;
   height: 100%;
 
-  backdrop-filter: blur(10px);
-
   &::after {
     content: "";
     background: border-box url("~@/assets/images/bricks-bg.jpeg") repeat;

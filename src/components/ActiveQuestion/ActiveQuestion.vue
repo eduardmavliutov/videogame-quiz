@@ -242,7 +242,6 @@ export default class ActiveQuestion extends Vue {
     flex-flow: row nowrap;
     box-shadow: $box-shadow--dark;
     background-color: $main-color;
-    backdrop-filter: blur(2px);
     transition: all 0.5s ease-in-out;
 
     &::before {
