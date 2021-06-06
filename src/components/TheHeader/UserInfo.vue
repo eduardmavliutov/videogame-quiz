@@ -1,5 +1,10 @@
 <template>
-  <div class="user-info">
+  <div
+    class="user-info"
+    :class="{ 'menu-is-open': showUserMenu }"
+    @click="showUserMenu = !showUserMenu"
+    @mouseleave="showUserMenu = !showUserMenu"
+  >
     <p class="user-info__name">
       {{ userName }}
     </p>
@@ -25,6 +30,15 @@
         <span class="user-info__finished-quizes-counter">{{ completedQuizes }}</span>
       </div>
     </div>
+    <transition name="menu">
+      <ul
+        v-if="showUserMenu"
+        class="user-info__menu"
+      >
+        <li class="user-info__menu-item">Edit profile</li>
+        <li class="user-info__menu-item">Logout</li>
+      </ul>
+    </transition>
   </div>
 </template>
 <script lang="ts">
@@ -52,6 +66,11 @@ export default class UserInfo extends Vue {
    * will be applied or not
    */
   private animateCompletedQuizes = false
+
+  /**
+   * Defines whether to show user menu or not
+   */
+  private showUserMenu = false
 
   /**
    * Watcher for points property
@@ -112,16 +131,31 @@ export default class UserInfo extends Vue {
   }
 }
 .user-info {
+  position: relative;
   display: flex;
   justify-content: center;
   flex-flow: column nowrap;
   background-color: $color-complementary--light;
-  border-radius: 10px;
   padding: 0.5rem;
   color: $main-color;
   font-weight: bold;
+  transition: all 0.3s ease-in-out;
+  border-radius: 10px;
+
+  &.menu-is-open {
+    border-radius: unset;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+
+    @include mobile {
+      border-radius: 10px;
+    }
+  }
 
   @include mobile {
+    position: unset;
     padding: 0 8px;
   }
 
@@ -132,12 +166,15 @@ export default class UserInfo extends Vue {
 
   &__name {
     cursor: pointer;
-    max-width: 8rem;
     font-weight: bold;
     flex-shrink: 2;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+
+    @include mobile {
+      max-width: 8rem;
+    }
   }
 
   &__stats {
@@ -163,6 +200,78 @@ export default class UserInfo extends Vue {
       animation-fill-mode: backwards;
       animation-iteration-count: infinite;
     }
+  }
+
+  &__menu {
+    position: absolute;
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    flex-flow: column nowrap;
+    top: 4.5rem; // 4rem + 0.5rem padding in TheHeader component
+    left: 0px;
+    z-index: 10;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    overflow: hidden;
+
+    &.hidden {
+      display: none;
+    }
+
+    @include mobile {
+      background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.01) 0%,
+        $color-complementary--light 10%
+      );
+      border-radius: unset;
+      padding-top: 1rem;
+      top: 3.5rem;
+      z-index: unset;
+      width: 100%;
+      height: 100vh;
+    }
+
+    @media screen and (max-width: 320px) {
+      top: 3rem;
+      padding-top: 0;
+    }
+
+    &-item {
+      padding: 1rem;
+      transition: all 0.1s ease-in-out;
+      background-color: rgba(#e8e8e8, 0.95);
+
+      &:not(:last-child) {
+        border-bottom: 2px $main-color solid;
+      }
+
+      &:hover {
+        background-color: #e8e8e8;
+      }
+
+      &:active {
+        box-shadow: inset $box-shadow--default;
+      }
+    }
+  }
+}
+// TODO: Переместить внутрь основных стилей
+.menu {
+  &-enter,
+  &-leave-to {
+    opacity: 0;
+    transform: translateY(-5rem);
+  }
+  &-enter-to,
+  &-leave {
+    opacity: 1;
+    transform: translateY(0rem);
+  }
+  &-enter-active,
+  &-leave-active {
+    transition: 0.2s all ease-in-out;
   }
 }
 </style>

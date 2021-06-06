@@ -27,7 +27,7 @@
         :userName="activeUser"
         :points="points"
         :completed-quizes="completedQuizes"
-        @click.native="logoutHandler"
+        @logout="logoutHandler"
       />
     </div>
   </header>
@@ -107,8 +107,10 @@ export default class TheHeader extends Vue {
   backdrop-filter: blur(2px);
   box-shadow: $box-shadow--dark;
   transition: all 0.4s ease-in;
+  height: 5.5rem;
 
   @include mobile {
+    height: 4.5rem;
     padding: 8px 8px 8px 0px;
   }
 
