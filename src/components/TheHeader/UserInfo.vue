@@ -3,7 +3,7 @@
     class="user-info"
     :class="{ 'menu-is-open': showUserMenu }"
     @click="showUserMenu = !showUserMenu"
-    @mouseleave="showUserMenu = !showUserMenu"
+    @mouseleave="showUserMenu = false"
   >
     <p class="user-info__name">
       {{ userName }}
@@ -30,19 +30,33 @@
         <span class="user-info__finished-quizes-counter">{{ completedQuizes }}</span>
       </div>
     </div>
-    <transition name="menu">
+    <transition
+      name="menu"
+      mode="out-in"
+    >
       <ul
         v-if="showUserMenu"
         class="user-info__menu"
       >
-        <li class="user-info__menu-item">Edit profile</li>
-        <li class="user-info__menu-item">Logout</li>
+        <li
+          class="user-info__menu-item"
+          @click.stop="editProfileClickHandler"
+        >
+          Edit profile
+        </li>
+        <li
+          class="user-info__menu-item"
+          @click.stop="logoutClickHandler"
+        >
+          Logout
+        </li>
       </ul>
     </transition>
   </div>
 </template>
 <script lang="ts">
 import { Prop, Component, Vue, Watch } from 'vue-property-decorator'
+import { NavigationGuardNext, Route } from 'vue-router'
 
 @Component({})
 export default class UserInfo extends Vue {
@@ -93,6 +107,22 @@ export default class UserInfo extends Vue {
   }
 
   /**
+   * Handler for clicking on 'Edit profile' in settings menu
+   */
+  editProfileClickHandler () {
+    this.showUserMenu = false
+    this.$emit('settings')
+  }
+
+  /**
+   * Handler for clicking on 'Logout' in settings menu
+   */
+  logoutClickHandler () {
+    this.showUserMenu = false
+    this.$emit('logout')
+  }
+
+  /**
    * Method for current point value that will be displayed
    * to user
    */
@@ -109,6 +139,11 @@ export default class UserInfo extends Vue {
         }
       }, 50)
     }
+  }
+
+  beforeRouteLeave (to: Route, from: Route, next: NavigationGuardNext) {
+    this.showUserMenu = false
+    next()
   }
 
   /**
@@ -132,6 +167,7 @@ export default class UserInfo extends Vue {
 }
 .user-info {
   position: relative;
+  // z-index: 1;
   display: flex;
   justify-content: center;
   flex-flow: column nowrap;
@@ -170,6 +206,7 @@ export default class UserInfo extends Vue {
     flex-shrink: 2;
     overflow: hidden;
     white-space: nowrap;
+    text-align: center;
     text-overflow: ellipsis;
 
     @include mobile {
@@ -181,6 +218,10 @@ export default class UserInfo extends Vue {
     display: flex;
     justify-content: space-around;
     flex-flow: row nowrap;
+  }
+
+  &__points {
+    margin-right: 0.5rem;
   }
 
   &__points,
@@ -208,11 +249,12 @@ export default class UserInfo extends Vue {
     display: flex;
     justify-content: flex-start;
     flex-flow: column nowrap;
-    top: 4.5rem; // 4rem + 0.5rem padding in TheHeader component
+    top: 4rem; // 4rem + 0.5rem padding in TheHeader component
     left: 0px;
     z-index: 10;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
+    border-top: 2px solid $main-color;
     overflow: hidden;
 
     &.hidden {
@@ -226,10 +268,11 @@ export default class UserInfo extends Vue {
         $color-complementary--light 10%
       );
       border-radius: unset;
+      border-top: none;
       padding-top: 1rem;
       top: 3.5rem;
-      z-index: unset;
-      width: 100%;
+      z-index: 20;
+      width: 100vw;
       height: 100vh;
     }
 

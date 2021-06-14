@@ -4,17 +4,19 @@ import Home from '@/views/Home.vue'
 import Quiz from '@/components/Quiz/Quiz.vue'
 import Auth from '@/views/Auth.vue'
 import ActiveQuestion from '@/components/ActiveQuestion/ActiveQuestion.vue'
+import UserSettingsPage from '@/views/UserSettings.vue'
 
 Vue.use(VueRouter)
 
 const routes: Array<RouteConfig> = [
   {
     path: '/',
-    name: 'Home',
+    name: 'home',
     component: Home
   },
   {
     path: '/quiz/:quizId',
+    name: 'quiz',
     component: Quiz
   },
   {
@@ -27,7 +29,13 @@ const routes: Array<RouteConfig> = [
   },
   {
     path: '/auth/',
+    name: 'auth',
     component: Auth
+  },
+  {
+    path: '/user-settings',
+    name: 'settings',
+    component: UserSettingsPage
   }
 ]
 

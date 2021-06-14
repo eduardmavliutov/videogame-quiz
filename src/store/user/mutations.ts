@@ -16,6 +16,7 @@ export const mutations: MutationTree<UserState> = {
     state.quizes = payload.quizes
     state.name = payload.name
     state.points = payload.points
+    state.photoURL = payload.photoURL
   },
 
   REMOVE_USER (state) {

@@ -4,6 +4,8 @@ import {
   CreateParticipatedQuizPayload,
   EditLetterPayload,
   MarkQuestionDonePayload,
+  UpdateUserName,
+  UpdateUserPhotoURL,
   UserState
 } from '@/types/store/user/user.interface'
 import { ActionTree } from 'vuex'
@@ -35,12 +37,13 @@ export const actions: ActionTree<UserState, RootState> = {
       }
     )
     // then we send that blank quiz with all quizes to the server
-    firebase.auth().currentUser?.uid && await firebase
-      .database()
-      .ref(`users/${firebase.auth().currentUser?.uid}/quizes`)
-      .set({
-        ...computedQuizes
-      })
+    firebase.auth().currentUser?.uid &&
+      (await firebase
+        .database()
+        .ref(`users/${firebase.auth().currentUser?.uid}/quizes`)
+        .set({
+          ...computedQuizes
+        }))
   },
   async addLetter ({ state }, payload: EditLetterPayload): Promise<void> {
     const { quizId, questionId, value } = payload
@@ -58,12 +61,13 @@ export const actions: ActionTree<UserState, RootState> = {
       ].letterPool.splice(value, 1)
       openedLetters[freeSpot] = choosenLetter
       state.quizes[quizId][questionId].openedLetters = openedLetters
-      firebase.auth().currentUser?.uid && await firebase
-        .database()
-        .ref(`users/${firebase.auth().currentUser?.uid}/quizes`)
-        .set({
-          ...state.quizes
-        })
+      firebase.auth().currentUser?.uid &&
+        (await firebase
+          .database()
+          .ref(`users/${firebase.auth().currentUser?.uid}/quizes`)
+          .set({
+            ...state.quizes
+          }))
     }
   },
 
@@ -82,12 +86,13 @@ export const actions: ActionTree<UserState, RootState> = {
       }
       state.quizes[quizId][questionId].openedLetters = openedLetters
       state.quizes[quizId][questionId].letterPool.push(choosenLetter)
-      firebase.auth().currentUser?.uid && await firebase
-        .database()
-        .ref(`users/${firebase.auth().currentUser?.uid}/quizes`)
-        .set({
-          ...state.quizes
-        })
+      firebase.auth().currentUser?.uid &&
+        (await firebase
+          .database()
+          .ref(`users/${firebase.auth().currentUser?.uid}/quizes`)
+          .set({
+            ...state.quizes
+          }))
     }
   },
 
@@ -95,20 +100,22 @@ export const actions: ActionTree<UserState, RootState> = {
     const { quizId, questionId } = payload
     const { quizes } = state
     quizes[quizId][questionId].done = true
-    firebase.auth().currentUser?.uid && await firebase
-      .database()
-      .ref(`users/${firebase.auth().currentUser?.uid}/quizes`)
-      .set({
-        ...quizes
-      })
+    firebase.auth().currentUser?.uid &&
+      (await firebase
+        .database()
+        .ref(`users/${firebase.auth().currentUser?.uid}/quizes`)
+        .set({
+          ...quizes
+        }))
   },
 
   async addPoints ({ state }, payload: AddPointsPayload) {
     const points = Number(state.points) + payload.points
-    firebase.auth().currentUser?.uid && await firebase
-      .database()
-      .ref(`users/${firebase.auth().currentUser?.uid}/points`)
-      .set(points)
+    firebase.auth().currentUser?.uid &&
+      (await firebase
+        .database()
+        .ref(`users/${firebase.auth().currentUser?.uid}/points`)
+        .set(points))
   },
 
   async logout ({ commit }): Promise<void> {
@@ -119,5 +126,21 @@ export const actions: ActionTree<UserState, RootState> = {
         console.log(error)
       })
     commit('REMOVE_USER')
+  },
+
+  async updateUserName ({ commit }, payload: UpdateUserName) {
+    await firebase
+      .database()
+      .ref(`users/${firebase.auth().currentUser?.uid}/name`)
+      .set(payload.name)
+      .catch((error) => console.log(error))
+  },
+
+  async updateUserPhotoURL ({ commit }, payload: UpdateUserPhotoURL) {
+    await firebase
+      .database()
+      .ref(`users/${firebase.auth().currentUser?.uid}/photoURL`)
+      .set(payload.photoURL)
+      .catch((error) => console.log(error))
   }
 }

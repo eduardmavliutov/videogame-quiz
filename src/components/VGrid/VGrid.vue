@@ -23,6 +23,10 @@ export default class VGrid extends Vue {
     grid-template-columns: repeat(2, 1fr);
   }
 
+  @media screen and (max-width: 320px) {
+    grid-template-columns: repeat(2, minmax(0, auto));
+  }
+
   &--quiz-list {
     @include mobile {
       grid-template-columns: 100%;

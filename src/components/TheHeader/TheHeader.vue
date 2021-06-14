@@ -15,20 +15,26 @@
       />
     </div>
     <div class="header__auth">
-      <router-link
-        v-if="!isAuthenticated"
-        class="header__auth-button"
-        to="/auth"
+      <transition
+        name="header__auth"
+        mode="out-in"
       >
-        Login
-      </router-link>
-      <user-info
-        v-else
-        :userName="activeUser"
-        :points="points"
-        :completed-quizes="completedQuizes"
-        @logout="logoutHandler"
-      />
+        <router-link
+          v-if="!isAuthenticated"
+          class="header__auth-button"
+          to="/auth"
+        >
+          Login
+        </router-link>
+        <user-info
+          v-else
+          :userName="activeUser"
+          :points="points"
+          :completed-quizes="completedQuizes"
+          @logout="logoutHandler"
+          @settings="settingsHandler"
+        />
+      </transition>
     </div>
   </header>
 </template>
@@ -85,6 +91,15 @@ export default class TheHeader extends Vue {
       this.$router.push('/')
     }
   }
+
+  /**
+   * Handler-router to user settings
+   */
+  settingsHandler (): void {
+    this.$router.push({
+      name: 'settings'
+    })
+  }
 }
 </script>
 <style lang="scss">
@@ -110,6 +125,7 @@ export default class TheHeader extends Vue {
   height: 5.5rem;
 
   @include mobile {
+    z-index: 1;
     height: 4.5rem;
     padding: 8px 8px 8px 0px;
   }
@@ -182,6 +198,21 @@ export default class TheHeader extends Vue {
   }
 
   &__auth {
+    &-enter-to,
+    &-leave {
+      transform: translateX(0%);
+    }
+
+    &-enter-active,
+    &-leave-active {
+      transition: all 0.3s ease-in-out;
+    }
+
+    &-enter,
+    &-leave-to {
+      transform: translateX(100%);
+    }
+
     &-button {
       text-decoration: none;
       padding: 1rem;

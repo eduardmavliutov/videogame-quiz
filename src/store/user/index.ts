@@ -10,7 +10,8 @@ export const state: UserState = {
   email: '',
   name: '',
   quizes: {},
-  points: 0
+  points: 0,
+  photoURL: ''
 }
 
 const namespaced = true

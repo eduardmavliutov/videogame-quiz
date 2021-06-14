@@ -34,6 +34,10 @@ export default class QuizQuestion extends Vue {
     max-width: 10rem;
   }
 
+  @media screen and (max-width: 320px) {
+    max-width: 8rem;
+  }
+
   &:hover {
     box-shadow: $box-shadow--white;
   }

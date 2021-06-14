@@ -151,18 +151,20 @@ export default class Auth extends Vue {
           email: this.form.email.value,
           name: '',
           quizes: [],
-          points: 0
+          points: 0,
+          photoURL: ''
         })
         return firebase.database().ref(`/users/${userId}`)
       })
       .then((result) => {
         result.on('value', (snapshot) => {
-          const { email, name, points, quizes = [] } = snapshot.val()
+          const { email, name, points, photoURL, quizes = [] } = snapshot.val()
           this.SET_USER({
             email,
             name,
             quizes,
-            points
+            points,
+            photoURL
           })
         })
         this.showMessage('Registration is successful!', 'info')
@@ -193,12 +195,13 @@ export default class Auth extends Vue {
       })
       .then((result) => {
         result.on('value', (snapshot) => {
-          const { email, name, points, quizes = [] } = snapshot.val()
+          const { email, photoURL, name, points, quizes = [] } = snapshot.val()
           this.SET_USER({
             email,
             name,
             quizes,
-            points
+            points,
+            photoURL
           })
         })
         this.showMessage('Authentication is successful!', 'info')

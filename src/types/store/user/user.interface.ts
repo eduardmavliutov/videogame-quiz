@@ -7,9 +7,7 @@ export interface UserState {
   };
   name: string;
   points: number;
-  // имя ?
-  // ник ?
-  // дата рождения ?
+  photoURL: string;
 }
 
 export type SetUserPayload = UserState
@@ -44,4 +42,12 @@ export interface MarkQuestionDonePayload {
 
 export interface AddPointsPayload {
   points: number;
+}
+
+export interface UpdateUserName {
+  name?: string;
+}
+
+export interface UpdateUserPhotoURL {
+  photoURL?: string;
 }

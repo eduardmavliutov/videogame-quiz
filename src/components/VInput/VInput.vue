@@ -20,7 +20,12 @@
       @input="$emit('update:model', $event.target.value)"
     />
     <transition name="error">
-      <small v-if="errors.length" class="v-input__error-message">{{ errors[0] }}</small>
+      <small
+        v-if="errors.length"
+        class="v-input__error-message"
+      >
+        {{ errors[0] }}
+      </small>
     </transition>
   </validation-provider>
 </template>
@@ -37,6 +42,7 @@ export default class VInput extends Vue {
   @Prop({ required: true, type: String }) rules!: string
   @Prop({ required: true, type: String }) name!: string
   @Prop({ required: true, type: String }) type!: string
+  @Prop({ required: false, type: Boolean, default: false }) disabled!: boolean
   @Prop({ required: true }) model!: string
 }
 </script>
@@ -84,10 +90,12 @@ export default class VInput extends Vue {
     transition: opacity 0.4s ease-in-out;
   }
 
-  &-enter, &-leave-to  {
+  &-enter,
+  &-leave-to {
     opacity: 0;
   }
-  &-enter-to, &-leave {
+  &-enter-to,
+  &-leave {
     opacity: 1;
   }
 }
