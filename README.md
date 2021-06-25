@@ -1,19 +1,20 @@
-# Videogame Quiz
+# videogame-quiz
 
-Quiz for videogame lovers (as I am). Optimized for mobile browsers. Currently in development. Release is coming soon!
+## Build Setup
 
-**Stack**: Vue, Vuex, TypeScript, Firebase
+```bash
+# install dependencies
+$ npm install
 
-# serve
-```
-npm run serve
+# serve with hot reload at localhost:3000
+$ npm run dev
+
+# build for production and launch server
+$ npm run build
+$ npm run start
+
+# generate static project
+$ npm run generate
 ```
 
-# build
-```
-npm run build
-```
-# test
-```
-npm run test:unit
-```
+For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).

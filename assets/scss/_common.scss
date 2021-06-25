@@ -1,0 +1,48 @@
+body {
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  font-family: $font-family;
+  font-size: $font-size-normal-desktop;
+  color: $color-white;
+}
+
+h1,
+h2 {
+  margin: 0;
+  padding: 0;
+}
+
+.visually-hidden {
+  position: absolute;
+  clip: rect(0 0 0 0);
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+}
+
+.visually-hidden-mobile {
+  @include mobile {
+    position: absolute;
+    clip: rect(0 0 0 0);
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+  }
+}
+
+.route-change {
+  &-enter-active,
+  &-leave-active {
+    transition: 0.3s opacity ease;
+  }
+  &-enter,
+  &-leave-to {
+    opacity: 0;
+  }
+
+  &-enter-to,
+  &-leave {
+    opacity: 1;
+  }
+}
