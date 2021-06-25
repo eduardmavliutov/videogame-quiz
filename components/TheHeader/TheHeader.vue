@@ -123,6 +123,7 @@ export default class TheHeader extends Vue {
   box-shadow: $box-shadow--dark;
   transition: all 0.4s ease-in;
   height: 5.5rem;
+  z-index: 1;
 
   @include mobile {
     z-index: 1;
