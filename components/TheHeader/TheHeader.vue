@@ -14,8 +14,7 @@
         class="header__logo-title--mobile"
       />
     </div>
-    <v-loader v-if="isAuthLoading" />
-    <div v-else class="header__auth">
+    <div class="header__auth">
       <transition
         name="header__auth"
         mode="out-in"
@@ -44,19 +43,16 @@
 import { Component, Vue } from 'nuxt-property-decorator'
 import UserInfo from '@/components/TheHeader/UserInfo.vue'
 import VTitle from '@/components/VTitle/VTitle.vue'
-import VLoader from '@/components/VLoader/VLoader.vue'
 import { namespace } from 'vuex-class'
 import { Quiz } from '@/types/store/quiz/quiz.interface'
 
 const userModule = namespace('user')
 const quizModule = namespace('quiz')
-const authModule = namespace('auth')
 
 @Component({
   components: {
     UserInfo,
-    VTitle,
-    VLoader
+    VTitle
   }
 })
 export default class TheHeader extends Vue {
@@ -67,7 +63,6 @@ export default class TheHeader extends Vue {
   @userModule.Getter('completedQuizes') completedQuizes!: number
   @userModule.Action('logout') logout!: () => Promise<void>
   @quizModule.Getter('quiz') quiz!: (quizId: string) => Quiz
-  @authModule.Getter('isAuthLoading') isAuthLoading!: boolean
 
   /**
    * Retrieves current user`s name if there is one set or their email
@@ -94,7 +89,9 @@ export default class TheHeader extends Vue {
   logoutHandler (): void {
     this.logout()
     if (this.$route.path !== '/') {
-      this.$router.push('/')
+      this.$router.push({
+        name: 'index'
+      })
     }
   }
 

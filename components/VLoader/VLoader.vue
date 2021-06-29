@@ -11,9 +11,10 @@ export default class VLoader extends Vue {}
 <style lang="scss">
 .lds-ellipsis {
   display: inline-block;
+  align-self: center;
   position: relative;
-  width: 80px;
-  height: 80px;
+  width: 5rem;
+  height: 3rem;
 }
 .lds-ellipsis div {
   position: absolute;

@@ -43,6 +43,7 @@
             {{ message }}
           </span>
         </transition>
+        <v-loader v-if="isAuthLoading" />
       </form>
     </validation-observer>
   </v-page>
@@ -52,6 +53,7 @@ import { Vue, Component } from 'nuxt-property-decorator'
 import VPage from '@/components/VPage/VPage.vue'
 import VTitle from '@/components/VTitle/VTitle.vue'
 import VInput from '@/components/VInput/VInput.vue'
+import VLoader from '@/components/VLoader/VLoader.vue'
 import { extend, ValidationObserver } from 'vee-validate'
 import { required, email, min } from 'vee-validate/dist/rules'
 import { namespace } from 'vuex-class'
@@ -91,6 +93,7 @@ extend('password', {
     VPage,
     VTitle,
     VInput,
+    VLoader,
     ValidationObserver
   }
 })
@@ -98,6 +101,7 @@ export default class Auth extends Vue {
   @userModule.Mutation('SET_USER') SET_USER!: (payload: SetUserPayload) => void
   @userModule.Action('fetchUserData') fetchUserData!: (payload: FetchUserData) => Promise<void>
   @authModule.Mutation('SET_IS_AUTH_LOADING') SET_IS_AUTH_LOADING !: (payload: SetIsAuthLoadingPayload) => void
+  @authModule.Getter('isAuthLoading') isAuthLoading!: boolean
 
   /**
    * Might be 'login' or 'signUp', defines handler that will be used
