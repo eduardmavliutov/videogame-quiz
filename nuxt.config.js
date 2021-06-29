@@ -1,8 +1,9 @@
 export default {
   ssr: false,
+
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
-    title: 'videogame-quiz',
+    title: 'Videogame Quiz',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -18,10 +19,6 @@ export default {
   plugins: [
     {
       src: '@/plugins/vuex-persist',
-      ssr: false,
-    },
-    {
-      src: '@/plugins/redirect-to-auth',
       ssr: false
     }
   ],
@@ -90,6 +87,7 @@ export default {
   },
 
   router: {
+    middleware: ['router-guard'],
     extendRoutes(routes, resolve) {
       routes.push(
         ...[
