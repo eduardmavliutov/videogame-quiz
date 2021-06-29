@@ -57,9 +57,11 @@ import { required, email, min } from 'vee-validate/dist/rules'
 import { namespace } from 'vuex-class'
 import { PASSWORD_MIN_LENGTH } from '@/helpers/constants'
 import { AuthForm } from '@/types/views/auth.interface'
-import { SetUserPayload } from '@/types/store/user/user.interface'
+import { FetchUserData, SetUserPayload } from '@/types/store/user/user.interface'
+import { SetIsAuthLoadingPayload } from '@/types/store/auth/auth.interface'
 
 const userModule = namespace('user')
+const authModule = namespace('auth')
 
 extend('required', {
   ...required,
@@ -94,6 +96,8 @@ extend('password', {
 })
 export default class Auth extends Vue {
   @userModule.Mutation('SET_USER') SET_USER!: (payload: SetUserPayload) => void
+  @userModule.Action('fetchUserData') fetchUserData!: (payload: FetchUserData) => Promise<void>
+  @authModule.Mutation('SET_IS_AUTH_LOADING') SET_IS_AUTH_LOADING !: (payload: SetIsAuthLoadingPayload) => void
 
   /**
    * Might be 'login' or 'signUp', defines handler that will be used
@@ -184,27 +188,18 @@ export default class Auth extends Vue {
   loginHandler (): void {
     const authData = {
       email: this.form.email.value.toLowerCase(),
-      password: this.form.password.value,
-      returnSecureToken: true
+      password: this.form.password.value
     }
+    this.SET_IS_AUTH_LOADING({
+      isAuthLoading: true
+    })
     this.$fire.auth.signInWithEmailAndPassword(authData.email, authData.password)
       .then((loginStatus) => {
         const userId = `${loginStatus.user?.uid}`
-        return this.$fire.database.ref(`/users/${userId}`)
+        this.fetchUserData({ userId })
       })
-      .then((result) => {
-        result.on('value', (snapshot) => {
-          const { email, photoURL, name, points, quizes = [] } = snapshot.val()
-          this.SET_USER({
-            email,
-            name,
-            quizes,
-            points,
-            photoURL
-          })
-        })
+      .then(() => {
         this.showMessage('Authentication is successful!', 'info')
-
         const timeout = setTimeout(() => {
           this.$router.push('/')
           clearTimeout(timeout)
@@ -212,6 +207,11 @@ export default class Auth extends Vue {
       })
       .catch((error) => {
         this.showMessage(error.message, 'error')
+      })
+      .finally(() => {
+        this.SET_IS_AUTH_LOADING({
+          isAuthLoading: false
+        })
       })
   }
 

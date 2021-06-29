@@ -14,26 +14,28 @@
         class="header__logo-title--mobile"
       />
     </div>
-    <div class="header__auth">
+    <v-loader v-if="isAuthLoading" />
+    <div v-else class="header__auth">
       <transition
         name="header__auth"
         mode="out-in"
       >
-        <nuxt-link
-          v-if="!isAuthenticated"
-          class="header__auth-button"
-          to="/auth"
-        >
-          Login
-        </nuxt-link>
         <user-info
-          v-else
+          v-if="isAuthenticated"
           :user-name="activeUser"
           :points="points"
           :completed-quizes="completedQuizes"
           @logout="logoutHandler"
           @settings="settingsHandler"
         />
+        <nuxt-link
+          v-else
+          v-once
+          class="header__auth-button"
+          to="/auth"
+        >
+          Login
+        </nuxt-link>
       </transition>
     </div>
   </header>
@@ -42,16 +44,19 @@
 import { Component, Vue } from 'nuxt-property-decorator'
 import UserInfo from '@/components/TheHeader/UserInfo.vue'
 import VTitle from '@/components/VTitle/VTitle.vue'
+import VLoader from '@/components/VLoader/VLoader.vue'
 import { namespace } from 'vuex-class'
 import { Quiz } from '@/types/store/quiz/quiz.interface'
 
 const userModule = namespace('user')
 const quizModule = namespace('quiz')
+const authModule = namespace('auth')
 
 @Component({
   components: {
     UserInfo,
-    VTitle
+    VTitle,
+    VLoader
   }
 })
 export default class TheHeader extends Vue {
@@ -62,6 +67,7 @@ export default class TheHeader extends Vue {
   @userModule.Getter('completedQuizes') completedQuizes!: number
   @userModule.Action('logout') logout!: () => Promise<void>
   @quizModule.Getter('quiz') quiz!: (quizId: string) => Quiz
+  @authModule.Getter('isAuthLoading') isAuthLoading!: boolean
 
   /**
    * Retrieves current user`s name if there is one set or their email
@@ -199,6 +205,7 @@ export default class TheHeader extends Vue {
   }
 
   &__auth {
+    display: flex;
     &-enter-to,
     &-leave {
       transform: translateX(0%);
@@ -206,7 +213,7 @@ export default class TheHeader extends Vue {
 
     &-enter-active,
     &-leave-active {
-      transition: all 0.3s ease-in-out;
+      transition: all 0.2s ease-in-out;
     }
 
     &-enter,

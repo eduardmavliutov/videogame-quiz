@@ -9,7 +9,8 @@ import {
   UserState,
   ParticipatedQuestion,
   SetUserPayload,
-  SetQuizesPayload
+  SetQuizesPayload,
+  FetchUserData
 } from '@/types/store/user/user.interface'
 import { EMPTY_LETTER_BOX_SYMBOL, SPACE_SYMBOL } from '@/helpers/constants'
 import {
@@ -74,6 +75,20 @@ export const actions: ActionTree<UserState, RootState> = {
       .database
       .ref(`users/${this.$fire.auth.currentUser?.uid}/points`)
       .set(points)
+  },
+
+  async fetchUserData ({ commit }, payload: FetchUserData) {
+    const result = await this.$fire.database.ref(`/users/${payload.userId}`)
+    await result.on('value', (snapshot) => {
+      const { email, photoURL, name, points, quizes = [] } = snapshot.val()
+      commit('SET_USER', {
+        email,
+        name,
+        quizes,
+        points,
+        photoURL
+      })
+    })
   },
 
   async logout({ commit }): Promise<void> {

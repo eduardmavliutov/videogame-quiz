@@ -1,4 +1,5 @@
 export default {
+  ssr: false,
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
     title: 'videogame-quiz',
@@ -19,6 +20,10 @@ export default {
       src: '@/plugins/vuex-persist',
       ssr: false,
     },
+    {
+      src: '@/plugins/redirect-to-auth',
+      ssr: false
+    }
   ],
 
   pageTransition: {
@@ -56,14 +61,17 @@ export default {
           auth: {
             persistence: 'local',
             initialize: {
-              onAuthStateChangedAction({ dispatch }, { authUser }) {
-                if (!authUser) {
-                  console.log('WE ARE NOT AUTHORIZED')
-                  dispatch('user/logout')
+              onAuthStateChangedAction (ctx, { authUser }) {
+                console.log('onAuthStateChangedAction')
+                if (!ctx.getters('user/isAuthenticated') && authUser) {
+                  ctx.dispatch('user/fetchUserData', {
+                    userId: authUser.uid
+                  }, { root: true })
+                } else {  
+                  ctx.commit('user/logout', { root: true })
                 }
-              },
-            },
-            ssr: true,
+              }
+            }
           },
           database: true,
         },
@@ -99,6 +107,7 @@ export default {
               __dirname,
               'components/ActiveQuestion/ActiveQuestion.vue'
             ),
+            name: 'quiz-question'
           },
         ]
       )

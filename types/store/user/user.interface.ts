@@ -57,3 +57,7 @@ export interface UpdateUserName {
 export interface UpdateUserPhotoURL {
   photoURL?: string;
 }
+
+export interface FetchUserData {
+  userId: string;
+}

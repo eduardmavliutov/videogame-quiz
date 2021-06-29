@@ -167,7 +167,6 @@ export default class UserInfo extends Vue {
 }
 .user-info {
   position: relative;
-  // z-index: 1;
   display: flex;
   justify-content: center;
   flex-flow: column nowrap;
