@@ -14,7 +14,6 @@ export default class VLoader extends Vue {}
   position: relative;
   width: 80px;
   height: 80px;
-  flex-grow: 1;
 }
 .lds-ellipsis div {
   position: absolute;
