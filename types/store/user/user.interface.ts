@@ -1,4 +1,5 @@
 import { Quiz, QuizQuestionLetter } from '@/types/store/quiz/quiz.interface'
+import firebase from 'firebase'
 
 export interface UserState {
   email: string;
@@ -60,4 +61,8 @@ export interface UpdateUserPhotoURL {
 
 export interface FetchUserData {
   userId: string;
+}
+
+export interface SubscribeUserModulePayload {
+  reference: firebase.database.Reference;
 }

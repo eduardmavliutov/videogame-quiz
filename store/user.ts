@@ -10,7 +10,8 @@ import {
   ParticipatedQuestion,
   SetUserPayload,
   SetQuizesPayload,
-  FetchUserData
+  FetchUserData,
+  SubscribeUserModulePayload
 } from '@/types/store/user/user.interface'
 import { EMPTY_LETTER_BOX_SYMBOL, SPACE_SYMBOL } from '@/helpers/constants'
 import {
@@ -18,6 +19,7 @@ import {
   QuizQuestionLetter
 } from '@/types/store/quiz/quiz.interface'
 import { GetterTree, MutationTree, ActionTree } from 'vuex'
+import firebase from 'firebase'
 
 export const actions: ActionTree<UserState, RootState> = {
   async createParticipatedQuiz(
@@ -77,9 +79,13 @@ export const actions: ActionTree<UserState, RootState> = {
       .set(points)
   },
 
-  async fetchUserData ({ commit }, payload: FetchUserData) {
+  async fetchUserData ({ dispatch }, payload: FetchUserData) {
     const result = await this.$fire.database.ref(`/users/${payload.userId}`)
-    await result.on('value', (snapshot) => {
+    await dispatch('subscribeUserModule', { result })
+  },
+
+  async subscribeUserModule({ commit }, payload: SubscribeUserModulePayload) {
+    await payload.reference.on('value', (snapshot: firebase.database.DataSnapshot) => {
       const { email, photoURL, name, points, quizes = [] } = snapshot.val()
       commit('SET_USER', {
         email,

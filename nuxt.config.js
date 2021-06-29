@@ -20,6 +20,10 @@ export default {
     {
       src: '@/plugins/vuex-persist',
       ssr: false
+    },
+    {
+      src: '@/plugins/validation-rules',
+      ssr: false
     }
   ],
 

@@ -54,39 +54,15 @@ import VPage from '@/components/VPage/VPage.vue'
 import VTitle from '@/components/VTitle/VTitle.vue'
 import VInput from '@/components/VInput/VInput.vue'
 import VLoader from '@/components/VLoader/VLoader.vue'
-import { extend, ValidationObserver } from 'vee-validate'
-import { required, email, min } from 'vee-validate/dist/rules'
+import { ValidationObserver } from 'vee-validate'
 import { namespace } from 'vuex-class'
 import { PASSWORD_MIN_LENGTH } from '@/helpers/constants'
 import { AuthForm } from '@/types/views/auth.interface'
-import { FetchUserData, SetUserPayload } from '@/types/store/user/user.interface'
+import { FetchUserData, SetUserPayload, SubscribeUserModulePayload } from '@/types/store/user/user.interface'
 import { SetIsAuthLoadingPayload } from '@/types/store/auth/auth.interface'
 
 const userModule = namespace('user')
 const authModule = namespace('auth')
-
-extend('required', {
-  ...required,
-  message: '{_field_} field is required'
-})
-
-extend('email', {
-  ...email,
-  message: 'Enter valid email'
-})
-
-extend('min', {
-  ...min,
-  message: `{_field_} must have length more than ${PASSWORD_MIN_LENGTH}`
-})
-
-extend('password', {
-  validate: (value) => {
-    const regex = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{6,})')
-    return regex.test(value)
-  },
-  message: 'Password must contain at least 1 lowercase character, 1 uppercase character, 1 numeric character'
-})
 
 @Component({
   components: {
@@ -100,6 +76,7 @@ extend('password', {
 export default class Auth extends Vue {
   @userModule.Mutation('SET_USER') SET_USER!: (payload: SetUserPayload) => void
   @userModule.Action('fetchUserData') fetchUserData!: (payload: FetchUserData) => Promise<void>
+  @userModule.Action('subscribeUserModule') subscribeUserModule!: (payload: SubscribeUserModulePayload) => Promise<void>
   @authModule.Mutation('SET_IS_AUTH_LOADING') SET_IS_AUTH_LOADING !: (payload: SetIsAuthLoadingPayload) => void
   @authModule.Getter('isAuthLoading') isAuthLoading!: boolean
 
@@ -151,7 +128,13 @@ export default class Auth extends Vue {
    * Puts received tokens and user info in store
    */
   signUpHandler (): void {
-    this.$fire.auth.createUserWithEmailAndPassword(this.form.email.value, this.form.password.value)
+    const email = this.form.email.value.trim().toLowerCase()
+    const password = this.form.password.value
+
+    this.SET_IS_AUTH_LOADING({
+      isAuthLoading: true
+    })
+    this.$fire.auth.createUserWithEmailAndPassword(email, password)
       .then((loginStatus) => {
         const userId = `${loginStatus.user?.uid}`
         this.$fire.database.ref(`/users/${userId}/`).set({
@@ -164,18 +147,12 @@ export default class Auth extends Vue {
         return this.$fire.database.ref(`/users/${userId}`)
       })
       .then((result) => {
-        result.on('value', (snapshot) => {
-          const { email, name, points, photoURL, quizes = [] } = snapshot.val()
-          this.SET_USER({
-            email,
-            name,
-            quizes,
-            points,
-            photoURL
-          })
+        this.subscribeUserModule({ 
+          reference: result 
         })
+      })
+      .then(() => {
         this.showMessage('Registration is successful!', 'info')
-
         const timeout = setTimeout(() => {
           this.$router.push('/')
           clearTimeout(timeout)
@@ -184,20 +161,24 @@ export default class Auth extends Vue {
       .catch((error) => {
         this.showMessage(error.message, 'error')
       })
+      .finally(() => {
+        this.SET_IS_AUTH_LOADING({
+          isAuthLoading: false
+        })
+      })
   }
 
   /**
    * Logins existing user, then fetches their data. Stores authdata and userdata in the store
    */
   loginHandler (): void {
-    const authData = {
-      email: this.form.email.value.toLowerCase(),
-      password: this.form.password.value
-    }
+    const email = this.form.email.value.trim().toLowerCase()
+    const password = this.form.password.value
+    
     this.SET_IS_AUTH_LOADING({
       isAuthLoading: true
     })
-    this.$fire.auth.signInWithEmailAndPassword(authData.email, authData.password)
+    this.$fire.auth.signInWithEmailAndPassword(email, password)
       .then((loginStatus) => {
         const userId = `${loginStatus.user?.uid}`
         this.fetchUserData({ userId })
