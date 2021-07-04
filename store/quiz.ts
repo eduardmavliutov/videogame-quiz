@@ -38,7 +38,6 @@ export const state = (): QuizState => ({
       },
       questions: [
         {
-          done: false,
           rightAnswer: 'god of war',
           image: {
             src: require('@/assets/images/quizes/ps4-exclusives/god-of-war.jpeg'),
@@ -78,7 +77,6 @@ export const state = (): QuizState => ({
           ]
         },
         {
-          done: false,
           rightAnswer: 'uncharted 4',
           image: {
             src: require('@/assets/images/quizes/ps4-exclusives/uncharted-4.jpeg'),
@@ -116,7 +114,6 @@ export const state = (): QuizState => ({
           ]
         },
         {
-          done: false,
           rightAnswer: 'persona 5',
           image: {
             src: require('@/assets/images/quizes/ps4-exclusives/persona-5.jpeg'),
@@ -155,7 +152,6 @@ export const state = (): QuizState => ({
           ]
         }
       ],
-      done: false
     },
     {
       id: '324rfdsfsd',
@@ -165,7 +161,6 @@ export const state = (): QuizState => ({
         alt: 'horrors'
       },
       questions: [],
-      done: false
     }
   ]
 })

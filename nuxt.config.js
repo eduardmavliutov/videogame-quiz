@@ -24,6 +24,10 @@ export default {
     {
       src: '@/plugins/validation-rules',
       ssr: false
+    },
+    {
+      src: '@/plugins/vue-image',
+      ssr: false
     }
   ],
 
