@@ -105,6 +105,7 @@ export default class AdminQuizCard extends Vue {
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
+  justify-content: space-between;
 
   &::after {
     content: "";

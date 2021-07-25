@@ -3,7 +3,7 @@
     <v-title :title="pageTitle" />
     <section class="admin__quiz-question-list">
       <v-grid name="admin-quiz-question-list">
-        <admin-quiz-card 
+        <admin-quiz-card
           :title.sync="quiz.title"
           :image.sync="quiz.image"
         />
@@ -14,7 +14,16 @@
           :image.sync="question.image"
           :questionId="index"
         />
+        <v-add-button
+          @add="addButtonHandler"
+        />
       </v-grid>
+      <v-button
+        type="submit"
+        @click.native="saveButtonClickHandler"
+      >
+        Save
+      </v-button>
     </section>
   </v-page>
 </template>
@@ -25,7 +34,10 @@ import AdminQuizCard from '@/components/AdminQuizCard/AdminQuizCard.vue'
 import VGrid from '@/components/VGrid/VGrid.vue'
 import VPage from '@/components/VPage/VPage.vue'
 import VTitle from '@/components/VTitle/VTitle.vue'
-import { Quiz } from '@/types/store/quiz/quiz.interface'
+import VButton from '@/components/VButton/VButton.vue'
+import VAddButton from '@/components/VAddButton/VAddButton.vue'
+import { AdminQuiz } from '@/types/store/quiz/quiz.interface'
+import { emptyAdminQuiz } from '@/helpers/emptyModels';
 
 @Component({
   components: {
@@ -33,16 +45,23 @@ import { Quiz } from '@/types/store/quiz/quiz.interface'
     AdminQuizCard,
     VGrid,
     VPage,
-    VTitle
+    VTitle,
+    VButton,
+    VAddButton
   },
   layout: 'admin',
   async asyncData ({ $fire, route }) {
     try {
       const quizId = route.params.id
+      if (quizId === 'new') {
+        return {
+          quiz: emptyAdminQuiz
+        }
+      }
       const snapshot = await $fire.database.ref(`/quizes/${quizId}`).once('value')
       const quiz = snapshot.val()
       return {
-        quiz: quiz ?? {}
+        quiz
       }
     } catch (error) {
       console.log(error)
@@ -50,17 +69,24 @@ import { Quiz } from '@/types/store/quiz/quiz.interface'
   }
 })
 export default class AdminQuizPage extends Vue {
-  private quiz: Quiz = {
-    title: '',
-    image: {
-      src: '',
-      alt: ''
-    },
-    questions: []
-  }
-  
+  private quiz = {} as AdminQuiz
+
   get pageTitle (): string {
     return this.quiz.title || 'New quiz'
+  }
+
+  private saveButtonClickHandler (): void {
+    console.log('SUBMITTED QUIZ!', this.quiz)
+  }
+
+  private addButtonHandler (): void {
+    this.quiz.questions.push({
+      image: {
+        src: '',
+        alt: ''
+      },
+      rightAnswer: ''
+    })
   }
 
   created () {
@@ -71,10 +97,14 @@ export default class AdminQuizPage extends Vue {
 <style lang="scss">
 .admin__quiz-question-list {
   margin-bottom: 2rem;
+  padding: 1rem;
   background-color: rgba(255, 255, 255, 0.815);
   border-radius: 10px;
-  padding: 1rem;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-between;
   align-self: stretch;
-  flex-grow: 1;
+  // flex-grow: 1;
+  overflow-y: auto;
 }
 </style>

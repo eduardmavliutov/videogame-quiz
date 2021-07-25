@@ -27,3 +27,17 @@ export interface QuizState {
 export interface SetQuizesPayload {
   quizes: Quiz[];
 }
+
+export interface AdminQuizQuestion {
+  image: ImageProps;
+  rightAnswer: string;
+  letterPool?: QuizQuestionLetter[];
+  openedLetters?: QuizQuestionLetter[];
+}
+
+export interface AdminQuiz {
+  id?: string;
+  title: string;
+  image: ImageProps;
+  questions: AdminQuizQuestion[];
+}

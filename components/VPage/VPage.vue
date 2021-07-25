@@ -24,6 +24,10 @@ export default class VPage extends Vue {
     margin-top: 2rem;
   }
 
+  &-admin-quiz {
+    overflow-y: auto;
+  }
+
   &-container {
     flex-grow: 1;
     padding: 0 40px;

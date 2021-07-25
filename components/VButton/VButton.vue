@@ -1,14 +1,14 @@
 <template>
-  <button class="v-button">
+  <button class="v-button" :type="type">
     <slot />
   </button>
 </template>
 <script lang="ts">
-import { Vue, Component } from 'nuxt-property-decorator'
+import { Vue, Component, Prop } from 'nuxt-property-decorator'
 
 @Component
 export default class VButton extends Vue {
-
+  @Prop({ required: false, type: String, default: 'button' }) type!: string
 }
 </script>
 <style lang="scss">

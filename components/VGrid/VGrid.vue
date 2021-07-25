@@ -35,7 +35,8 @@ export default class VGrid extends Vue {
   }
 
   &--admin-quiz-question-list {
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(4, 1fr);
+    margin-bottom: 1rem;
   }
 }
 </style>
