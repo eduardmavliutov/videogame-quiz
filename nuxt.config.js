@@ -26,9 +26,9 @@ export default {
       ssr: false
     },
     {
-      src: '@/plugins/vue-image',
-      ssr: false
-    }
+      src: '@/plugins/vue-croppa',
+      ssr: false,
+    },
   ],
 
   pageTransition: {
@@ -101,7 +101,7 @@ export default {
         ...[
           {
             path: '/quiz/:quizId',
-            component: resolve(__dirname, 'components/Quiz/Quiz.vue'),
+            component: resolve(__dirname, 'views/QuizPage/QuizPage.vue'),
           },
           {
             path: '/quiz/:quizId/:questionId',
@@ -111,12 +111,20 @@ export default {
             }),
             component: resolve(
               __dirname,
-              'components/ActiveQuestion/ActiveQuestion.vue'
+              'views/ActiveQuestionPage/ActiveQuestionPage.vue'
             ),
-            name: 'quiz-question'
+            name: 'quiz-question',
+          },
+          {
+            path: '/admin/quizes/:id?',
+            component: resolve(
+              __dirname,
+              'views/AdminQuizPage/AdminQuizPage.vue'
+            ),
+            name: 'admin-quizes-id',
           },
         ]
-      )
+      );
     },
   },
-}
+};

@@ -16,6 +16,7 @@ export default class VGrid extends Vue {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   justify-items: center;
+  align-items: flex-start;
   gap: 1rem;
 
   @include mobile {
@@ -31,6 +32,10 @@ export default class VGrid extends Vue {
     @include mobile {
       grid-template-columns: 100%;
     }
+  }
+
+  &--admin-quiz-question-list {
+    grid-template-columns: repeat(5, 1fr);
   }
 }
 </style>

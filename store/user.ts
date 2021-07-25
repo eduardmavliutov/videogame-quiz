@@ -81,7 +81,7 @@ export const actions: ActionTree<UserState, RootState> = {
 
   async fetchUserData ({ dispatch }, payload: FetchUserData) {
     const result = await this.$fire.database.ref(`/users/${payload.userId}`)
-    await dispatch('subscribeUserModule', { result })
+    await dispatch('subscribeUserModule', { reference: result })
   },
 
   async subscribeUserModule({ commit }, payload: SubscribeUserModulePayload) {

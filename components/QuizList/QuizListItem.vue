@@ -48,6 +48,8 @@ export default class QuizListItem extends Vue {
 
   &__inner {
     height: 100%;
+    display: flex;
+    flex-flow: column nowrap;
     @include mobile {
       width: 5rem;
     }
@@ -72,6 +74,7 @@ export default class QuizListItem extends Vue {
   &__image {
     width: 100%;
     height: 100%;
+    flex-grow: 1;
   }
 }
 </style>

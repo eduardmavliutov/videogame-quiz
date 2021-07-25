@@ -22,6 +22,7 @@ import QuizQuestion from '@/components/Quiz/QuizQuestion.vue'
 import VGrid from '@/components/VGrid/VGrid.vue'
 import VPage from '@/components/VPage/VPage.vue'
 import VTitle from '@/components/VTitle/VTitle.vue'
+import { Quiz } from '@/types/store/quiz/quiz.interface'
 
 const quizModule = namespace('quiz')
 
@@ -33,7 +34,7 @@ const quizModule = namespace('quiz')
     VPage
   }
 })
-export default class Quiz extends Vue {
+export default class QuizPage extends Vue {
   @quizModule.Getter('quiz') quiz!: (quizId: string) => Quiz
 
   get computedQuiz (): Quiz {

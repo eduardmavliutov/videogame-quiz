@@ -46,3 +46,20 @@ h2 {
     opacity: 1;
   }
 }
+
+.croppa-container {
+  position: relative;
+  display: flex;
+  justify-content: stretch;
+
+  canvas {
+    width: 15rem !important;
+    height: 15rem !important;
+  }
+}
+
+.icon-remove {
+  position: absolute;
+  right: 0;
+  top: 15px;
+}

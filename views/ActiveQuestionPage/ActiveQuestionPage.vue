@@ -81,7 +81,7 @@ const userModule = namespace('user')
     QuestionControlPanel
   }
 })
-export default class ActiveQuestion extends Vue {
+export default class ActiveQuestionPage extends Vue {
   @quizModule.Getter('quiz') quiz!: (quizId: string) => Quiz
   @quizModule.Getter('quizQuestionImage') image!: (quizId: string, questionId: number) => ImageProps
 

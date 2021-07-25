@@ -14,12 +14,16 @@ export interface QuizQuestionLetter {
 }
 
 export interface Quiz {
-  id: string;
+  id?: string;
   title: string;
   image: ImageProps;
   questions: QuizQuestion[];
 }
 
 export interface QuizState {
+  quizes: Quiz[];
+}
+
+export interface SetQuizesPayload {
   quizes: Quiz[];
 }

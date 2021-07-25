@@ -1,23 +1,14 @@
 <template>
   <div class="app-wrapper">
     <nuxt />
-    <image-cropper v-if="src" />
   </div>
 </template>
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
-import ImageCropper from '@/components/ImageCropper/ImageCropper.vue'
-import { namespace } from 'vuex-class'
 
-const cropperModule = namespace('cropper')
-
-@Component({
-  components: {
-    ImageCropper
-  }
-})
+@Component
 export default class AdminLayout extends Vue {
-  @cropperModule.Getter('src') src!: string
+  
 }
 </script>
 <style lang="scss">

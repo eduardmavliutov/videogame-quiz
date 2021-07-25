@@ -6,13 +6,14 @@
     class="v-input__wrapper"
   >
     <label
-      :for="name"
+      :for="inputId"
       class="v-input__label"
+      :style="{ color: labelColor }"
     >
       {{ name }}
     </label>
     <input
-      :id="name"
+      :id="inputId"
       :value="model"
       :type="type"
       class="v-input__input"
@@ -40,10 +41,15 @@ import { ValidationProvider } from 'vee-validate'
 })
 export default class VInput extends Vue {
   @Prop({ required: true, type: String }) rules!: string
-  @Prop({ required: true, type: String }) name!: string
+  @Prop({ required: true, type: String }) name!: string 
   @Prop({ required: true, type: String }) type!: string
+  @Prop({ required: false, type: String, default: 'white' }) labelColor!: string
   @Prop({ required: false, type: Boolean, default: false }) disabled!: boolean
   @Prop({ required: true }) model!: string
+
+  get inputId (): string {
+    return `${this.name}${Math.random()}`
+  }
 }
 </script>
 <style lang="scss">
