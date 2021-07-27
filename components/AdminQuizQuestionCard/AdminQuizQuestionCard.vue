@@ -32,7 +32,7 @@
       v-if="isEditMode"
       class="quiz-question-card__edit-buttons"
     >
-      <v-button @click.native="cropImageButtonHandler">
+    <v-button @click.native="saveQuestionButtonHandler">
         Save
       </v-button>
       <v-button @click.native="cancelButtonHandler">
@@ -79,7 +79,7 @@ export default class AdminQuizQuestionCard extends Vue {
     return `#${this.questionId + 1}`
   }
 
-  private cropImageButtonHandler () {
+  private saveQuestionButtonHandler () {
     const croppedImage = this.myCroppa.generateDataUrl()
     this.$emit('update:image', {
       src: croppedImage,

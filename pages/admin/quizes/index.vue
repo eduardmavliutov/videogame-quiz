@@ -4,16 +4,29 @@
     <section class="admin__quiz-list-wrapper">
       <ul class="admin__quiz-list">
         <li
-          v-for="quiz in quizes"
-          :key="quiz.id"
+          v-for="quizId in Object.keys(quizes)"
+          :key="quizId"
         >
           <nuxt-link
             :to="{
               name: 'admin-quizes-id',
-              params: { id: quiz.id }
+              params: { id: quizId }
             }"
           >
-            {{ quiz.title }}
+            {{ quizes[quizId].title }}
+          </nuxt-link>
+        </li>
+        <li
+          v-for="quizId in Object.keys(quizes)"
+          :key="quizId"
+        >
+          <nuxt-link
+            :to="{
+              name: 'admin-quizes-id',
+              params: { id: 'new' }
+            }"
+          >
+            {{ 'Create new quiz' }}
           </nuxt-link>
         </li>
       </ul>
@@ -24,10 +37,7 @@
 import { Vue, Component } from 'nuxt-property-decorator'
 import VPage from '@/components/VPage/VPage.vue'
 import VTitle from '@/components/VTitle/VTitle.vue'
-import { Quiz } from '@/types/store/quiz/quiz.interface'
-import { namespace } from 'vuex-class'
-
-const quizModule = namespace('quiz')
+import { AdminQuiz } from '@/types/store/quiz/quiz.interface'
 
 @Component({
   components: {
@@ -48,7 +58,7 @@ const quizModule = namespace('quiz')
   }
 })
 export default class AdminPage extends Vue {
-  private quizes!: Quiz[]
+  private quizes!: { [key: string]: AdminQuiz }
 
   quizClickHandler (index: number): void {
     console.log('I am heading to the quiz')

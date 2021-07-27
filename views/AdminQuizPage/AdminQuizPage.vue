@@ -40,7 +40,7 @@ import VAddButton from '@/components/VAddButton/VAddButton.vue'
 import { AdminQuiz, AdminQuizQuestion } from '@/types/store/quiz/quiz.interface'
 import { emptyAdminQuiz } from '@/helpers/emptyModels'
 import { validationMixin } from 'vuelidate'
-const { required, minLength } = require('vuelidate/lib/validators')
+import { required, minLength } from 'vuelidate/lib/validators'
 
 @Component({
   components: {
