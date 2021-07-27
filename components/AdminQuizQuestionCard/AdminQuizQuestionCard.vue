@@ -33,7 +33,7 @@
       class="quiz-question-card__edit-buttons"
     >
       <v-button @click.native="cropImageButtonHandler">
-        Crop
+        Save
       </v-button>
       <v-button @click.native="cancelButtonHandler">
         Cancel
@@ -46,6 +46,13 @@
       Edit
     </v-button>
     <span class="quiz-question-card__question-number"><i>{{ questionNumber }}</i></span>
+    <button 
+      v-if="isEditMode"
+      class="quiz-question-card__delete-button"
+      @click="deleteButtonHandler"
+    >
+      X
+    </button>
   </div>
 </template>
 <script lang="ts">
@@ -89,11 +96,22 @@ export default class AdminQuizQuestionCard extends Vue {
     this.isEditMode = true
   }
 
+  private deleteButtonHandler () {
+    if(confirm('Are you sure?')) {
+      this.$emit('delete-question', this.questionId);
+    }
+  }
+
   private cancelButtonHandler () {
     this.isEditMode = false
     this.myCroppa.refresh()
   }
 
+  created () {
+    if (this.$route.params.id === 'new') {
+      this.isEditMode = true
+    }
+  }
 }
 </script>
 <style lang="scss">
@@ -184,6 +202,35 @@ export default class AdminQuizQuestionCard extends Vue {
       font-size: 2rem;
       line-height: 2.5rem;
       color: rgba(255, 255, 255, 0.5);
+    }
+
+    &__delete-button {
+      height: 100%;
+      width: 30px;
+      position: absolute;
+      top: 0;
+      left: -25px;
+      z-index: -1;
+      color: $color-white;
+      font-weight: bold;
+      background: linear-gradient(to right, red 30%, transparent 80%);
+      border: none;
+      border-bottom-left-radius: 10px;
+      border-top-left-radius: 10px;
+      transition: 0.3s all ease;
+
+      &:hover {
+        transform: translateX(-5px);
+        font-size: 20px;
+        border-left: 2px solid gray;
+      }
+
+      &:active {
+        transform: translateX(-5px);
+        font-size: 20px;
+        color: black;
+        border-left: 2px solid gray;
+      }
     }
   }
 }

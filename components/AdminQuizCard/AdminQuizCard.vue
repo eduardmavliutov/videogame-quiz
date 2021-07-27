@@ -34,7 +34,7 @@
       class="quiz-card__edit-buttons"
     >
       <v-button @click.native="cropImageButtonHandler">
-        Crop
+        Save
       </v-button>
       <v-button @click.native="cancelButtonHandler">
         Cancel
@@ -89,6 +89,12 @@ export default class AdminQuizCard extends Vue {
   private cancelButtonHandler () {
     this.isEditMode = false
     this.myCroppa.refresh()
+  }
+
+  created () {
+    if (this.$route.params.id === 'new') {
+      this.isEditMode = true
+    }
   }
 }
 </script>

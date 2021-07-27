@@ -13,6 +13,7 @@
           :right-answer.sync="question.rightAnswer"
           :image.sync="question.image"
           :questionId="index"
+          @delete-question="deleteQuestionHandler"
         />
         <v-add-button
           @add="addButtonHandler"
@@ -36,8 +37,10 @@ import VPage from '@/components/VPage/VPage.vue'
 import VTitle from '@/components/VTitle/VTitle.vue'
 import VButton from '@/components/VButton/VButton.vue'
 import VAddButton from '@/components/VAddButton/VAddButton.vue'
-import { AdminQuiz } from '@/types/store/quiz/quiz.interface'
-import { emptyAdminQuiz } from '@/helpers/emptyModels';
+import { AdminQuiz, AdminQuizQuestion } from '@/types/store/quiz/quiz.interface'
+import { emptyAdminQuiz } from '@/helpers/emptyModels'
+import { validationMixin } from 'vuelidate'
+const { required, minLength } = require('vuelidate/lib/validators')
 
 @Component({
   components: {
@@ -66,6 +69,30 @@ import { emptyAdminQuiz } from '@/helpers/emptyModels';
     } catch (error) {
       console.log(error)
     }
+  },
+  mixins: [validationMixin],
+  validations: {
+    quiz: {
+      title: {
+        required
+      },
+      image: {
+        src: {
+          required
+        }
+      },
+      questions: {
+        minLength: minLength(1),
+        $each: {
+          image: {
+            src: required
+          },
+          rightAnswer: {
+            required
+          }
+        }
+      }
+    }
   }
 })
 export default class AdminQuizPage extends Vue {
@@ -77,6 +104,8 @@ export default class AdminQuizPage extends Vue {
 
   private saveButtonClickHandler (): void {
     console.log('SUBMITTED QUIZ!', this.quiz)
+    this.$v.$touch();
+    console.log('IS FORM VALID', !this.$v.$invalid)
   }
 
   private addButtonHandler (): void {
@@ -89,8 +118,8 @@ export default class AdminQuizPage extends Vue {
     })
   }
 
-  created () {
-    console.log(this.quiz.questions)
+  private deleteQuestionHandler (questionId: number): void {
+    this.quiz.questions = this.quiz.questions.filter((_: AdminQuizQuestion, index: number) => index !== questionId)
   }
 }
 </script>
