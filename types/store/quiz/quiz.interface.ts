@@ -40,4 +40,5 @@ export interface AdminQuiz {
   title: string;
   image: ImageProps;
   questions: AdminQuizQuestion[];
+  published: boolean;
 }

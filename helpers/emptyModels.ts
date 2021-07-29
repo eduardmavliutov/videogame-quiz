@@ -6,5 +6,6 @@ export const emptyAdminQuiz: AdminQuiz = {
     src: '',
     alt: ''
   },
-  questions: []
+  questions: [],
+  published: false
 }

@@ -15,16 +15,37 @@
           :questionId="index"
           @delete-question="deleteQuestionHandler"
         />
-        <v-add-button
-          @add="addButtonHandler"
-        />
+        <v-add-button @add="addButtonHandler" />
       </v-grid>
-      <v-button
-        type="submit"
-        @click.native="saveButtonClickHandler"
+      <div
+        v-if="isNewQuiz"
+        class="admin__buttons-wrapper"
       >
-        Save
-      </v-button>
+        <v-button
+          type="submit"
+          @click.native="createQuizHandler"
+        >
+          Create
+        </v-button>
+      </div>
+      <div
+        v-else
+        class="admin__buttons-wrapper"
+      >
+        <v-button
+          type="submit"
+          @click.native="saveQuizHandler"
+        >
+          Save
+        </v-button>
+        <v-button
+          v-if="!quiz.published"
+          type="submit"
+          @click.native="publishButtonHandler"
+        >
+          Publish
+        </v-button>
+      </div>
     </section>
   </v-page>
 </template>
@@ -97,15 +118,67 @@ import { required, minLength } from 'vuelidate/lib/validators'
 })
 export default class AdminQuizPage extends Vue {
   private quiz = {} as AdminQuiz
+  private loading = false
 
   get pageTitle (): string {
     return this.quiz.title || 'New quiz'
   }
 
-  private saveButtonClickHandler (): void {
+  get isNewQuiz (): boolean {
+    return this.$route.params.id === 'new'
+  }
+
+  get createButtonText (): string {
+    return this.isNewQuiz ? 'Create' : 'Save'
+  }
+
+  private async createQuizHandler (): Promise<void> {
     console.log('SUBMITTED QUIZ!', this.quiz)
-    this.$v.$touch();
+    this.$v.$touch()
     console.log('IS FORM VALID', !this.$v.$invalid)
+    if (!this.$v.$invalid) {
+      try {
+        this.loading = true
+        const quizId = Date.now()
+        this.$fire.database.ref(`/quizes/${quizId}`).set(this.quiz)
+        this.$router.push({
+          name: 'admin-quizes-id',
+          params: {
+            id: quizId.toString()
+          }
+        })
+      } catch (error) {
+        console.log(error)
+      } finally {
+        this.loading = false
+      }
+    }
+  }
+
+  private async saveQuizHandler (): Promise<void> {
+    console.log('SUBMITTED QUIZ!', this.quiz)
+    this.$v.$touch()
+    console.log('IS FORM VALID', !this.$v.$invalid)
+    if (!this.$v.$invalid) {
+      try {
+        this.loading = true
+        this.$fire.database.ref(`/quizes/${this.$route.params.id}`).set(this.quiz)
+        this.$router.push({
+          name: 'admin-quizes-id',
+          params: {
+            id: this.$route.params.id
+          }
+        })
+      } catch (error) {
+        console.log(error)
+      } finally {
+        this.loading = false
+      }
+    }
+  }
+
+  private publishButtonHandler (): void {
+    console.log('PUBLISHED!')
   }
 
   private addButtonHandler (): void {
@@ -124,16 +197,24 @@ export default class AdminQuizPage extends Vue {
 }
 </script>
 <style lang="scss">
-.admin__quiz-question-list {
-  margin-bottom: 2rem;
-  padding: 1rem;
-  background-color: rgba(255, 255, 255, 0.815);
-  border-radius: 10px;
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: space-between;
-  align-self: stretch;
-  // flex-grow: 1;
-  overflow-y: auto;
+.admin {
+  &__quiz-question-list {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background-color: rgba(255, 255, 255, 0.815);
+    border-radius: 10px;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+    align-self: stretch;
+    // flex-grow: 1;
+    overflow-y: auto;
+  }
+
+  &__buttons-wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+  }
 }
 </style>

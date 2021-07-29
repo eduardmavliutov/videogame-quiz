@@ -17,8 +17,6 @@
           </nuxt-link>
         </li>
         <li
-          v-for="quizId in Object.keys(quizes)"
-          :key="quizId"
         >
           <nuxt-link
             :to="{
