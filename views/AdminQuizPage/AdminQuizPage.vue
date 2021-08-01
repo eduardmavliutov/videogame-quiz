@@ -34,6 +34,7 @@
       >
         <v-button
           type="submit"
+          :disabled="quiz.published"
           @click.native="saveQuizHandler"
         >
           Save
@@ -46,6 +47,15 @@
           Publish
         </v-button>
       </div>
+        <transition-group class="admin__errors" name="admin__errors" tag="ul" appear="">
+          <li
+            v-for="error in validationErrors"
+            :key="error"
+            class="admin__error-item"
+          >
+            {{ error }}
+          </li>
+        </transition-group>
     </section>
   </v-page>
 </template>
@@ -61,7 +71,7 @@ import VAddButton from '@/components/VAddButton/VAddButton.vue'
 import { AdminQuiz, AdminQuizQuestion } from '@/types/store/quiz/quiz.interface'
 import { emptyAdminQuiz } from '@/helpers/emptyModels'
 import { validationMixin } from 'vuelidate'
-import { required, minLength } from 'vuelidate/lib/validators'
+import { required } from 'vuelidate/lib/validators'
 
 @Component({
   components: {
@@ -103,10 +113,12 @@ import { required, minLength } from 'vuelidate/lib/validators'
         }
       },
       questions: {
-        minLength: minLength(1),
+        required,
         $each: {
           image: {
-            src: required
+            src: {
+              required
+            }
           },
           rightAnswer: {
             required
@@ -119,6 +131,38 @@ import { required, minLength } from 'vuelidate/lib/validators'
 export default class AdminQuizPage extends Vue {
   private quiz = {} as AdminQuiz
   private loading = false
+
+  get validationErrors (): string[] {
+    const errors = []
+
+    if (this.$v.quiz.title?.$dirty && !this.$v.quiz.title?.required) {
+      errors.push('Quiz must have a title')
+    }
+
+    if (this.$v.quiz.image?.src?.$dirty && !this.$v.quiz.image?.src.required) {
+      errors.push('Quiz must have an image')
+    }
+
+    if (!this.$v.quiz.questions?.required) {
+      errors.push('Quiz must have at least 1 question')
+    }
+
+    for (let i = 0; i < this.$v.quiz.questions?.$model.length; i++) {
+      if (this.$v.quiz.questions?.$each[i]?.$dirty && !this.$v.quiz.questions?.$each[i]?.rightAnswer.required) {
+        errors.push('All questions must have right answers')
+        break
+      }
+    }
+
+    for (let i = 0; i < this.$v.quiz.questions?.$model.length; i++) {
+      if (this.$v.quiz.questions?.$each[i]?.image.src.$dirty && !this.$v.quiz.questions?.$each[i]?.image.src.required) {
+        errors.push('All questions must have saved images')
+        break
+      }
+    }
+
+    return errors
+  }
 
   get pageTitle (): string {
     return this.quiz.title || 'New quiz'
@@ -133,14 +177,12 @@ export default class AdminQuizPage extends Vue {
   }
 
   private async createQuizHandler (): Promise<void> {
-    console.log('SUBMITTED QUIZ!', this.quiz)
     this.$v.$touch()
-    console.log('IS FORM VALID', !this.$v.$invalid)
     if (!this.$v.$invalid) {
       try {
         this.loading = true
         const quizId = Date.now()
-        this.$fire.database.ref(`/quizes/${quizId}`).set(this.quiz)
+        await this.$fire.database.ref(`/quizes/${quizId}`).set(this.quiz)
         this.$router.push({
           name: 'admin-quizes-id',
           params: {
@@ -156,13 +198,11 @@ export default class AdminQuizPage extends Vue {
   }
 
   private async saveQuizHandler (): Promise<void> {
-    console.log('SUBMITTED QUIZ!', this.quiz)
     this.$v.$touch()
-    console.log('IS FORM VALID', !this.$v.$invalid)
     if (!this.$v.$invalid) {
       try {
         this.loading = true
-        this.$fire.database.ref(`/quizes/${this.$route.params.id}`).set(this.quiz)
+        await this.$fire.database.ref(`/quizes/${this.$route.params.id}`).set(this.quiz)
         this.$router.push({
           name: 'admin-quizes-id',
           params: {
@@ -177,8 +217,21 @@ export default class AdminQuizPage extends Vue {
     }
   }
 
-  private publishButtonHandler (): void {
-    console.log('PUBLISHED!')
+  private async publishButtonHandler (): Promise<void> {
+    if (confirm('Are you sure?')) {
+      this.$v.$touch()
+      if (!this.$v.$invalid) {
+        try {
+          this.loading = true
+          this.quiz.published = true
+          await this.$fire.database.ref(`/quizes/${this.$route.params.id}`).set(this.quiz)
+        } catch (error) {
+          console.log(error)
+        } finally {
+          this.loading = false
+        }
+      }
+    }
   }
 
   private addButtonHandler (): void {
@@ -199,7 +252,6 @@ export default class AdminQuizPage extends Vue {
 <style lang="scss">
 .admin {
   &__quiz-question-list {
-    margin-bottom: 2rem;
     padding: 1rem;
     background-color: rgba(255, 255, 255, 0.815);
     border-radius: 10px;
@@ -207,7 +259,6 @@ export default class AdminQuizPage extends Vue {
     flex-flow: column nowrap;
     justify-content: space-between;
     align-self: stretch;
-    // flex-grow: 1;
     overflow-y: auto;
   }
 
@@ -215,6 +266,33 @@ export default class AdminQuizPage extends Vue {
     display: flex;
     justify-content: center;
     gap: 1rem;
+  }
+
+  &__error-item {
+      transition: 0.4s all ease-out;
+    }
+
+  &__errors {
+    color: red;
+    font-weight: bold;
+    font-size: 15px;
+    align-self: center;
+    margin-top: 0.5rem;
+    font-style: italic;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+
+    &-enter-to,
+    &-leave {
+      opacity: 1;
+    }
+
+    &-leave-to, 
+    &-enter {
+      opacity: 0;
+    }
   }
 }
 </style>
