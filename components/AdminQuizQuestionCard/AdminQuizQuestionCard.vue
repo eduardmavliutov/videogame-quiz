@@ -32,7 +32,7 @@
       v-if="isEditMode"
       class="quiz-question-card__edit-buttons"
     >
-    <v-button @click.native="saveQuestionButtonHandler">
+      <v-button @click.native="saveQuestionButtonHandler">
         Save
       </v-button>
       <v-button @click.native="cancelButtonHandler">
@@ -46,13 +46,15 @@
       Edit
     </v-button>
     <span class="quiz-question-card__question-number"><i>{{ questionNumber }}</i></span>
-    <button 
-      v-if="isEditMode"
-      class="quiz-question-card__delete-button"
-      @click="deleteButtonHandler"
-    >
-      X
-    </button>
+    <transition name="quiz-question-card__delete-button">
+      <button
+        v-if="isEditMode"
+        class="quiz-question-card__delete-button"
+        @click="deleteButtonHandler"
+      >
+        X
+      </button>
+    </transition>
   </div>
 </template>
 <script lang="ts">
@@ -97,8 +99,8 @@ export default class AdminQuizQuestionCard extends Vue {
   }
 
   private deleteButtonHandler () {
-    if(confirm('Are you sure?')) {
-      this.$emit('delete-question', this.questionId);
+    if (confirm('Are you sure?')) {
+      this.$emit('delete-question', this.questionId)
     }
   }
 
@@ -117,7 +119,12 @@ export default class AdminQuizQuestionCard extends Vue {
 <style lang="scss">
 .admin__quiz-question-card {
   position: relative;
-  background: linear-gradient(to top, $main-color 20%, $color-white 40%, $color-white 100%);
+  background: linear-gradient(
+    to top,
+    $main-color 20%,
+    $color-white 40%,
+    $color-white 100%
+  );
   border-radius: 10px;
   padding: 1rem;
   width: 17rem;
@@ -128,6 +135,7 @@ export default class AdminQuizQuestionCard extends Vue {
   flex-flow: column nowrap;
   align-items: center;
   justify-content: space-between;
+  transition: 0.3s all ease-out;
 
   &::after {
     content: "";
@@ -230,6 +238,18 @@ export default class AdminQuizQuestionCard extends Vue {
         font-size: 20px;
         color: black;
         border-left: 2px solid gray;
+      }
+
+      &-enter,
+      &-leave-to {
+        left: 0px;
+        opacity: 0;
+      }
+
+      &-enter-to,
+      &-leave {
+        left: -25px;
+        opacity: 1;
       }
     }
   }

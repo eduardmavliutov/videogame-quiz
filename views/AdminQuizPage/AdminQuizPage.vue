@@ -4,18 +4,19 @@
     <section class="admin__quiz-question-list">
       <v-grid name="admin-quiz-question-list">
         <admin-quiz-card
+          :key="quiz.toString()"
           :title.sync="quiz.title"
           :image.sync="quiz.image"
         />
-        <admin-quiz-question-card
-          v-for="(question, index) in quiz.questions"
-          :key="index"
-          :right-answer.sync="question.rightAnswer"
-          :image.sync="question.image"
-          :questionId="index"
-          @delete-question="deleteQuestionHandler"
-        />
-        <v-add-button @add="addButtonHandler" />
+          <admin-quiz-question-card
+            v-for="(question, index) in quiz.questions"
+            :key="`${index}question`"
+            :right-answer.sync="question.rightAnswer"
+            :image.sync="question.image"
+            :questionId="index"
+            @delete-question="deleteQuestionHandler"
+          />
+        <v-add-button key="addButton" @add="addButtonHandler" />
       </v-grid>
       <div
         v-if="isNewQuiz"

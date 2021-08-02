@@ -1,11 +1,11 @@
 <template>
   <v-grid name="quiz-list">
     <quiz-list-item
-      v-for="quiz in quizes"
-      :id="quiz.id"
-      :key="quiz.id"
-      :title="quiz.title"
-      :image="quiz.image"
+      v-for="(quizId) in Object.keys(quizes)"
+      :id="quizId"
+      :key="quizId"
+      :title="quizes[quizId].title"
+      :image="quizes[quizId].image"
       class="v-grid-item"
     ></quiz-list-item>
   </v-grid>
@@ -14,7 +14,7 @@
 import { Component, Vue, Prop } from 'nuxt-property-decorator'
 import QuizListItem from '@/components/QuizList/QuizListItem.vue'
 import VGrid from '@/components/VGrid/VGrid.vue'
-import { QuizQuestion } from '@/types/store/quiz/quiz.interface'
+import { Quiz } from '@/types/store/quiz/quiz.interface'
 
 @Component({
   components: {
@@ -23,6 +23,6 @@ import { QuizQuestion } from '@/types/store/quiz/quiz.interface'
   }
 })
 export default class QuizList extends Vue {
-  @Prop({ required: true, type: Array }) quizes!: QuizQuestion[]
+  @Prop({ required: true, type: Object }) quizes!: { [key: string]: Quiz }
 }
 </script>

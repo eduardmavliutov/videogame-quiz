@@ -1,7 +1,12 @@
 <template>
-  <div :class="`v-grid v-grid--${name}`">
+  <transition-group
+    :class="`v-grid v-grid--${name}`"
+    name="v-grid"
+    tag="div"
+    appear
+  >
     <slot></slot>
-  </div>
+  </transition-group>
 </template>
 <script lang="ts">
 import { Component, Vue, Prop } from 'nuxt-property-decorator'
@@ -18,6 +23,19 @@ export default class VGrid extends Vue {
   justify-items: center;
   align-items: flex-start;
   gap: 1rem;
+  transition: 0.3s all ease-out;
+
+  &-enter,
+  &-leave-to {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+
+  &-enter-to,
+  &-leave {
+    opacity: 1;
+    transform: scale(1);
+  }
 
   @include mobile {
     width: 100%;
