@@ -47,15 +47,20 @@
           Publish
         </v-button>
       </div>
-        <transition-group class="admin__errors" name="admin__errors" tag="ul" appear="">
-          <li
-            v-for="error in validationErrors"
-            :key="error"
-            class="admin__error-item"
-          >
-            {{ error }}
-          </li>
-        </transition-group>
+      <transition-group
+        class="admin__errors"
+        name="admin__errors"
+        tag="ul"
+        appear
+      >
+        <li
+          v-for="error in validationErrors"
+          :key="error"
+          class="admin__error-item"
+        >
+          {{ error }}
+        </li>
+      </transition-group>
     </section>
   </v-page>
 </template>
@@ -68,10 +73,11 @@ import VPage from '@/components/VPage/VPage.vue'
 import VTitle from '@/components/VTitle/VTitle.vue'
 import VButton from '@/components/VButton/VButton.vue'
 import VAddButton from '@/components/VAddButton/VAddButton.vue'
-import { AdminQuiz, AdminQuizQuestion } from '@/types/store/quiz/quiz.interface'
+import { AdminQuiz, AdminQuizQuestion, QuizQuestion, QuizQuestionLetter } from '@/types/store/quiz/quiz.interface'
 import { emptyAdminQuiz } from '@/helpers/emptyModels'
 import { validationMixin } from 'vuelidate'
 import { required } from 'vuelidate/lib/validators'
+import { generateEmptyLetters, generateLetterPool } from '@/helpers/utils'
 
 @Component({
   components: {
@@ -143,7 +149,7 @@ export default class AdminQuizPage extends Vue {
       errors.push('Quiz must have an image')
     }
 
-    if (!this.$v.quiz.questions?.required) {
+    if (this.$v.quiz.questions?.$dirty && !this.$v.quiz.questions?.required) {
       errors.push('Quiz must have at least 1 question')
     }
 
@@ -224,7 +230,14 @@ export default class AdminQuizPage extends Vue {
         try {
           this.loading = true
           this.quiz.published = true
-          await this.$fire.database.ref(`/quizes/${this.$route.params.id}`).set(this.quiz)
+          this.quiz.questions = this.quiz.questions.map((question: AdminQuizQuestion) => ({
+            ...question,
+            letterPool: generateLetterPool(question.rightAnswer),
+            openedLetters: generateEmptyLetters(question.rightAnswer)
+          }))
+          await this.$fire.database.ref(`/quizes/${this.$route.params.id}`).set({
+            ...this.quiz
+          })
         } catch (error) {
           console.log(error)
         } finally {
@@ -269,8 +282,8 @@ export default class AdminQuizPage extends Vue {
   }
 
   &__error-item {
-      transition: 0.4s all ease-out;
-    }
+    transition: 0.4s all ease-out;
+  }
 
   &__errors {
     color: red;
@@ -289,7 +302,7 @@ export default class AdminQuizPage extends Vue {
       opacity: 1;
     }
 
-    &-leave-to, 
+    &-leave-to,
     &-enter {
       opacity: 0;
     }

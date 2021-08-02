@@ -6,23 +6,25 @@
         <li
           v-for="quizId in Object.keys(quizes)"
           :key="quizId"
+          class="admin__quiz-list-item"
         >
           <nuxt-link
             :to="{
               name: 'admin-quizes-id',
               params: { id: quizId }
             }"
+            class="admin__quiz-list-item-link"
           >
             {{ quizes[quizId].title }}
           </nuxt-link>
         </li>
-        <li
-        >
+        <li class="admin__quiz-list-item--new">
           <nuxt-link
             :to="{
               name: 'admin-quizes-id',
               params: { id: 'new' }
             }"
+            class="admin__quiz-list-item-link"
           >
             {{ 'Create new quiz' }}
           </nuxt-link>
@@ -57,14 +59,6 @@ import { AdminQuiz } from '@/types/store/quiz/quiz.interface'
 })
 export default class AdminPage extends Vue {
   private quizes!: { [key: string]: AdminQuiz }
-
-  quizClickHandler (index: number): void {
-    console.log('I am heading to the quiz')
-  }
-
-  createQuizHandler (): void {
-    console.log('New quiz is going to be created')
-  }
 }
 </script>
 <style lang="scss">
@@ -80,6 +74,60 @@ export default class AdminPage extends Vue {
     background-color: rgba(255, 255, 255, 0.815);
     border-radius: 10px;
     flex-grow: 1;
+  }
+
+  &__quiz-list-item,
+  &__quiz-list-item--new {
+    padding: 1rem;
+    border-radius: 10px;
+    margin: 0.5rem 0;
+    cursor: pointer;
+    transition: 0.3s all ease;
+  }
+
+  &__quiz-list-item {
+    background: $color-white;
+
+    &:hover {
+      box-shadow: inset -4px -4px 6px 3px lightgrey;
+    }
+
+    &:active {
+      box-shadow: 
+        inset -4px -4px 6px 3px lightgrey,
+        inset -4px -6px 6px 3px $main-color;
+    }
+
+    &-link {
+      font-weight: 600;
+      color: $main-color;
+
+      &:hover {
+        color: $main-color;
+      }
+    }
+  }
+
+  &__quiz-list-item--new {
+    padding: 1rem;
+    border-radius: 10px;
+    margin: 0.5rem 0;
+    background: $color-analogous-two;
+
+    &:hover {
+      box-shadow: inset -4px -4px 6px 3px $color-white;
+    }
+
+    &:active {
+      box-shadow: 
+        inset -4px -4px 6px 3px $color-white,
+        inset -4px -6px 6px 3px $main-color;
+    }
+
+    .admin__quiz-list-item-link {
+      font-weight: 600;
+      color: $color-white;
+    }
   }
 }
 </style>
