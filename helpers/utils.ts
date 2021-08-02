@@ -32,9 +32,29 @@ export const generateLetterPool = (rightAnswer: string): QuizQuestionLetter[] =>
   const extraLetters = new Array(poolLength)
     .fill(0)
     .map(() => getRandomLetter())
-  return shuffle(Array.from(answerWithoutSpaces).concat(...extraLetters)).map((letter: string) => ({
-    value: letter.toLowerCase()
-  }))
+  return shuffle(Array
+      .from(answerWithoutSpaces)
+      .concat(...extraLetters)
+    ).map((letter: string) => ({
+      value: letter.toLowerCase()
+    })
+  )
+}
+
+/**
+ * Generates instance of {QuizQuestionLetter} basing on given letter
+ * @param {string} letter - letter that would be a value for new {QuizQuestionLetter}
+ * @returns {QuizQuestionLetter} new instance of {QuizQuestionLetter}
+ */
+export const generateEmptyLetter = (letter: string): QuizQuestionLetter => {
+  return letter === ' ' 
+    ? { 
+      value: ' ',
+    }
+    : { 
+      value: '',
+      openedByHint: false
+    }
 }
 
 /**
@@ -43,16 +63,5 @@ export const generateLetterPool = (rightAnswer: string): QuizQuestionLetter[] =>
  * @returns {QuizQuestionLetter[]} array of QuizQuestionLetter for question's 'openedLetters' array
  */
 export const generateEmptyLetters = (rightAnswer: string): QuizQuestionLetter[] => {
-  return new Array(rightAnswer.length)
-    .fill(0)
-    .map((_, index: number): QuizQuestionLetter => {
-    return rightAnswer[index] === ' ' 
-      ? { 
-        value: ' ',
-      }
-      : { 
-        value: '',
-        openedByHint: false
-      }
-  })
+  return Array.from(rightAnswer).map(generateEmptyLetter)
 }
