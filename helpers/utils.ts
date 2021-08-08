@@ -1,4 +1,4 @@
-import { ALPHABET, EXTRA_LETTERS_AMOUNT_PERCANTAGE } from '@/helpers/constants'
+import { ALPHABET, EXTRA_LETTERS_AMOUNT_PERCANTAGE, SPACE_SYMBOL } from '@/helpers/constants'
 import shuffle from 'lodash.shuffle'
 import { QuizQuestionLetter } from '@/types/store/quiz/quiz.interface'
 
@@ -27,7 +27,7 @@ export const getRandomLetter = (): string => {
  * @returns {QuizQuestionLetter[]} array of QuizQuestionLetter for question's 'letterPool' array
  */
 export const generateLetterPool = (rightAnswer: string): QuizQuestionLetter[] => {
-  const answerWithoutSpaces = Array.from(rightAnswer).filter((letter: string) => !!letter)
+  const answerWithoutSpaces = Array.from(rightAnswer).filter((letter: string) => letter !== SPACE_SYMBOL)
   const poolLength = Math.ceil(answerWithoutSpaces.length + (answerWithoutSpaces.length * EXTRA_LETTERS_AMOUNT_PERCANTAGE))
   const extraLetters = new Array(poolLength)
     .fill(0)

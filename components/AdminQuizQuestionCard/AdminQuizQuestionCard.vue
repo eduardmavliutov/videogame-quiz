@@ -91,7 +91,7 @@ export default class AdminQuizQuestionCard extends Vue {
   }
 
   private rightAnswerInputHandler (value: string): void {
-    this.$emit('update:rightAnswer', value.trim())
+    this.$emit('update:rightAnswer', value.trim().toLowerCase())
   }
 
   private editButtonHandler () {

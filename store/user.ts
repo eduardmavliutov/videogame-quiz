@@ -70,13 +70,13 @@ export const actions: ActionTree<UserState, RootState> = {
       })
   },
 
-  async addPoints({ state }, payload: AddPointsPayload): Promise<void> {
-    const points = Number(state.points) + payload.points
-
+  async addPoints({ state, commit }, payload: AddPointsPayload): Promise<void> {
+    commit('ADD_POINTS', { points: 10 })
+    
     await this.$fire
       .database
       .ref(`users/${this.$fire.auth.currentUser?.uid}/points`)
-      .set(points)
+      .set(state.points)
   },
 
   async fetchUserData ({ dispatch }, payload: FetchUserData) {
@@ -273,6 +273,10 @@ export const mutations: MutationTree<UserState> = {
   MARK_QUESTION_AS_DONE (state, payload: MarkQuestionDonePayload) {
     const { quizId, questionId } = payload
     state.quizes[quizId][questionId].done = true
+  },
+
+  ADD_POINTS(state, payload: AddPointsPayload) {
+    state.points += payload.points
   }
 }
 

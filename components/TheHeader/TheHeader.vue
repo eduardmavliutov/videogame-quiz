@@ -44,10 +44,8 @@ import { Component, Vue } from 'nuxt-property-decorator'
 import UserInfo from '@/components/TheHeader/UserInfo.vue'
 import VTitle from '@/components/VTitle/VTitle.vue'
 import { namespace } from 'vuex-class'
-import { Quiz } from '@/types/store/quiz/quiz.interface'
 
 const userModule = namespace('user')
-const quizModule = namespace('quiz')
 
 @Component({
   components: {
@@ -62,7 +60,6 @@ export default class TheHeader extends Vue {
   @userModule.State('points') points!: number
   @userModule.Getter('completedQuizes') completedQuizes!: number
   @userModule.Action('logout') logout!: () => Promise<void>
-  @quizModule.Getter('quiz') quiz!: (quizId: string) => Quiz
 
   /**
    * Retrieves current user`s name if there is one set or their email
@@ -79,7 +76,7 @@ export default class TheHeader extends Vue {
    */
   get quizTitle (): string {
     return this.$route.params.quizId && this.$route.params.questionId
-      ? this.quiz(this.$route.params.quizId).title
+      ? 'TITLE OF THE QUIZ MUST BE THERE' // TODO: придумать, как получить название текущего квиза
       : 'Videogame Quiz'
   }
 

@@ -1,18 +1,18 @@
 <template>
   <v-page name="quiz">
-    <v-title :title="computedQuiz.title" />
+    <v-title :title="quiz.title" />
     <v-grid name="quiz">
       <quiz-question
-        v-for="(question, index) in computedQuiz.questions"
+        v-for="(question, index) in quiz.questions"
         :id="index"
         :key="index"
-        :image="question.imagePreview"
+        :image="question.image"
         :quiz-id="$route.params.quizId"
         class="v-grid-item"
         @click.native="quizQuestionClickHandler(index)"
       ></quiz-question>
     </v-grid>
-    <router-view></router-view>
+    <router-view/>
   </v-page>
 </template>
 <script lang="ts">
@@ -32,14 +32,28 @@ const quizModule = namespace('quiz')
     VGrid,
     VTitle,
     VPage
+  },
+  async asyncData ({ $fire, route }) {
+    try {
+      const quizId = route.params.quizId
+      const snapshot = await $fire.database.ref(`/quizes/${quizId}`).once('value')
+      const quiz: Quiz = snapshot.val()
+      console.log('QUIZ', quiz)
+      return {
+        quiz
+      }
+    } catch (error) {
+      console.log(error)
+    }
   }
 })
 export default class QuizPage extends Vue {
-  @quizModule.Getter('quiz') quiz!: (quizId: string) => Quiz
+  // @quizModule.Getter('quiz') quiz!: (quizId: string) => Quiz
+  private quiz!: Quiz
 
-  get computedQuiz (): Quiz {
-    return this.quiz(`${this.$route.params.quizId}`)
-  }
+  // get computedQuiz (): Quiz {
+  //   return this.quiz(`${this.$route.params.quizId}`)
+  // }
 
   quizQuestionClickHandler (questionId: number) {
     const quizId = this.$route.params.quizId

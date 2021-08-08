@@ -37,6 +37,7 @@ html {
   display: flex;
   flex-flow: column nowrap;
   height: 100vh;
+  overflow-y: auto;
 
   &::after {
     content: "";

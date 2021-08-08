@@ -2,7 +2,7 @@
   <client-only>
     <v-page name="quiz-active-question">
       <v-title
-        :title="`${quizTitle} / #${activeQuestionIdForTitle}`"
+        :title="`${quiz.title} / #${activeQuestionIdForTitle}`"
         :hide-in-mobile-mode="true"
       />
       <article class="quiz-active-question__main">
@@ -13,8 +13,8 @@
         <div class="quiz-active-question__card">
           <div class="quiz-active-question__image-wrapper">
             <img
-              :src="activeQuestionImage.src"
-              :alt="activeQuestionImage.alt"
+              :src="quiz.questions[questionId].image.src"
+              :alt="quiz.questions[questionId].image.alt"
               class="quiz-active-question__image"
             >
           </div>
@@ -65,10 +65,9 @@ import VPage from '@/components/VPage/VPage.vue'
 import VTitle from '@/components/VTitle/VTitle.vue'
 import { namespace } from 'vuex-class'
 import { Quiz } from '@/types/store/quiz/quiz.interface'
-import { ImageProps } from '@/types/image'
 import { AddPointsPayload, CreateParticipatedQuizPayload, EditLetterPayload, MarkQuestionDonePayload, ParticipatedQuestion, ParticipatedQuizes } from '@/types/store/user/user.interface'
+import { ImageProps } from '@/types/image'
 
-const quizModule = namespace('quiz')
 const userModule = namespace('user')
 
 @Component({
@@ -79,11 +78,22 @@ const userModule = namespace('user')
     VTitle,
     ChangeQuestionButton,
     QuestionControlPanel
+  },
+  async asyncData ({ $fire, route }) {
+    try {
+      const quizId = route.params.quizId
+      const snapshot = await $fire.database.ref(`/quizes/${quizId}`).once('value')
+      const quiz: Quiz = snapshot.val()
+      return {
+        quiz
+      }
+    } catch (error) {
+      console.log(error)
+    }
   }
 })
 export default class ActiveQuestionPage extends Vue {
-  @quizModule.Getter('quiz') quiz!: (quizId: string) => Quiz
-  @quizModule.Getter('quizQuestionImage') image!: (quizId: string, questionId: number) => ImageProps
+  private quiz!: Quiz
 
   @userModule.Getter('quizes') participatedQuizes!: ParticipatedQuizes
   @userModule.Getter('isQuizParticipated') isQuizParticipated!: (quizId: string) => boolean
@@ -104,14 +114,6 @@ export default class ActiveQuestionPage extends Vue {
   private questionWasCounted = false
 
   /**
-   * Retrieves the title of current quiz
-   * @returns {string} - the title of current quiz
-   */
-  get quizTitle (): string {
-    return this.quiz(this.quizId).title
-  }
-
-  /**
    * Computes active quiz question id for title
    * @returns {number} active quiz question id
    */
@@ -127,12 +129,8 @@ export default class ActiveQuestionPage extends Vue {
     return this.participatedQuestion(this.quizId, this.questionId)
   }
 
-  /**
-   * Retrieves the image url for current active question
-   * @returns {string} image url for current active question
-   */
-  get activeQuestionImage () {
-    return this.image(this.quizId, this.questionId)
+  get questionImage (): ImageProps {
+    return this.quiz.questions[this.questionId].image
   }
 
   /**
@@ -194,7 +192,7 @@ export default class ActiveQuestionPage extends Vue {
    * Navigates to next quiz question and resets questionWasCounted property
    */
   nextQuizQuestionHandler (): void {
-    const currentQuizLength = this.quiz(this.quizId).questions.length
+    const currentQuizLength = this.quiz.questions.length
     if (this.questionId < (currentQuizLength - 1)) {
       this.$router.push(`/quiz/${this.quizId}/${this.questionId + 1}`)
       this.questionWasCounted = false
@@ -212,7 +210,7 @@ export default class ActiveQuestionPage extends Vue {
       // if current quiz is not participated we create new participated
       // quiz and then we send that blank quiz to the server
       this.createParticipatedQuiz({
-        quiz: this.quiz(this.quizId),
+        quiz: this.quiz,
         quizId: this.quizId
       })
     }
