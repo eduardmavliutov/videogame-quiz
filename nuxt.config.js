@@ -1,6 +1,10 @@
 export default {
   ssr: false,
 
+  publicRuntimeConfig: {
+    secret: process.env.NUXT_APP_SECRET
+  },
+
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
     title: 'Videogame Quiz',

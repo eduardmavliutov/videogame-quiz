@@ -1,11 +1,21 @@
 import { Middleware } from '@nuxt/types'
 
-const guardedRoutes: string[] = ['quiz-question', 'user-settings']
+const adminRequiredRoutes: string[] = ['admin-quizes', 'admin-quizes-id']
 
-const routerMiddleware: Middleware = ({ store, route, redirect }) => {
-  if (!store.getters['user/isAuthenticated'] && guardedRoutes.includes(`${route.name}`)) {
+const authRequiredRoutes: string[] = ['quiz-question', 'user-settings', ...adminRequiredRoutes]
+
+const routerMiddleware: Middleware = ({ store, route, redirect, $config, $fire }) => {
+  const currentUser = $fire.auth.currentUser
+  
+  if (!store.getters['user/isAuthenticated'] && authRequiredRoutes.includes(`${route.name}`)) {
     redirect({
       name: 'auth'
+    })
+  }
+
+  if (authRequiredRoutes.includes(`${route.name}`) && currentUser?.email !== $config.secret) {
+    redirect({
+      name: 'index'
     })
   }
 }

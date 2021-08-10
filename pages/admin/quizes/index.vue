@@ -3,6 +3,16 @@
     <v-title title="Admin panel" />
     <section class="admin__quiz-list-wrapper">
       <ul class="admin__quiz-list">
+        <li class="admin__quiz-list-item--new">
+          <nuxt-link
+            :to="{
+              name: 'index',
+            }"
+            class="admin__quiz-list-item-link"
+          >
+            {{ 'Homepage' }}
+          </nuxt-link>
+        </li>
         <li
           v-for="quizId in Object.keys(quizes)"
           :key="quizId"
@@ -93,8 +103,7 @@ export default class AdminPage extends Vue {
     }
 
     &:active {
-      box-shadow: 
-        inset -4px -4px 6px 3px lightgrey,
+      box-shadow: inset -4px -4px 6px 3px lightgrey,
         inset -4px -6px 6px 3px $main-color;
     }
 
@@ -119,8 +128,7 @@ export default class AdminPage extends Vue {
     }
 
     &:active {
-      box-shadow: 
-        inset -4px -4px 6px 3px $color-white,
+      box-shadow: inset -4px -4px 6px 3px $color-white,
         inset -4px -6px 6px 3px $main-color;
     }
 

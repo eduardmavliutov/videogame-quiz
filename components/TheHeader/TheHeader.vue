@@ -14,6 +14,13 @@
         class="header__logo-title--mobile"
       />
     </div>
+    <nuxt-link
+      v-if="showAdminRoute"
+      :to="{ name: 'admin-quizes' }"
+      class="header__admin-link"
+    >
+      Admin
+    </nuxt-link>
     <div class="header__auth">
       <transition
         name="header__auth"
@@ -78,6 +85,17 @@ export default class TheHeader extends Vue {
     return this.$route.params.quizId && this.$route.params.questionId
       ? 'TITLE OF THE QUIZ MUST BE THERE' // TODO: придумать, как получить название текущего квиза
       : 'Videogame Quiz'
+  }
+
+  /**
+   * Defines whether to show link to admin panel or not
+   * @returns {boolean} true if current user's email is admin's email, otherwise - false
+   */
+  get showAdminRoute (): boolean {
+    if (!this.$fire.auth.currentUser?.uid) {
+      return false
+    }
+    return this.userEmail === this.$config.secret
   }
 
   /**
@@ -200,6 +218,7 @@ export default class TheHeader extends Vue {
 
   &__auth {
     display: flex;
+
     &-enter-to,
     &-leave {
       transform: translateX(0%);
@@ -227,15 +246,10 @@ export default class TheHeader extends Vue {
     }
   }
 
-  &__active-user {
-    color: $color-analogous-two;
+  &__admin-link {
+    color: $color-white;
     font-weight: bold;
-    cursor: pointer;
-    max-width: 8rem;
-    flex-shrink: 2;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+    justify-self: flex-end;
   }
 }
 </style>
