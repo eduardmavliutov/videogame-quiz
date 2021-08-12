@@ -13,7 +13,7 @@ const routerMiddleware: Middleware = ({ store, route, redirect, $config, $fire }
     })
   }
 
-  if (authRequiredRoutes.includes(`${route.name}`) && currentUser?.email !== $config.secret) {
+  if (adminRequiredRoutes.includes(`${route.name}`) && currentUser?.email !== $config.secret) {
     redirect({
       name: 'index'
     })

@@ -10,7 +10,7 @@
         :quiz-id="$route.params.quizId"
         class="v-grid-item"
         @click.native="quizQuestionClickHandler(index)"
-      ></quiz-question>
+      />
     </v-grid>
     <router-view/>
   </v-page>
@@ -38,7 +38,6 @@ const quizModule = namespace('quiz')
       const quizId = route.params.quizId
       const snapshot = await $fire.database.ref(`/quizes/${quizId}`).once('value')
       const quiz: Quiz = snapshot.val()
-      console.log('QUIZ', quiz)
       return {
         quiz
       }

@@ -7,16 +7,21 @@
           :key="quiz.toString()"
           :title.sync="quiz.title"
           :image.sync="quiz.image"
+          class="v-grid-item"
         />
-          <admin-quiz-question-card
-            v-for="(question, index) in quiz.questions"
-            :key="`${index}question`"
-            :right-answer.sync="question.rightAnswer"
-            :image.sync="question.image"
-            :questionId="index"
-            @delete-question="deleteQuestionHandler"
-          />
-        <v-add-button key="addButton" @add="addButtonHandler" />
+        <admin-quiz-question-card
+          v-for="(question, index) in quiz.questions"
+          :key="`${index}question`"
+          :right-answer.sync="question.rightAnswer"
+          :image.sync="question.image"
+          :questionId="index"
+          @delete-question="deleteQuestionHandler"
+          class="v-grid-item"
+        />
+        <v-add-button
+          key="addButton"
+          @add="addButtonHandler"
+        />
       </v-grid>
       <div
         v-if="isNewQuiz"

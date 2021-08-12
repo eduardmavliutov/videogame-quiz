@@ -1,19 +1,27 @@
 <template>
-  <transition-group
+  <div
     :class="`v-grid v-grid--${name}`"
-    name="v-grid"
-    tag="div"
-    appear
   >
     <slot></slot>
-  </transition-group>
+  </div>
 </template>
 <script lang="ts">
 import { Component, Vue, Prop } from 'nuxt-property-decorator'
+import { gsap } from 'gsap'
 
 @Component({})
 export default class VGrid extends Vue {
   @Prop({ required: false, type: String }) name!: string
+
+  mounted () {
+    gsap.from('.v-grid-item', {
+      duration: 0.5,
+      scale: 0.5,
+      opacity: 0.5,
+      stagger: 0.1,
+      ease: 'elastic',
+    })
+  }
 }
 </script>
 <style lang="scss">

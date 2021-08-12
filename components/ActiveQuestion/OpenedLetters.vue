@@ -4,6 +4,7 @@
       v-for="(letter, index) in openedLetters"
       :key="index"
       :letter="letter.value"
+      type="opened-letter"
       :class="{ 'question-is-done' : isQuestionDone }"
       @click.native="$emit('remove-letter', index)"
     />

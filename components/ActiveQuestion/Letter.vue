@@ -1,7 +1,7 @@
 <template>
   <div
     class="quiz-letter"
-    :class="{ 'space': !!isSpace }"
+    :class="classes"
   >
     <span>{{ letter }}</span>
   </div>
@@ -13,9 +13,17 @@ import { SPACE_SYMBOL } from '@/helpers/constants'
 @Component({})
 export default class QuizQuestionLetter extends Vue {
   @Prop({ required: true, type: String }) letter!: string
+  @Prop({ required: false, type: String }) type!: string
 
   get isSpace () {
     return this.letter === SPACE_SYMBOL
+  }
+
+  get classes () {
+    return {
+      'space': !!this.isSpace,
+      'opened-letter': this.type === 'opened-letter'
+    }
   }
 }
 </script>
@@ -51,6 +59,7 @@ export default class QuizQuestionLetter extends Vue {
   flex-flow: column nowrap;
   font-weight: bold;
   cursor: pointer;
+  transition: 0.2s all ease;
 
   @include mobile {
     width: 1.6rem;
@@ -63,14 +72,8 @@ export default class QuizQuestionLetter extends Vue {
   }
 
   &.question-is-done {
-    animation: 1.2s infinite alternate forwards win-animation;
-    animation-iteration-count: 5;
-  }
-
-  @for $i from 1 through 30 {
-    &.question-is-done:nth-child(#{$i}) {
-      animation-delay: $i * (1s / 20);
-    }
+    background-color: $color-yellow-win;
+    color: $color-black;
   }
 }
 </style>

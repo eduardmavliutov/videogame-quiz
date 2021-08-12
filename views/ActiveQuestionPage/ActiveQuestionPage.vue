@@ -67,6 +67,7 @@ import { namespace } from 'vuex-class'
 import { Quiz } from '@/types/store/quiz/quiz.interface'
 import { AddPointsPayload, CreateParticipatedQuizPayload, EditLetterPayload, MarkQuestionDonePayload, ParticipatedQuestion, ParticipatedQuizes } from '@/types/store/user/user.interface'
 import { ImageProps } from '@/types/image'
+import { gsap } from 'gsap'
 
 const userModule = namespace('user')
 
@@ -143,6 +144,15 @@ export default class ActiveQuestionPage extends Vue {
     const answer = this.computedAnswer(this.quizId, this.questionId)
     const rightAnswer = this.activeQuizQuestion.rightAnswer
     if (!this.questionWasCounted && answer === rightAnswer) {
+      gsap.to('.opened-letter', {
+        duration: 0.4,
+        y: -10,
+        stagger: 0.1,
+        scale: 1.1,
+        ease: 'bounce.out',
+        yoyo: true,
+        repeat: 3
+      })
       this.questionWasCounted = true
       this.markQuestionAsDone({
         quizId: this.quizId,
