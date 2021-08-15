@@ -5,6 +5,17 @@ export default {
     secret: process.env.NUXT_APP_SECRET
   },
 
+  loading: {
+    color: '#ffd848',
+    height: '5px',
+  },
+
+  loadingIndicator: {
+    name: 'cube-grid',
+    color: '#bf360c',
+    background: '#e8e8e8'
+  },
+
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
     title: 'Videogame Quiz',

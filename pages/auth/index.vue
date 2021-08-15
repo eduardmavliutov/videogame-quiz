@@ -210,7 +210,7 @@ export default class Auth extends Vue {
     this.messageStyle = style
     setTimeout(() => {
       this.message = ''
-    }, 2000)
+    }, 1000)
   }
 }
 </script>
