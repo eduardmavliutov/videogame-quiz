@@ -4,14 +4,14 @@
       v-if="!loading"
       :quizes="quizes"
     />
-    <loader v-else />
+    <v-loader v-else />
   </v-page>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
 import VPage from '@/components/VPage/VPage.vue'
-import Loader from '@/components/Loader/Loader.vue'
+import VLoader from '@/components/Loader/Loader.vue'
 import QuizList from '@/components/QuizList/QuizList.vue'
 import { Quiz } from '@/types/store/quiz/quiz.interface'
 
@@ -19,7 +19,7 @@ import { Quiz } from '@/types/store/quiz/quiz.interface'
   components: {
     VPage,
     QuizList,
-    Loader
+    VLoader
   },
 })
 export default class Home extends Vue {

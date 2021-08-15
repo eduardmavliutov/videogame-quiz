@@ -19,20 +19,22 @@
           :model.sync="form[input.type].value"
         />
         <div class="auth-form--buttons">
-          <button
-            class="auth-form--submit"
+          <v-button
             type="submit"
-            @click="submitType = 'login'"
+            :loading="isAuthLoading"
+            :disabled="isAuthenticated"
+            @click.native="submitType = 'login'"
           >
             Login
-          </button>
-          <button
-            class="auth-form--submit"
+          </v-button>
+          <v-button
             type="submit"
-            @click="submitType = 'signUp'"
+            :loading="isAuthLoading"
+            :disabled="isAuthenticated"
+            @click.native="submitType = 'signUp'"
           >
             Sign up
-          </button>
+          </v-button>
         </div>
         <transition name="error">
           <span
@@ -43,7 +45,6 @@
             {{ message }}
           </span>
         </transition>
-        <v-loader v-if="isAuthLoading" />
       </form>
     </validation-observer>
   </v-page>
@@ -53,7 +54,7 @@ import { Vue, Component } from 'nuxt-property-decorator'
 import VPage from '@/components/VPage/VPage.vue'
 import VTitle from '@/components/VTitle/VTitle.vue'
 import VInput from '@/components/VInput/VInput.vue'
-import VLoader from '@/components/VLoader/VLoader.vue'
+import VButton from '@/components/VButton/VButton.vue'
 import { ValidationObserver } from 'vee-validate'
 import { namespace } from 'vuex-class'
 import { PASSWORD_MIN_LENGTH } from '@/helpers/constants'
@@ -69,14 +70,15 @@ const authModule = namespace('auth')
     VPage,
     VTitle,
     VInput,
-    VLoader,
-    ValidationObserver
+    ValidationObserver,
+    VButton
   }
 })
 export default class Auth extends Vue {
   @userModule.Mutation('SET_USER') SET_USER!: (payload: SetUserPayload) => void
   @userModule.Action('fetchUserData') fetchUserData!: (payload: FetchUserData) => Promise<void>
   @userModule.Action('subscribeUserModule') subscribeUserModule!: (payload: SubscribeUserModulePayload) => Promise<void>
+  @userModule.Getter('isAuthenticated') isAuthenticated !: boolean
   @authModule.Mutation('SET_IS_AUTH_LOADING') SET_IS_AUTH_LOADING !: (payload: SetIsAuthLoadingPayload) => void
   @authModule.Getter('isAuthLoading') isAuthLoading!: boolean
 
@@ -147,8 +149,8 @@ export default class Auth extends Vue {
         return this.$fire.database.ref(`/users/${userId}`)
       })
       .then((result) => {
-        this.subscribeUserModule({ 
-          reference: result 
+        this.subscribeUserModule({
+          reference: result
         })
       })
       .then(() => {
@@ -174,7 +176,7 @@ export default class Auth extends Vue {
   loginHandler (): void {
     const email = this.form.email.value.trim().toLowerCase()
     const password = this.form.password.value
-    
+
     this.SET_IS_AUTH_LOADING({
       isAuthLoading: true
     })
@@ -210,7 +212,7 @@ export default class Auth extends Vue {
     this.messageStyle = style
     setTimeout(() => {
       this.message = ''
-    }, 1000)
+    }, 2000)
   }
 }
 </script>
@@ -261,6 +263,7 @@ export default class Auth extends Vue {
   &--buttons {
     display: flex;
     justify-content: center;
+    gap: 1rem;
   }
 
   &--submit {

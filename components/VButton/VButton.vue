@@ -5,7 +5,16 @@
     :type="type"
     :disabled="disabled"
   >
-    <slot />
+    <slot v-if="!loading" />
+    <div
+      v-else
+      class="lds-ellipsis"
+    >
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
   </button>
 </template>
 <script lang="ts">
@@ -15,6 +24,7 @@ import { Vue, Component, Prop } from 'nuxt-property-decorator'
 export default class VButton extends Vue {
   @Prop({ required: false, type: String, default: 'button' }) type!: string
   @Prop({ required: false, type: Boolean, default: false }) disabled!: boolean
+  @Prop({ required: false, type: Boolean, default: false }) loading!: boolean
 
   get classes (): string {
     const classes = []
@@ -37,6 +47,7 @@ export default class VButton extends Vue {
   border: 1px solid $color-white;
   transition: 0.2s all ease;
   flex-shrink: 1;
+  position: relative;
 
   &:hover {
     box-shadow: 0 0 5px 2px $color-white;
@@ -64,6 +75,61 @@ export default class VButton extends Vue {
       color: gray;
       background-color: rgba(128, 128, 128, 0.513);
     }
+  }
+}
+
+.lds-ellipsis {
+  display: inline-block;
+  width: 5rem;
+  height: 1rem;
+}
+.lds-ellipsis div {
+  position: absolute;
+  top: 25%;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: $main-color;
+  animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+.lds-ellipsis div:nth-child(1) {
+  left: 22%;
+  animation: lds-ellipsis1 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(2) {
+  left: 22%;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(3) {
+  left: 44%;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(4) {
+  left: 66%;
+  animation: lds-ellipsis3 0.6s infinite;
+}
+@keyframes lds-ellipsis1 {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes lds-ellipsis3 {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+@keyframes lds-ellipsis2 {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(20px, 0);
   }
 }
 </style>
