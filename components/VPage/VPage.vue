@@ -21,7 +21,7 @@ export default class VPage extends Vue {
   z-index: 0;
 
   &-home {
-    margin-top: 2rem;
+    margin: 2rem 0;
   }
 
   &-admin-quiz {
