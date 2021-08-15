@@ -13,6 +13,17 @@
             {{ 'Homepage' }}
           </nuxt-link>
         </li>
+        <li class="admin__quiz-list-item--new">
+          <nuxt-link
+            :to="{
+              name: 'admin-quizes-id',
+              params: { id: 'new' }
+            }"
+            class="admin__quiz-list-item-link"
+          >
+            {{ 'Create new quiz' }}
+          </nuxt-link>
+        </li>
         <li
           v-for="quizId in Object.keys(quizes)"
           :key="quizId"
@@ -26,17 +37,6 @@
             class="admin__quiz-list-item-link"
           >
             {{ quizes[quizId].title }}
-          </nuxt-link>
-        </li>
-        <li class="admin__quiz-list-item--new">
-          <nuxt-link
-            :to="{
-              name: 'admin-quizes-id',
-              params: { id: 'new' }
-            }"
-            class="admin__quiz-list-item-link"
-          >
-            {{ 'Create new quiz' }}
           </nuxt-link>
         </li>
       </ul>
@@ -84,6 +84,12 @@ export default class AdminPage extends Vue {
     background-color: rgba(255, 255, 255, 0.815);
     border-radius: 10px;
     flex-grow: 1;
+  }
+
+  &__quiz-list {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1rem;
   }
 
   &__quiz-list-item,
