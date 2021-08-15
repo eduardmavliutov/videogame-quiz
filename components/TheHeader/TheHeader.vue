@@ -92,7 +92,7 @@ export default class TheHeader extends Vue {
    * @returns {boolean} true if current user's email is admin's email, otherwise - false
    */
   get showAdminRoute (): boolean {
-    if (!this.$fire.auth.currentUser?.uid) {
+    if (!this.isAuthenticated) {
       return false
     }
     return this.userEmail === this.$config.secret
