@@ -20,7 +20,7 @@ import { Quiz } from '@/types/store/quiz/quiz.interface'
     VPage,
     QuizList,
     VLoader
-  },
+  }
 })
 export default class Home extends Vue {
   private quizes!: { [key: string]: Quiz }

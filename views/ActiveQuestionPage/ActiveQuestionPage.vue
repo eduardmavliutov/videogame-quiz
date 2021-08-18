@@ -9,7 +9,7 @@
         <change-question-button
           type="previous"
           @change-question="previousQuizQuestionHandler()"
-        ></change-question-button>
+        />
         <div class="quiz-active-question__card">
           <div class="quiz-active-question__image-wrapper">
             <img
@@ -46,7 +46,7 @@
         <change-question-button
           type="next"
           @change-question="nextQuizQuestionHandler()"
-        ></change-question-button>
+        />
       </article>
       <question-control-panel
         @previous-question="previousQuizQuestionHandler"
@@ -67,6 +67,7 @@ import { namespace } from 'vuex-class'
 import { Quiz } from '@/types/store/quiz/quiz.interface'
 import { AddPointsPayload, CreateParticipatedQuizPayload, EditLetterPayload, MarkQuestionDonePayload, ParticipatedQuestion, ParticipatedQuizes } from '@/types/store/user/user.interface'
 import { ImageProps } from '@/types/image'
+import { Route } from 'vue-router'
 import { gsap } from 'gsap'
 
 const userModule = namespace('user')
@@ -91,10 +92,142 @@ const userModule = namespace('user')
     } catch (error) {
       console.log(error)
     }
+  },
+  transition (to: Route, from: Route | undefined) {
+    const toQuestionId = to.params.questionId
+    const fromQuestionId = from!.params.questionId
+    return toQuestionId > fromQuestionId
+      ? 'route-change-left'
+      : 'route-change-right'
   }
 })
 export default class ActiveQuestionPage extends Vue {
   private quiz!: Quiz
+  // // ! временно пока доступ в firebase не будет возобновлен
+  // private quiz: Quiz = {
+  //   id: '324rfsd',
+  //   title: 'PS4 exclusives',
+  //   image: {
+  //     src: require('@/assets/images/quizes/ps4-exclusives/ps4-exclusives.jpeg'),
+  //     alt: 'ps4-exclusives'
+  //   },
+  //   questions: [
+  //     {
+  //       rightAnswer: 'god of war',
+  //       image: {
+  //         src: require('@/assets/images/quizes/ps4-exclusives/god-of-war.jpeg'),
+  //         alt: 'quiz-picture-alt'
+  //       },
+  //       imagePreview: {
+  //         src: require('@/assets/images/quizes/ps4-exclusives/god-of-war-thumb.jpeg'),
+  //         alt: 'quiz-picture-alt'
+  //       },
+  //       letterPool: [
+  //         { value: 'f' },
+  //         { value: 'g' },
+  //         { value: 'o' },
+  //         { value: 'd' },
+  //         { value: 'w' },
+  //         { value: 'o' },
+  //         { value: 'f' },
+  //         { value: 'a' },
+  //         { value: '6' },
+  //         { value: 'r' },
+  //         { value: 'n' },
+  //         { value: 'm' },
+  //         { value: 'u' },
+  //         { value: '5' }
+  //       ],
+  //       openedLetters: [
+  //         { value: '' },
+  //         { value: '' },
+  //         { value: '' },
+  //         { value: ' ' },
+  //         { value: '' },
+  //         { value: '' },
+  //         { value: ' ' },
+  //         { value: '' },
+  //         { value: '' },
+  //         { value: '' }
+  //       ]
+  //     },
+  //     {
+  //       rightAnswer: 'uncharted 4',
+  //       image: {
+  //         src: require('@/assets/images/quizes/ps4-exclusives/uncharted-4.jpeg'),
+  //         alt: 'quiz-picture-alt'
+  //       },
+  //       imagePreview: {
+  //         src: require('@/assets/images/quizes/ps4-exclusives/uncharted-4-thumb.jpeg'),
+  //         alt: 'quiz-picture-alt'
+  //       },
+  //       letterPool: [
+  //         { value: 'c' },
+  //         { value: 'h' },
+  //         { value: 'u' },
+  //         { value: 'a' },
+  //         { value: 'n' },
+  //         { value: '4' },
+  //         { value: 'd' },
+  //         { value: 'n' },
+  //         { value: 'e' },
+  //         { value: 't' },
+  //         { value: 'r' }
+  //       ],
+  //       openedLetters: [
+  //         { value: '' },
+  //         { value: '' },
+  //         { value: '' },
+  //         { value: '' },
+  //         { value: '' },
+  //         { value: '' },
+  //         { value: '' },
+  //         { value: '' },
+  //         { value: '' },
+  //         { value: ' ' },
+  //         { value: '' }
+  //       ]
+  //     },
+  //     {
+  //       rightAnswer: 'persona 5',
+  //       image: {
+  //         src: require('@/assets/images/quizes/ps4-exclusives/persona-5.jpeg'),
+  //         alt: 'quiz-picture-alt'
+  //       },
+  //       imagePreview: {
+  //         src: require('@/assets/images/quizes/ps4-exclusives/persona-5-thumb.jpeg'),
+  //         alt: 'quiz-picture-alt'
+  //       },
+  //       letterPool: [
+  //         { value: 'e' },
+  //         { value: 'p' },
+  //         { value: 'r' },
+  //         { value: 'o' },
+  //         { value: 's' },
+  //         { value: 'n' },
+  //         { value: '5' },
+  //         { value: '3' },
+  //         { value: 'a' },
+  //         { value: 'a' },
+  //         { value: 's' },
+  //         { value: 'a' },
+  //         { value: 'w' },
+  //         { value: 'm' }
+  //       ],
+  //       openedLetters: [
+  //         { value: '' },
+  //         { value: '' },
+  //         { value: '' },
+  //         { value: '' },
+  //         { value: '' },
+  //         { value: '' },
+  //         { value: '' },
+  //         { value: ' ' },
+  //         { value: '' }
+  //       ]
+  //     }
+  //   ],
+  // }
 
   @userModule.Getter('quizes') participatedQuizes!: ParticipatedQuizes
   @userModule.Getter('isQuizParticipated') isQuizParticipated!: (quizId: string) => boolean
@@ -255,8 +388,8 @@ export default class ActiveQuestionPage extends Vue {
     transition: all 0.5s ease-in-out;
 
     &::before {
-      content: '';
-      background: url('~@/assets/images/questions.png');
+      content: "";
+      background: url("~@/assets/images/questions.png");
       background-size: 10%;
       opacity: 0.05;
       top: 0;

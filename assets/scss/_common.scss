@@ -51,6 +51,68 @@ h2 {
   }
 }
 
+@keyframes left {
+  0% {
+    opacity: 1;
+  }
+
+  70% {
+    opacity: 0;
+    transform: translateX(-60%);
+  }
+
+  80% {
+    transform: translateX(120%);
+  }
+}
+
+.route-change {
+  &-left {
+    &-enter-active,
+    &-leave-active {
+      transition: 0.4s all ease-out;
+    }
+
+    &-enter {
+      opacity: 0;
+      transform: translateX(120%);
+    }
+
+    &-leave-to {
+      opacity: 0;
+      transform: translateX(-60%);
+    }
+
+    &-enter-to,
+    &-leave {
+      transform: translateX(0%);
+      opacity: 1;
+    }
+  }
+  &-right {
+    &-enter-active,
+    &-leave-active {
+      transition: 0.4s all ease-out;
+    }
+
+    &-enter {
+      opacity: 0;
+      transform: translateX(-60%);
+    }
+
+    &-leave-to {
+      opacity: 0;
+      transform: translateX(120%);
+    }
+
+    &-enter-to,
+    &-leave {
+      transform: translateX(0%);
+      opacity: 1;
+    }
+  }
+}
+
 .croppa-container {
   position: relative;
   display: flex;
