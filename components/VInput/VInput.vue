@@ -1,8 +1,5 @@
 <template>
-  <validation-provider
-    v-slot="{ errors }"
-    :rules="rules"
-    :name="name"
+  <div
     class="v-input__wrapper"
   >
     <label
@@ -17,7 +14,7 @@
       :value="model"
       :type="type"
       class="v-input__input"
-      :class="{ 'v-input__input--error' : errors.length}"
+      :class="{ 'v-input__input--error' : errors.length }"
       @input="$emit('update:model', $event.target.value)"
     />
     <transition name="error">
@@ -28,21 +25,16 @@
         {{ errors[0] }}
       </small>
     </transition>
-  </validation-provider>
+  </div>
 </template>
 <script lang="ts">
 import { Prop, Component, Vue } from 'nuxt-property-decorator'
-import { ValidationProvider } from 'vee-validate'
 
-@Component({
-  components: {
-    ValidationProvider
-  }
-})
+@Component({})
 export default class VInput extends Vue {
-  @Prop({ required: true, type: String }) rules!: string
   @Prop({ required: true, type: String }) name!: string 
   @Prop({ required: true, type: String }) type!: string
+  @Prop({ required: true, type: Array }) errors!: string[]
   @Prop({ required: false, type: String, default: 'white' }) labelColor!: string
   @Prop({ required: false, type: Boolean, default: false }) disabled!: boolean
   @Prop({ required: true }) model!: string

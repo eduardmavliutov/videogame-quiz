@@ -37,10 +37,6 @@ export default {
       ssr: false
     },
     {
-      src: '@/plugins/validation-rules',
-      ssr: false
-    },
-    {
       src: '@/plugins/vue-croppa',
       ssr: false,
     },

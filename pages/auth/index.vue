@@ -1,22 +1,22 @@
 <template>
   <v-page name="auth">
     <v-title title="Authentication" />
-    <validation-observer
-      v-slot="{ handleSubmit }"
-      tag="div"
-      class="auth-form__wrapper"
-    >
+    <div class="auth-form__wrapper">
       <form
         class="auth-form"
-        @submit.prevent="handleSubmit(submitHandler)"
+        @submit.prevent="submitHandler"
       >
         <v-input
-          v-for="input in form"
-          :key="`${input.name}-${input.rules}`"
-          :rules="input.rules"
-          :name="input.name"
-          :type="input.type"
-          :model.sync="form[input.type].value"
+          name="E-mail"
+          type="text"
+          :errors="emailErrors"
+          :model.sync="form.email"
+        />
+        <v-input
+          name="Password"
+          type="password"
+          :errors="passwordErrors"
+          :model.sync="form.password"
         />
         <div class="auth-form--buttons">
           <v-button
@@ -46,7 +46,7 @@
           </span>
         </transition>
       </form>
-    </validation-observer>
+    </div>
   </v-page>
 </template>
 <script lang="ts">
@@ -55,12 +55,13 @@ import VPage from '@/components/VPage/VPage.vue'
 import VTitle from '@/components/VTitle/VTitle.vue'
 import VInput from '@/components/VInput/VInput.vue'
 import VButton from '@/components/VButton/VButton.vue'
-import { ValidationObserver } from 'vee-validate'
 import { namespace } from 'vuex-class'
-import { PASSWORD_MIN_LENGTH } from '@/helpers/constants'
 import { AuthForm } from '@/types/views/auth.interface'
 import { FetchUserData, SetUserPayload, SubscribeUserModulePayload } from '@/types/store/user/user.interface'
 import { SetIsAuthLoadingPayload } from '@/types/store/auth/auth.interface'
+import { PASSWORD_MIN_LENGTH } from '@/helpers/constants'
+import { validationMixin } from 'vuelidate'
+import { required, minLength, email } from 'vuelidate/lib/validators'
 
 const userModule = namespace('user')
 const authModule = namespace('auth')
@@ -70,8 +71,20 @@ const authModule = namespace('auth')
     VPage,
     VTitle,
     VInput,
-    ValidationObserver,
     VButton
+  },
+  mixins: [validationMixin],
+  validations: {
+    form: {
+      email: {
+        required,
+        email
+      },
+      password: {
+        required,
+        minLength: minLength(PASSWORD_MIN_LENGTH)
+      }
+    }
   }
 })
 export default class Auth extends Vue {
@@ -102,45 +115,74 @@ export default class Auth extends Vue {
    * Represents auth form for a new or an existing user
    */
   private form: AuthForm = {
-    email: {
-      value: '',
-      rules: 'required',
-      name: 'Email',
-      type: 'email'
-    },
-    password: {
-      value: '',
-      rules: `required|min:${PASSWORD_MIN_LENGTH}|password`,
-      name: 'Password',
-      type: 'password'
+    email: '',
+    password: ''
+  }
+
+  private get emailErrors (): string[] {
+    const errors: string[] = []
+
+    if (!this.$v.form.email?.$dirty) {
+      return errors
     }
+
+    if (!this.$v.form.email.required) {
+      errors.push('E-mail is required')
+    }
+
+    if (!this.$v.form.email.email) {
+      errors.push('E-mail is invalid')
+    }
+
+    return errors
+  }
+
+  private get passwordErrors (): string[] {
+    const errors: string[] = []
+
+    if (!this.$v.form.password?.$dirty) {
+      return errors
+    }
+
+    if (!this.$v.form.password?.required) {
+      errors.push('Password must be filled')
+    }
+
+    if (!this.$v.form.password.minLength) {
+      errors.push(`Password must be at least ${PASSWORD_MIN_LENGTH} long`)
+    }
+
+    return errors
   }
 
   /**
    * Submit handler for auth form
    */
   submitHandler (): void {
-    this.submitType === 'login'
-      ? this.loginHandler()
-      : this.signUpHandler()
+    this.$v.$touch()
+    if (!this.$v.$invalid) {
+      this.submitType === 'login'
+        ? this.loginHandler()
+        : this.signUpHandler()
+    }
   }
 
   /**
    * Signs up a new user, then creates a user directory using received created user id.
    * Puts received tokens and user info in store
    */
-  signUpHandler (): void {
-    const email = this.form.email.value.trim().toLowerCase()
-    const password = this.form.password.value
+  async signUpHandler (): Promise<void> {
+    const email = this.form.email.trim().toLowerCase()
+    const password = this.form.password
 
     this.SET_IS_AUTH_LOADING({
       isAuthLoading: true
     })
-    this.$fire.auth.createUserWithEmailAndPassword(email, password)
+    await this.$fire.auth.createUserWithEmailAndPassword(email, password)
       .then((loginStatus) => {
         const userId = `${loginStatus.user?.uid}`
         this.$fire.database.ref(`/users/${userId}/`).set({
-          email: this.form.email.value,
+          email: this.form.email,
           name: '',
           quizes: [],
           points: 0,
@@ -173,14 +215,14 @@ export default class Auth extends Vue {
   /**
    * Logins existing user, then fetches their data. Stores authdata and userdata in the store
    */
-  loginHandler (): void {
-    const email = this.form.email.value.trim().toLowerCase()
-    const password = this.form.password.value
+  async loginHandler (): Promise<void> {
+    const email = this.form.email.trim().toLowerCase()
+    const password = this.form.password
 
     this.SET_IS_AUTH_LOADING({
       isAuthLoading: true
     })
-    this.$fire.auth.signInWithEmailAndPassword(email, password)
+    await this.$fire.auth.signInWithEmailAndPassword(email, password)
       .then((loginStatus) => {
         const userId = `${loginStatus.user?.uid}`
         this.fetchUserData({ userId })
