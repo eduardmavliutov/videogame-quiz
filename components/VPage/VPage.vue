@@ -28,6 +28,14 @@ export default class VPage extends Vue {
     overflow-y: auto;
   }
 
+  &-quiz-active-question {
+    .v-page-container {
+      @include mobile {
+        justify-content: space-between;
+      }
+    }
+  }
+
   &-container {
     flex-grow: 1;
     padding: 0 40px;

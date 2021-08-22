@@ -1,10 +1,6 @@
 <template>
-  <client-only>
-    <v-page name="quiz-active-question">
-      <v-title
-        :title="`${quiz.title} / #${activeQuestionIdForTitle}`"
-        :hide-in-mobile-mode="true"
-      />
+  <div class="quiz-active-question__wrapper">
+    <client-only>
       <article class="quiz-active-question__main">
         <change-question-button
           type="previous"
@@ -48,51 +44,31 @@
           @change-question="nextQuizQuestionHandler()"
         />
       </article>
-      <question-control-panel
-        @previous-question="previousQuizQuestionHandler"
-        @next-question="nextQuizQuestionHandler"
-      />
-    </v-page>
-  </client-only>
+    </client-only>
+  </div>
 </template>
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from 'nuxt-property-decorator'
 import LetterPool from '@/components/ActiveQuestion/LetterPool.vue'
 import OpenedLetters from '@/components/ActiveQuestion/OpenedLetters.vue'
 import ChangeQuestionButton from '@/components/ActiveQuestion/ChangeQuestionButton.vue'
-import QuestionControlPanel from '@/components/ActiveQuestion/QuestionControlPanel.vue'
-import VPage from '@/components/VPage/VPage.vue'
-import VTitle from '@/components/VTitle/VTitle.vue'
 import { namespace } from 'vuex-class'
+import { gsap } from 'gsap'
 import { Quiz } from '@/types/store/quiz/quiz.interface'
 import { AddPointsPayload, CreateParticipatedQuizPayload, EditLetterPayload, MarkQuestionDonePayload, ParticipatedQuestion, ParticipatedQuizes } from '@/types/store/user/user.interface'
 import { ImageProps } from '@/types/image'
 import { Route } from 'vue-router'
-import { gsap } from 'gsap'
 
 const userModule = namespace('user')
+const quizModule = namespace('quiz')
 
 @Component({
   components: {
     LetterPool,
     OpenedLetters,
-    VPage,
-    VTitle,
-    ChangeQuestionButton,
-    QuestionControlPanel
+    ChangeQuestionButton
   },
-  async asyncData ({ $fire, route }) {
-    // try {
-    //   const quizId = route.params.quizId
-    //   const snapshot = await $fire.database.ref(`/quizes/${quizId}`).once('value')
-    //   const quiz: Quiz = snapshot.val()
-    //   return {
-    //     quiz
-    //   }
-    // } catch (error) {
-    //   console.log(error)
-    // }
-  },
+  layout: 'active-quiz-question',
   transition (to: Route, from: Route | undefined) {
     if (from && from?.path.includes('/quiz/') && to.name === 'quiz-question') {
       return 'route-change-left'
@@ -105,133 +81,6 @@ const userModule = namespace('user')
   }
 })
 export default class ActiveQuestionPage extends Vue {
-  // private quiz!: Quiz
-  // ! временно пока доступ в firebase не будет возобновлен
-  private quiz: Quiz = {
-    id: '324rfsd',
-    title: 'PS4 exclusives',
-    image: {
-      src: require('@/assets/images/quizes/ps4-exclusives/ps4-exclusives.jpeg'),
-      alt: 'ps4-exclusives'
-    },
-    questions: [
-      {
-        rightAnswer: 'god of war',
-        image: {
-          src: require('@/assets/images/quizes/ps4-exclusives/god-of-war.jpeg'),
-          alt: 'quiz-picture-alt'
-        },
-        imagePreview: {
-          src: require('@/assets/images/quizes/ps4-exclusives/god-of-war-thumb.jpeg'),
-          alt: 'quiz-picture-alt'
-        },
-        letterPool: [
-          { value: 'f' },
-          { value: 'g' },
-          { value: 'o' },
-          { value: 'd' },
-          { value: 'w' },
-          { value: 'o' },
-          { value: 'f' },
-          { value: 'a' },
-          { value: '6' },
-          { value: 'r' },
-          { value: 'n' },
-          { value: 'm' },
-          { value: 'u' },
-          { value: '5' }
-        ],
-        openedLetters: [
-          { value: '' },
-          { value: '' },
-          { value: '' },
-          { value: ' ' },
-          { value: '' },
-          { value: '' },
-          { value: ' ' },
-          { value: '' },
-          { value: '' },
-          { value: '' }
-        ]
-      },
-      {
-        rightAnswer: 'uncharted 4',
-        image: {
-          src: require('@/assets/images/quizes/ps4-exclusives/uncharted-4.jpeg'),
-          alt: 'quiz-picture-alt'
-        },
-        imagePreview: {
-          src: require('@/assets/images/quizes/ps4-exclusives/uncharted-4-thumb.jpeg'),
-          alt: 'quiz-picture-alt'
-        },
-        letterPool: [
-          { value: 'c' },
-          { value: 'h' },
-          { value: 'u' },
-          { value: 'a' },
-          { value: 'n' },
-          { value: '4' },
-          { value: 'd' },
-          { value: 'n' },
-          { value: 'e' },
-          { value: 't' },
-          { value: 'r' }
-        ],
-        openedLetters: [
-          { value: '' },
-          { value: '' },
-          { value: '' },
-          { value: '' },
-          { value: '' },
-          { value: '' },
-          { value: '' },
-          { value: '' },
-          { value: '' },
-          { value: ' ' },
-          { value: '' }
-        ]
-      },
-      {
-        rightAnswer: 'persona 5',
-        image: {
-          src: require('@/assets/images/quizes/ps4-exclusives/persona-5.jpeg'),
-          alt: 'quiz-picture-alt'
-        },
-        imagePreview: {
-          src: require('@/assets/images/quizes/ps4-exclusives/persona-5-thumb.jpeg'),
-          alt: 'quiz-picture-alt'
-        },
-        letterPool: [
-          { value: 'e' },
-          { value: 'p' },
-          { value: 'r' },
-          { value: 'o' },
-          { value: 's' },
-          { value: 'n' },
-          { value: '5' },
-          { value: '3' },
-          { value: 'a' },
-          { value: 'a' },
-          { value: 's' },
-          { value: 'a' },
-          { value: 'w' },
-          { value: 'm' }
-        ],
-        openedLetters: [
-          { value: '' },
-          { value: '' },
-          { value: '' },
-          { value: '' },
-          { value: '' },
-          { value: '' },
-          { value: '' },
-          { value: ' ' },
-          { value: '' }
-        ]
-      }
-    ],
-  }
-
   @userModule.Getter('quizes') participatedQuizes!: ParticipatedQuizes
   @userModule.Getter('isQuizParticipated') isQuizParticipated!: (quizId: string) => boolean
   @userModule.Getter('participatedQuestion') participatedQuestion!: (quizId: string, questionId: number) => ParticipatedQuestion
@@ -242,6 +91,8 @@ export default class ActiveQuestionPage extends Vue {
   @userModule.Action('markQuestionAsDone') markQuestionAsDone!: (payload: MarkQuestionDonePayload) => void
   @userModule.Action('addPoints') addPoints!: (payload: AddPointsPayload) => void
 
+  @quizModule.Getter('quiz') getQuiz!: (quizId: string) => Quiz
+
   @Prop({ required: true, type: String }) quizId!: string
   @Prop({ required: true, type: Number }) questionId!: number
 
@@ -250,12 +101,8 @@ export default class ActiveQuestionPage extends Vue {
    */
   private questionWasCounted = false
 
-  /**
-   * Computes active quiz question id for title
-   * @returns {number} active quiz question id
-   */
-  get activeQuestionIdForTitle (): number {
-    return this.questionId + 1
+  private get quiz (): Quiz {
+    return this.getQuiz(this.quizId)
   }
 
   /**
@@ -329,8 +176,13 @@ export default class ActiveQuestionPage extends Vue {
    */
   previousQuizQuestionHandler (): void {
     if (this.questionId >= 1) {
-      this.$router.push(`/quiz/${this.quizId}/${this.questionId - 1}`)
-      this.questionWasCounted = false
+      this.$router.push({
+        name: 'quiz-question',
+        params: {
+          quizId: this.quizId,
+          questionId: `${this.questionId - 1}`
+        }
+      })
     }
   }
 
@@ -340,8 +192,13 @@ export default class ActiveQuestionPage extends Vue {
   nextQuizQuestionHandler (): void {
     const currentQuizLength = this.quiz.questions.length
     if (this.questionId < (currentQuizLength - 1)) {
-      this.$router.push(`/quiz/${this.quizId}/${this.questionId + 1}`)
-      this.questionWasCounted = false
+      this.$router.push({
+        name: 'quiz-question',
+        params: {
+          quizId: this.quizId,
+          questionId: `${this.questionId + 1}`
+        }
+      })
     }
   }
 
@@ -365,6 +222,14 @@ export default class ActiveQuestionPage extends Vue {
 </script>
 <style lang="scss">
 .quiz-active-question {
+  &__wrapper {
+    @include mobile {
+      display: flex;
+      flex-flow: column nowrap;
+      flex-grow: 1;
+      padding: 0.7rem 0;
+    }
+  }
   &__main {
     display: flex;
     align-items: flex-start;
@@ -373,8 +238,6 @@ export default class ActiveQuestionPage extends Vue {
 
     @include mobile {
       flex-flow: column nowrap;
-      justify-content: center;
-      align-items: center;
       flex-grow: 1;
     }
   }
@@ -434,7 +297,7 @@ export default class ActiveQuestionPage extends Vue {
     @include mobile {
       width: auto;
       padding: 0;
-      flex-grow: 0;
+      flex-grow: 1;
       flex-shrink: 2;
     }
   }

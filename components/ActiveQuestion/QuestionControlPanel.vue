@@ -78,7 +78,6 @@ export default class QuestionControlPanel extends Vue {
     display: flex;
     justify-content: center;
     flex-flow: row nowrap;
-    justify-self: flex-end;
   }
 
   &__next-button,

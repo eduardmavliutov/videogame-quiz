@@ -1,6 +1,4 @@
 export default {
-  ssr: false,
-
   publicRuntimeConfig: {
     secret: process.env.NUXT_APP_SECRET
   },

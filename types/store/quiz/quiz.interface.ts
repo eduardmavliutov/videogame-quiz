@@ -20,12 +20,18 @@ export interface Quiz {
   questions: QuizQuestion[];
 }
 
+export interface Quizes {
+  [quizId: string]: Quiz;
+}
+
 export interface QuizState {
-  quizes: Quiz[];
+  quizes: Quizes;
 }
 
 export interface SetQuizesPayload {
-  quizes: Quiz[];
+  quizes: {
+    [quizId: string]: Quiz;
+  }
 }
 
 export interface AdminQuizQuestion {
