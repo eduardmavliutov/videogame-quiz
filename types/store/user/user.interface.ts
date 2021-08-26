@@ -8,7 +8,6 @@ export interface UserState {
   };
   name: string;
   points: number;
-  photoURL: string;
 }
 
 export type SetUserPayload = UserState
@@ -53,10 +52,6 @@ export interface AddPointsPayload {
 
 export interface UpdateUserName {
   name?: string;
-}
-
-export interface UpdateUserPhotoURL {
-  photoURL?: string;
 }
 
 export interface FetchUserData {

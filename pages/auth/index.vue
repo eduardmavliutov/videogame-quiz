@@ -185,8 +185,7 @@ export default class Auth extends Vue {
           email: this.form.email,
           name: '',
           quizes: [],
-          points: 0,
-          photoURL: ''
+          points: 0
         })
         return this.$fire.database.ref(`/users/${userId}`)
       })

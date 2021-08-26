@@ -6,28 +6,23 @@
       @submit.prevent="onFormSubmit"
     >
       <v-input
-        name="Name"
-        type="text"
-        :model.sync="name"
-      />
-      <v-input
         name="Email"
         type="text"
         :model="email"
         disabled
       />
       <v-input
-        name="PhotoURL"
+        name="Name"
         type="text"
-        :model.sync="photoURL"
+        :model.sync="name"
       />
       <div class="user-form__buttons">
-        <button
-          class="user-form__submit"
+        <v-button
           type="submit"
+          :loading="loading"
         >
           Save
-        </button>
+        </v-button>
       </div>
     </form>
   </v-page>
@@ -37,8 +32,9 @@ import { Component, Vue } from 'nuxt-property-decorator'
 import VTitle from '@/components/VTitle/VTitle.vue'
 import VPage from '@/components/VPage/VPage.vue'
 import VInput from '@/components/VInput/VInput.vue'
+import VButton from '@/components/VButton/VButton.vue'
 import { namespace } from 'vuex-class'
-import { UpdateUserName, UpdateUserPhotoURL } from '@/types/store/user/user.interface'
+import { UpdateUserName } from '@/types/store/user/user.interface'
 
 const userModule = namespace('user')
 
@@ -46,16 +42,15 @@ const userModule = namespace('user')
   components: {
     VPage,
     VTitle,
-    VInput
+    VInput,
+    VButton
   }
 })
 export default class UserSettingsPage extends Vue {
   @userModule.State('email') email!: string
   @userModule.Action('updateUserName') updateUserName!: (payload: UpdateUserName) => void
-  @userModule.Action('updateUserPhotoURL') updateUserPhotoURL!: (payload: UpdateUserPhotoURL) => void
 
   private name = this.$store.state.user.name
-  private photoURL = this.$store.state.user.photoURL
   private loading = false
 
   async onFormSubmit (): Promise<void> {
@@ -63,12 +58,6 @@ export default class UserSettingsPage extends Vue {
     if (this.name.trim()) {
       await this.updateUserName({
         name: this.name
-      })
-    }
-
-    if (this.photoURL.trim()) {
-      await this.updateUserPhotoURL({
-        photoURL: this.photoURL
       })
     }
 
@@ -111,13 +100,6 @@ export default class UserSettingsPage extends Vue {
   &__buttons {
     display: flex;
     justify-content: center;
-  }
-  &__submit {
-    background-color: $color-complementary--light;
-    border: none;
-    padding: 0.5rem 2rem;
-    font-weight: bold;
-    font-size: 1rem;
   }
 }
 </style>

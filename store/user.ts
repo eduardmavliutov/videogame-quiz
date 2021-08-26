@@ -5,7 +5,6 @@ import {
   EditLetterPayload,
   MarkQuestionDonePayload,
   UpdateUserName,
-  UpdateUserPhotoURL,
   UserState,
   ParticipatedQuestion,
   SetUserPayload,
@@ -86,13 +85,12 @@ export const actions: ActionTree<UserState, RootState> = {
 
   async subscribeUserModule({ commit }, payload: SubscribeUserModulePayload) {
     await payload.reference.on('value', (snapshot: firebase.database.DataSnapshot) => {
-      const { email, photoURL, name, points, quizes = [] } = snapshot.val()
+      const { email, name, points, quizes = [] } = snapshot.val()
       commit('SET_USER', {
         email,
         name,
         quizes,
-        points,
-        photoURL
+        points
       })
     })
   },
@@ -112,14 +110,6 @@ export const actions: ActionTree<UserState, RootState> = {
       .database
       .ref(`users/${this.$fire.auth.currentUser?.uid}/name`)
       .set(payload.name)
-      .catch((error) => console.log(error))
-  },
-
-  async updateUserPhotoURL({ commit }, payload: UpdateUserPhotoURL) {
-    await this.$fire
-      .database
-      .ref(`users/${this.$fire.auth.currentUser?.uid}/photoURL`)
-      .set(payload.photoURL)
       .catch((error) => console.log(error))
   }
 }
@@ -216,7 +206,6 @@ export const mutations: MutationTree<UserState> = {
     state.quizes = payload.quizes
     state.name = payload.name
     state.points = payload.points
-    state.photoURL = payload.photoURL
   },
 
   REMOVE_USER(state) {
@@ -284,6 +273,5 @@ export const state = (): UserState => ({
   email: '',
   name: '',
   quizes: {},
-  points: 0,
-  photoURL: ''
+  points: 0
 })
