@@ -74,6 +74,7 @@ export default {
         services: {
           auth: {
             persistence: 'local',
+            ssr: true,
             initialize: {
               onAuthStateChangedAction (ctx, { authUser }) {
                 console.log('onAuthStateChangedAction')

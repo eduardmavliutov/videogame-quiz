@@ -34,7 +34,7 @@ import { Prop, Component, Vue } from 'nuxt-property-decorator'
 export default class VInput extends Vue {
   @Prop({ required: true, type: String }) name!: string 
   @Prop({ required: true, type: String }) type!: string
-  @Prop({ required: true, type: Array }) errors!: string[]
+  @Prop({ required: false, type: Array, default: () => [] }) errors!: string[]
   @Prop({ required: false, type: String, default: 'white' }) labelColor!: string
   @Prop({ required: false, type: Boolean, default: false }) disabled!: boolean
   @Prop({ required: true }) model!: string

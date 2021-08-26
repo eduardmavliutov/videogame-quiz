@@ -1,50 +1,52 @@
 <template>
-  <header class="header">
-    <div class="header__logo">
-      <nuxt-link to="/">
-        <img
-          class="header__logo-image"
-          src="@/assets/images/gpad.png"
-        >
-      </nuxt-link>
-      <h1 class="header__logo-title">Videogame Quiz!</h1>
-      <v-title
-        :title="quizTitle"
-        primary
-        class="header__logo-title--mobile"
-      />
-    </div>
-    <nuxt-link
-      v-if="showAdminRoute"
-      :to="{ name: 'admin-quizes' }"
-      class="header__admin-link"
-    >
-      Admin
-    </nuxt-link>
-    <div class="header__auth">
-      <transition
-        name="header__auth"
-        mode="out-in"
-      >
-        <user-info
-          v-if="isAuthenticated"
-          :user-name="activeUser"
-          :points="points"
-          :completed-quizes="completedQuizes"
-          @logout="logoutHandler"
-          @settings="settingsHandler"
-        />
-        <nuxt-link
-          v-else
-          v-once
-          class="header__auth-button"
-          to="/auth"
-        >
-          Login
+  <client-only>
+    <header class="header">
+      <div class="header__logo">
+        <nuxt-link to="/">
+          <img
+            class="header__logo-image"
+            src="@/assets/images/gpad.png"
+            alt="logo-image"
+          >
         </nuxt-link>
-      </transition>
-    </div>
-  </header>
+        <h1 class="header__logo-title">Videogame Quiz!</h1>
+        <v-title
+          :title="quizTitle"
+          primary
+          class="header__logo-title--mobile"
+        />
+      </div>
+      <nuxt-link
+        v-if="showAdminRoute"
+        :to="{ name: 'admin-quizes' }"
+        class="header__admin-link"
+      >
+        Admin
+      </nuxt-link>
+      <div class="header__auth">
+        <transition
+          name="header__auth"
+          mode="out-in"
+        >
+          <user-info
+            v-if="isAuthenticated"
+            :user-name="activeUser"
+            :points="points"
+            :completed-quizes="completedQuizes"
+            @logout="logoutHandler"
+            @settings="settingsHandler"
+          />
+          <nuxt-link
+            v-else
+            class="header__auth-button"
+            to="/auth"
+          >
+            Login
+          </nuxt-link>
+        </transition>
+      </div>
+    </header>
+  </client-only>
 </template>
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
@@ -69,7 +71,7 @@ export default class TheHeader extends Vue {
   @userModule.State('points') points!: number
   @userModule.Getter('completedQuizes') completedQuizes!: number
   @userModule.Action('logout') logout!: () => Promise<void>
-  
+
   @quizModule.Getter('quiz') quiz!: (quizId: string) => Quiz
 
   /**
