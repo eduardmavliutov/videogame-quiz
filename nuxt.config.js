@@ -65,11 +65,11 @@ export default {
       {
         config: {
           apiKey: process.env.NUXT_APP_API_KEY,
-          authDomain: 'videogame-quizzz.firebaseapp.com',
-          projectId: 'videogame-quizzz',
-          storageBucket: 'videogame-quizzz.appspot.com',
-          messagingSenderId: '9357665547',
-          appId: '1:9357665547:web:45870505b613c87248ee0e',
+          authDomain: 'video-game-quizzz.firebaseapp.com',
+          projectId: 'video-game-quizzz',
+          storageBucket: 'video-game-quizzz.appspot.com',
+          messagingSenderId: '75257990794',
+          appId: '1:75257990794:web:7b348163c76b1b5b102773'
         },
         services: {
           auth: {

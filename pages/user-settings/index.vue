@@ -6,20 +6,17 @@
       @submit.prevent="onFormSubmit"
     >
       <v-input
-        rules=""
         name="Name"
         type="text"
         :model.sync="name"
       />
       <v-input
-        rules=""
         name="Email"
         type="text"
         :model="email"
         disabled
       />
       <v-input
-        rules=""
         name="PhotoURL"
         type="text"
         :model.sync="photoURL"
