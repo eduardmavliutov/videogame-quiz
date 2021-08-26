@@ -1,6 +1,7 @@
 {
   "name": "videogame-quiz",
   "version": "1.0.0",
+  "description": "Love games? Let's check it!",
   "private": true,
   "scripts": {
     "dev": "nuxt",

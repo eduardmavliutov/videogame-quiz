@@ -6,17 +6,18 @@ const authRequiredRoutes: string[] = ['quiz-question', 'user-settings', ...admin
 
 const routerMiddleware: Middleware = ({ store, route, redirect, $config, $fire }) => {
   const currentUser = $fire.auth.currentUser
+  if (process.client) {
+    if (!store.getters['user/isAuthenticated'] && authRequiredRoutes.includes(`${route.name}`)) {
+      redirect({
+        name: 'auth'
+      })
+    }
   
-  if (!store.getters['user/isAuthenticated'] && authRequiredRoutes.includes(`${route.name}`)) {
-    redirect({
-      name: 'auth'
-    })
-  }
-
-  if (adminRequiredRoutes.includes(`${route.name}`) && store.getters['user/email'] !== $config.secret) {
-    redirect({
-      name: 'index'
-    })
+    if (adminRequiredRoutes.includes(`${route.name}`) && store.getters['user/email'] !== $config.secret) {
+      redirect({
+        name: 'index'
+      })
+    }
   }
 }
 

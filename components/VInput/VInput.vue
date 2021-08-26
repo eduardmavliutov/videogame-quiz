@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="v-input__wrapper"
-  >
+  <div class="v-input__wrapper">
     <label
       :for="inputId"
       class="v-input__label"
@@ -14,7 +12,8 @@
       :value="model"
       :type="type"
       class="v-input__input"
-      :class="{ 'v-input__input--error' : errors.length }"
+      :class="classes"
+      :disabled="disabled"
       @input="$emit('update:model', $event.target.value)"
     />
     <transition name="error">
@@ -29,10 +28,11 @@
 </template>
 <script lang="ts">
 import { Prop, Component, Vue } from 'nuxt-property-decorator'
+import { CssClasses } from '@/types/css-classes'
 
 @Component({})
 export default class VInput extends Vue {
-  @Prop({ required: true, type: String }) name!: string 
+  @Prop({ required: true, type: String }) name!: string
   @Prop({ required: true, type: String }) type!: string
   @Prop({ required: false, type: Array, default: () => [] }) errors!: string[]
   @Prop({ required: false, type: String, default: 'white' }) labelColor!: string
@@ -41,6 +41,12 @@ export default class VInput extends Vue {
 
   get inputId (): string {
     return `${this.name}${Math.random()}`
+  }
+
+  get classes (): CssClasses {
+    return {
+      'v-input__input--error': this.errors.length > 0
+    }
   }
 }
 </script>

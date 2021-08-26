@@ -3,6 +3,27 @@ export default {
     secret: process.env.NUXT_APP_SECRET
   },
 
+  pwa: {
+    icon: {
+      fileName: 'icon.png'
+    },
+    meta: {
+      theme_color: '#bf360c',
+      name: 'Videogame Quiz',
+      lang: 'en'
+    },
+    manifest: {
+      name: 'Videogame Quiz',
+      short_name: 'Videogame Quiz',
+      start_url: 'http://localhost:3000/', // TODO after deployment
+      lang: 'en',
+      description: 'Love games? Let\'s check it!'
+    },
+    workbox: {
+      cleanupOutdatedCaches: true
+    },
+  },
+
   loading: {
     color: '#ffd848',
     height: '5px',
