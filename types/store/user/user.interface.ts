@@ -61,3 +61,20 @@ export interface FetchUserData {
 export interface SubscribeUserModulePayload {
   reference: firebase.database.Reference;
 }
+
+export interface UseTipPayload {
+  quizId: string;
+  questionId: number;
+}
+
+export interface SetOpenedLettersPayload {
+  openedLetters: QuizQuestionLetter[];
+  quizId: string;
+  questionId: number;
+}
+
+export interface RemoveLetterFromLetterPoolPayload {
+  quizId: string;
+  questionId: number;
+  value: string;
+}

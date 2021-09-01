@@ -98,7 +98,6 @@ export default {
             ssr: true,
             initialize: {
               onAuthStateChangedAction (ctx, { authUser }) {
-                console.log('onAuthStateChangedAction')
                 if (!ctx.getters('user/isAuthenticated') && authUser) {
                   ctx.dispatch('user/fetchUserData', {
                     userId: authUser.uid

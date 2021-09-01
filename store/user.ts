@@ -10,7 +10,10 @@ import {
   SetUserPayload,
   SetQuizesPayload,
   FetchUserData,
-  SubscribeUserModulePayload
+  SubscribeUserModulePayload,
+  UseTipPayload,
+  SetOpenedLettersPayload,
+  RemoveLetterFromLetterPoolPayload
 } from '@/types/store/user/user.interface'
 import { EMPTY_LETTER_BOX_SYMBOL, SPACE_SYMBOL } from '@/helpers/constants'
 import {
@@ -19,6 +22,7 @@ import {
 } from '@/types/store/quiz/quiz.interface'
 import { GetterTree, MutationTree, ActionTree } from 'vuex'
 import firebase from 'firebase'
+import { getRandomNumber } from '@/helpers/utils'
 
 export const actions: ActionTree<UserState, RootState> = {
   async createParticipatedQuiz(
@@ -69,8 +73,17 @@ export const actions: ActionTree<UserState, RootState> = {
       })
   },
 
-  async addPoints({ state, commit }, payload: AddPointsPayload): Promise<void> {
-    commit('ADD_POINTS', { points: 10 })
+  async addPoints({ state, commit }): Promise<void> {
+    commit('SET_POINTS', { points: state.points + 10 })
+    
+    await this.$fire
+      .database
+      .ref(`users/${this.$fire.auth.currentUser?.uid}/points`)
+      .set(state.points)
+  },
+
+  async subPoints({ state, commit }): Promise<void> {
+    commit('SET_POINTS', { points: state.points - 10 })
     
     await this.$fire
       .database
@@ -93,6 +106,44 @@ export const actions: ActionTree<UserState, RootState> = {
         points
       })
     })
+  },
+
+  async useTip({ commit, dispatch, state }, { quizId, questionId }: UseTipPayload): Promise<void> {
+    if (state.points > 0) {
+      let letterIndex = 0;
+      let randomLetterFromRightAnswer = SPACE_SYMBOL;
+      while (randomLetterFromRightAnswer === SPACE_SYMBOL) {
+        letterIndex = getRandomNumber(0, state.quizes[quizId][questionId].rightAnswer.length)
+        randomLetterFromRightAnswer = state.quizes[quizId][questionId].rightAnswer[letterIndex]
+      }
+      const openedLetters = [...state.quizes[quizId][questionId].openedLetters]
+      openedLetters[letterIndex] = {
+        value: randomLetterFromRightAnswer,
+        openedByHint: true
+      }
+
+      commit('SET_OPENED_LETTERS', {
+        quizId,
+        questionId,
+        openedLetters
+      })
+
+      commit('REMOVE_LETTER_FROM_LETTER_POOL', {
+        quizId,
+        questionId,
+        value: randomLetterFromRightAnswer
+      })
+
+      await dispatch('subPoints')
+
+      await this.$fire
+        .database
+        .ref(`users/${this.$fire.auth.currentUser?.uid}/quizes`)
+        .set({
+          ...state.quizes
+        })
+        .catch((error) => console.log(error))
+    }
   },
 
   async logout({ commit }): Promise<void> {
@@ -153,7 +204,11 @@ export const getters: GetterTree<UserState, RootState> = {
    */
   isQuizParticipated:
     (state) =>
-    (quizId: string): boolean => !!state.quizes[quizId],
+    (quizId: string): boolean => {
+      console.log('IS QUIZ PARTICIPATED, STATE.QUIZES', state.quizes)
+      console.log(!!state.quizes[quizId])
+      return !!state.quizes[quizId]
+    },
 
   /**
    * Gets participated quiz question
@@ -255,6 +310,18 @@ export const mutations: MutationTree<UserState> = {
     }
   },
 
+  REMOVE_LETTER_FROM_LETTER_POOL (state, payload: RemoveLetterFromLetterPoolPayload) {
+    const { quizId, questionId, value } = payload
+    const letterPool = [...state.quizes[quizId][questionId].letterPool]
+    const letterIndex = letterPool.findIndex((letter: QuizQuestionLetter) => letter.value === value)
+    letterPool.splice(letterIndex, 1)
+    state.quizes[quizId][questionId].letterPool = letterPool
+  },
+
+  SET_OPENED_LETTERS (state, { quizId, questionId, openedLetters }: SetOpenedLettersPayload) {
+    state.quizes[quizId][questionId].openedLetters = openedLetters
+  },
+
   SET_QUIZES(state, payload: SetQuizesPayload) {
     state.quizes = payload.quizes
   },
@@ -264,8 +331,8 @@ export const mutations: MutationTree<UserState> = {
     state.quizes[quizId][questionId].done = true
   },
 
-  ADD_POINTS(state, payload: AddPointsPayload) {
-    state.points += payload.points
+  SET_POINTS(state, payload: AddPointsPayload) {
+    state.points = payload.points
   }
 }
 

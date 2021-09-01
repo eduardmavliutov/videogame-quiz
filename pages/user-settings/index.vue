@@ -6,7 +6,7 @@
       @submit.prevent="onFormSubmit"
     >
       <v-input
-        name="Email"
+        name="E-mail"
         type="text"
         :model="email"
         disabled

@@ -13,6 +13,10 @@
               :alt="quiz.questions[questionId].image.alt"
               class="quiz-active-question__image"
             >
+            <button
+              class="quiz-active-question__tip-button"
+              @click="tipButtonHandler()"
+            />
           </div>
           <div
             v-if="!activeQuizQuestion.done"
@@ -55,7 +59,7 @@ import ChangeQuestionButton from '@/components/ActiveQuestion/ChangeQuestionButt
 import { namespace } from 'vuex-class'
 import { gsap } from 'gsap'
 import { Quiz } from '@/types/store/quiz/quiz.interface'
-import { AddPointsPayload, CreateParticipatedQuizPayload, EditLetterPayload, MarkQuestionDonePayload, ParticipatedQuestion, ParticipatedQuizes } from '@/types/store/user/user.interface'
+import { AddPointsPayload, CreateParticipatedQuizPayload, EditLetterPayload, MarkQuestionDonePayload, ParticipatedQuestion, ParticipatedQuizes, UseTipPayload } from '@/types/store/user/user.interface'
 import { ImageProps } from '@/types/image'
 import { Route } from 'vue-router'
 
@@ -89,7 +93,8 @@ export default class ActiveQuestionPage extends Vue {
   @userModule.Action('addLetter') addLetter!: (payload: EditLetterPayload) => void
   @userModule.Action('removeLetter') removeLetter!: (payload: EditLetterPayload) => void
   @userModule.Action('markQuestionAsDone') markQuestionAsDone!: (payload: MarkQuestionDonePayload) => void
-  @userModule.Action('addPoints') addPoints!: (payload: AddPointsPayload) => void
+  @userModule.Action('addPoints') addPoints!: (payload: AddPointsPayload) => Promise<void>
+  @userModule.Action('useTip') useTip!: (payload: UseTipPayload) => Promise<void>
 
   @quizModule.Getter('quiz') getQuiz!: (quizId: string) => Quiz
 
@@ -202,12 +207,20 @@ export default class ActiveQuestionPage extends Vue {
     }
   }
 
+  tipButtonHandler (): void {
+    this.useTip({
+      quizId: this.quizId,
+      questionId: this.questionId
+    })
+  }
+
   /**
    * When component is created we check if the current quiz was
    * participated before. If it was not we create such record in
    * user`s data
    */
   created (): void {
+    console.log('USER', this.$fire.auth.currentUser)
     // Checking if current quiz is in participated quizes
     if (!this.isQuizParticipated(this.quizId)) {
       // if current quiz is not participated we create new participated
@@ -282,8 +295,33 @@ export default class ActiveQuestionPage extends Vue {
     }
 
     &-wrapper {
+      position: relative;
       display: flex;
       justify-content: center;
+    }
+  }
+
+  &__tip-button {
+    display: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: none;
+    border-bottom-left-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.3);
+    box-shadow: -2px 2px 1px 2px rgba(255, 255, 255, 0.3);
+    background-image: url("@/assets/icons/tip.svg");
+    transition: 0.3s all ease-in;
+
+    @include mobile {
+      display: block;
+    }
+
+    &:active {
+      background-color: $color-white;
+      box-shadow: -2px 2px 1px 2px $color-white;
     }
   }
 
