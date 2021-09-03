@@ -193,7 +193,7 @@ export default class AdminQuizPage extends Vue {
     if (!this.$v.$invalid) {
       try {
         this.loading = true
-        const quizId = Date.now()
+        const quizId = Date.now().toString()
         await this.$fire.database.ref(`/quizes/${quizId}`).set(this.quiz)
         this.$router.push({
           name: 'admin-quizes-id',

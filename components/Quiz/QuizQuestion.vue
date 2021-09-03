@@ -15,8 +15,6 @@ import { Component, Prop, Vue } from 'nuxt-property-decorator'
 
 @Component({})
 export default class QuizQuestion extends Vue {
-  @Prop({ required: true, type: Number }) id!: number
-  @Prop({ required: true, type: String }) quizId!: string
   @Prop({ required: true, type: Object }) image!: ImageProps
 }
 </script>

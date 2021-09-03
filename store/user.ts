@@ -205,8 +205,6 @@ export const getters: GetterTree<UserState, RootState> = {
   isQuizParticipated:
     (state) =>
     (quizId: string): boolean => {
-      console.log('IS QUIZ PARTICIPATED, STATE.QUIZES', state.quizes)
-      console.log(!!state.quizes[quizId])
       return !!state.quizes[quizId]
     },
 

@@ -7,7 +7,7 @@
       :title="quizes[quizId].title"
       :image="quizes[quizId].image"
       class="v-grid-item"
-    ></quiz-list-item>
+    />
   </v-grid>
 </template>
 <script lang="ts">

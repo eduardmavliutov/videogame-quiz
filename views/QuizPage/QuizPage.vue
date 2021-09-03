@@ -4,10 +4,8 @@
     <v-grid name="quiz">
       <quiz-question
         v-for="(question, index) in activeQuiz.questions"
-        :id="index"
         :key="index"
         :image="question.image"
-        :quiz-id="activeQuiz.id"
         class="v-grid-item"
         @click.native="quizQuestionClickHandler(index)"
       />
@@ -37,7 +35,6 @@ const quizModule = namespace('quiz')
 export default class QuizPage extends Vue {
   @quizModule.Getter('quiz') quiz!: (quizId: string) => Quiz
 
-
   get activeQuiz (): Quiz {
     return this.quiz(`${this.$route.params.quizId}`)
   }
@@ -47,7 +44,7 @@ export default class QuizPage extends Vue {
     this.$router.push({
       name: 'quiz-question',
       params: {
-        quiz: this.$route.params.quizId,
+        quiz: quizId,
         questionId: `${questionId}`
       }
     })

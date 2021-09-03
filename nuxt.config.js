@@ -1,4 +1,6 @@
 export default {
+  ssr: false,
+
   publicRuntimeConfig: {
     secret: process.env.NUXT_APP_SECRET
   },
@@ -57,6 +59,10 @@ export default {
     },
     {
       src: '@/plugins/vue-croppa',
+      ssr: false,
+    },
+    {
+      src: '@/plugins/app-init',
       ssr: false,
     },
   ],
