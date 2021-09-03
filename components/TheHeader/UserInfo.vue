@@ -17,7 +17,7 @@
           class="user-info__stat-image-points"
           :class="{ animate: animateCoin }"
         >
-        <span class="user-info__points-counter">{{ pointsToDisplay }}</span>
+        <span class="user-info__points-counter">{{ animatedPoints }}</span>
       </div>
       <div class="user-info__finished-quizes">
         <img
@@ -27,7 +27,7 @@
           class="user-info__stat-image-quizes"
           :class="{ animate: animateCompletedQuizes }"
         >
-        <span class="user-info__finished-quizes-counter">{{ completedQuizes }}</span>
+        <span class="user-info__finished-quizes-counter">{{ animatedCompletedQuizes }}</span>
       </div>
     </div>
     <transition
@@ -57,6 +57,7 @@
 <script lang="ts">
 import { Prop, Component, Vue, Watch } from 'vue-property-decorator'
 import { NavigationGuardNext, Route } from 'vue-router'
+import gsap from 'gsap'
 
 @Component({})
 export default class UserInfo extends Vue {
@@ -64,10 +65,24 @@ export default class UserInfo extends Vue {
   @Prop({ required: true, type: Number }) points!: number
   @Prop({ required: true, type: Number }) completedQuizes!: number
 
-  /**
-   * Value that will be displayed to user
-   */
+
   private pointsToDisplay = 0
+
+  /**
+   * Points that will be displayed to user
+   */
+  private get animatedPoints () {
+    return this.pointsToDisplay.toFixed(0)
+  }
+
+  private completedQuizesToDisplay = 0
+
+  /**
+   * Completed quizes counter that will be displayed to user
+   */
+  private get animatedCompletedQuizes () {
+    return this.completedQuizesToDisplay.toFixed(0)
+  }
 
   /**
    * Defines whether animation for points image
@@ -87,23 +102,27 @@ export default class UserInfo extends Vue {
   private showUserMenu = false
 
   /**
-   * Watcher for points property
+   * Watcher for 'points' property
    */
-  @Watch('points')
-  onPointsChange (): void {
-    this.animatePoints()
+  @Watch('points', { immediate: true })
+  onPointsChange (newValue: number): void {
+    this.animateCoin = true
+    gsap.to(this.$data, {
+      duration: 0.5,
+      pointsToDisplay: newValue
+    }).then(() => this.animateCoin = false)
   }
 
   /**
-   * Watcher for compoletedQuizes property
+   * Watcher for 'compoletedQuizes' property
    */
-  @Watch('completedQuizes')
-  onCompletedQuizesChange (): void {
+  @Watch('completedQuizes', { immediate: true })
+  onCompletedQuizesChange (newValue: number): void {
     this.animateCompletedQuizes = true
-    const timerId = setTimeout(() => {
-      this.animateCompletedQuizes = false
-      clearTimeout(timerId)
-    }, 600) // after animation is over we clear timer
+    gsap.to(this.$data, {
+      duration: 0.5,
+      completedQuizesToDisplay: newValue
+    }).then(() => this.animateCompletedQuizes = false)
   }
 
   /**
@@ -122,35 +141,9 @@ export default class UserInfo extends Vue {
     this.$emit('logout')
   }
 
-  /**
-   * Method for current point value that will be displayed
-   * to user
-   */
-  animatePoints (): void {
-    if (this.points !== 0) {
-      this.animateCoin = true
-      const interval = setInterval(() => {
-        this.points - this.pointsToDisplay >= 100
-          ? this.pointsToDisplay += 100
-          : this.pointsToDisplay += 1
-        if (this.pointsToDisplay >= this.points) {
-          clearInterval(interval)
-          this.animateCoin = false
-        }
-      }, 50)
-    }
-  }
-
   beforeRouteLeave (_: Route, __: Route, next: NavigationGuardNext) {
     this.showUserMenu = false
     next()
-  }
-
-  /**
-   * Created hook starts the animation of the points counter
-   */
-  created (): void {
-    this.animatePoints()
   }
 }
 </script>
