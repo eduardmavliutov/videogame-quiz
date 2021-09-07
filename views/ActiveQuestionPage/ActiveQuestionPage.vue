@@ -135,15 +135,30 @@ export default class ActiveQuestionPage extends Vue {
   onParticipatedQuizesChange (): void {
     const answer = this.computedAnswer(this.quizId, this.questionId)
     const rightAnswer = this.activeQuizQuestion.rightAnswer
+    // Right answer animation
     if (!this.questionWasCounted && answer === rightAnswer) {
-      gsap.to('.opened-letter', {
-        duration: 0.4,
+      const timeline = gsap.timeline()
+      timeline.to('.opened-letter', {
+        duration: 0.5,
         y: -10,
-        stagger: 0.1,
         scale: 1.1,
+        stagger: 0.1,
+        backgroundColor: 'rgb(255, 216, 72)',
+        color: 'black',
         ease: 'bounce.out',
-        yoyo: true,
-        repeat: 3
+      }).to('.opened-letter', {
+        y: 0,
+        scale: 1,
+        stagger: 0.1,
+        backgroundColor: 'black',
+        color: 'white',
+        ease: 'bounce.out',
+      }).to('.opened-letter', {
+        duration: 0.5,
+        stagger: 0.1,
+        backgroundColor: 'rgb(255, 216, 72)',
+        color: 'black',
+        ease: 'bounce.out',
       })
       this.questionWasCounted = true
       this.markQuestionAsDone({
@@ -152,6 +167,22 @@ export default class ActiveQuestionPage extends Vue {
       })
       this.addPoints({
         points: 10
+      })
+    }
+
+    // Wrong answer animation
+    if (!this.questionWasCounted && answer !== rightAnswer && answer.length === rightAnswer.length) {
+      const timeline = gsap.timeline()
+      timeline.to('.opened-letter', {
+        duration: 0.5,
+        stagger: 0.1,
+        backgroundColor: 'red',
+        ease: 'SteppedEase.config(12)',
+      }).to('.opened-letter', {
+        duration: 0.5,
+        stagger: 0.1,
+        backgroundColor: 'black',
+        ease: 'SteppedEase.config(12)',
       })
     }
   }
