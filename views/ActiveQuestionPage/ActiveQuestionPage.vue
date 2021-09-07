@@ -1,54 +1,58 @@
 <template>
   <div class="quiz-active-question__wrapper">
-    <client-only>
-      <article class="quiz-active-question__main">
-        <change-question-button
-          type="previous"
-          @change-question="previousQuizQuestionHandler()"
-        />
-        <div class="quiz-active-question__card">
-          <div class="quiz-active-question__image-wrapper">
-            <img
-              :src="quiz.questions[questionId].image.src"
-              :alt="quiz.questions[questionId].image.alt"
-              class="quiz-active-question__image"
-            >
-            <button
-              class="quiz-active-question__tip-button"
-              @click="tipButtonHandler()"
-            />
-          </div>
-          <div
-            v-if="!activeQuizQuestion.done"
-            class="quiz-active-question__bottom"
+    <article class="quiz-active-question__main">
+      <change-question-button
+        type="previous"
+        @change-question="previousQuizQuestionHandler()"
+      />
+      <div class="quiz-active-question__card">
+        <div class="quiz-active-question__image-wrapper">
+          <img
+            :src="quiz.questions[questionId].image.src"
+            :alt="quiz.questions[questionId].image.alt"
+            class="quiz-active-question__image"
           >
-            <opened-letters
-              :opened-letters="activeQuizQuestion.openedLetters"
-              :is-question-done="activeQuizQuestion.done"
-              @remove-letter="removeLetterHandler"
-            />
-            <letter-pool
-              :letter-pool="activeQuizQuestion.letterPool"
-              @add-letter="addLetterHandler"
-            />
-          </div>
-          <div
-            v-else
-            class="quiz-active-question__bottom"
-          >
-            <opened-letters
-              :opened-letters="activeQuizQuestion.openedLetters"
-              :is-question-done="activeQuizQuestion.done"
-            />
-            <letter-pool :letter-pool="activeQuizQuestion.letterPool" />
-          </div>
+          <button
+            class="quiz-active-question__tip-button--mobile"
+            @click="tipButtonHandler()"
+          />
         </div>
-        <change-question-button
-          type="next"
-          @change-question="nextQuizQuestionHandler()"
-        />
-      </article>
-    </client-only>
+        <div
+          v-if="!activeQuizQuestion.done"
+          class="quiz-active-question__bottom"
+        >
+          <opened-letters
+            :opened-letters="activeQuizQuestion.openedLetters"
+            :is-question-done="activeQuizQuestion.done"
+            @remove-letter="removeLetterHandler"
+          />
+          <letter-pool
+            :letter-pool="activeQuizQuestion.letterPool"
+            @add-letter="addLetterHandler"
+          />
+          <button
+            class="quiz-active-question__tip-button--desktop"
+            @click="tipButtonHandler()"
+          >
+            Use hint
+          </button>
+        </div>
+        <div
+          v-else
+          class="quiz-active-question__bottom"
+        >
+          <opened-letters
+            :opened-letters="activeQuizQuestion.openedLetters"
+            :is-question-done="activeQuizQuestion.done"
+          />
+          <letter-pool :letter-pool="activeQuizQuestion.letterPool" />
+        </div>
+      </div>
+      <change-question-button
+        type="next"
+        @change-question="nextQuizQuestionHandler()"
+      />
+    </article>
   </div>
 </template>
 <script lang="ts">
@@ -308,26 +312,58 @@ export default class ActiveQuestionPage extends Vue {
   }
 
   &__tip-button {
-    display: none;
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 2.5rem;
-    height: 2.5rem;
-    border: none;
-    border-bottom-left-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.3);
-    box-shadow: -2px 2px 1px 2px rgba(255, 255, 255, 0.3);
-    background-image: url("@/assets/icons/tip.svg");
-    transition: 0.3s all ease-in;
+    &--mobile {
+      display: none;
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 2.5rem;
+      height: 2.5rem;
+      border: none;
+      border-bottom-left-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.3);
+      box-shadow: -2px 2px 1px 2px rgba(255, 255, 255, 0.3);
+      background-image: url("@/assets/icons/tip.svg");
+      transition: 0.3s all ease-in;
 
-    @include mobile {
-      display: block;
+      @include mobile {
+        display: block;
+      }
+
+      &:active {
+        background-color: $color-white;
+        box-shadow: -2px 2px 1px 2px $color-white;
+      }
     }
+    
+    &--desktop {
+      position: absolute;
+      bottom: 1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 6.5rem;
+      padding: 0.2rem 0.5rem;
+      text-align: right;
+      font-weight: bold;
+      font-size: 1rem;
+      color: $color-yellow-win;
+      background: $color-black url("@/assets/icons/tip.svg") 5% 0 no-repeat;
+      border-radius: 5px;
+      border: none;
+      transition: 0.2s all ease-in;
 
-    &:active {
-      background-color: $color-white;
-      box-shadow: -2px 2px 1px 2px $color-white;
+      &:hover {
+        box-shadow: 0 0 7px 2px $color-yellow-win;
+      }
+
+      &:active {
+        box-shadow: 0 0 7px 2px $color-yellow-win;
+        color: $main-color;
+      }
+
+      @include mobile {
+        display: none;
+      }
     }
   }
 
@@ -337,8 +373,11 @@ export default class ActiveQuestionPage extends Vue {
     display: flex;
     justify-content: center;
     flex-flow: column nowrap;
+    flex-grow: 1;
+    position: relative;
 
     @include mobile {
+      position: static;
       width: auto;
       padding: 0;
       flex-grow: 1;
