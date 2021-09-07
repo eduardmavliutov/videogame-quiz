@@ -14,6 +14,7 @@ import { SPACE_SYMBOL } from '@/helpers/constants'
 export default class QuizQuestionLetter extends Vue {
   @Prop({ required: true, type: String }) letter!: string
   @Prop({ required: false, type: String }) type!: string
+  @Prop({ required: false, type: Boolean, default: false }) openedByHint!: boolean
 
   get isSpace () {
     return this.letter === SPACE_SYMBOL
@@ -22,7 +23,8 @@ export default class QuizQuestionLetter extends Vue {
   get classes () {
     return {
       'space': !!this.isSpace,
-      'opened-letter': this.type === 'opened-letter'
+      'opened-letter': this.type === 'opened-letter',
+      'opened-by-hint': this.openedByHint
     }
   }
 }
@@ -71,7 +73,8 @@ export default class QuizQuestionLetter extends Vue {
     background-color: transparent !important;
   }
 
-  &.question-is-done {
+  &.question-is-done,
+  &.opened-by-hint {
     background-color: $color-yellow-win;
     color: $color-black;
   }

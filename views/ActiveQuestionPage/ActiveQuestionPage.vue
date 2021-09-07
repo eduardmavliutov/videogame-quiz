@@ -168,12 +168,14 @@ export default class ActiveQuestionPage extends Vue {
    * Opened letters click handler. When is called it dispatches
    * an action to remove clicked letter from opened letters pool
    */
-  removeLetterHandler (index: number): void {
-    this.removeLetter({
-      questionId: this.questionId,
-      quizId: this.quizId,
-      value: index
-    })
+  removeLetterHandler (index: number, openedByHint: boolean): void {
+    if (!openedByHint) {
+      this.removeLetter({
+        questionId: this.questionId,
+        quizId: this.quizId,
+        value: index
+      })
+    }
   }
 
   /**
@@ -207,11 +209,16 @@ export default class ActiveQuestionPage extends Vue {
     }
   }
 
+  /**
+   * Handler for 'Tip' button. Active if the active question is not done yet
+   */
   tipButtonHandler (): void {
-    this.useTip({
-      quizId: this.quizId,
-      questionId: this.questionId
-    })
+    if (!this.activeQuizQuestion.done) {
+      this.useTip({
+        quizId: this.quizId,
+        questionId: this.questionId
+      })
+    }
   }
 
   /**
@@ -220,7 +227,6 @@ export default class ActiveQuestionPage extends Vue {
    * user`s data
    */
   created (): void {
-    console.log('USER', this.$fire.auth.currentUser)
     // Checking if current quiz is in participated quizes
     if (!this.isQuizParticipated(this.quizId)) {
       // if current quiz is not participated we create new participated

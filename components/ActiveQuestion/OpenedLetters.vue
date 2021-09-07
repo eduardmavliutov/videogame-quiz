@@ -4,9 +4,10 @@
       v-for="(letter, index) in openedLetters"
       :key="index"
       :letter="letter.value"
+      :opened-by-hint="letter.openedByHint"
       type="opened-letter"
       :class="{ 'question-is-done' : isQuestionDone }"
-      @click.native="$emit('remove-letter', index)"
+      @click.native="$emit('remove-letter', index, openedLetters[index].openedByHint)"
     />
   </div>
 </template>

@@ -108,14 +108,26 @@ export const actions: ActionTree<UserState, RootState> = {
     })
   },
 
-  async useTip({ commit, dispatch, state }, { quizId, questionId }: UseTipPayload): Promise<void> {
-    if (state.points > 0) {
-      let letterIndex = 0;
-      let randomLetterFromRightAnswer = SPACE_SYMBOL;
-      while (randomLetterFromRightAnswer === SPACE_SYMBOL) {
-        letterIndex = getRandomNumber(0, state.quizes[quizId][questionId].rightAnswer.length)
-        randomLetterFromRightAnswer = state.quizes[quizId][questionId].rightAnswer[letterIndex]
+  async useTip({ commit, dispatch, state, getters }, { quizId, questionId }: UseTipPayload): Promise<void> {
+    const notOpenedLetterIndexes = getters['indexesOfNotOpenedLetters'](quizId, questionId)
+    if (state.points > 0 && notOpenedLetterIndexes.length > 0) {
+      // By default we set letter index to 0
+      let letterIndex = notOpenedLetterIndexes[0];
+
+      // By default we take the first index from 'notOpenedLetterIndexes'
+      // and then take the letter with that index from 'rightAnswer' property
+      let randomLetterFromRightAnswer = state.quizes[quizId][questionId].rightAnswer[letterIndex]
+
+      // If we have more that 1 free spot in openedLetters (that means that notOpenedLetterIndexes has more that 1 element)
+      // we randomly take index
+      if (notOpenedLetterIndexes.length > 1) {
+        randomLetterFromRightAnswer === SPACE_SYMBOL
+        while (randomLetterFromRightAnswer === SPACE_SYMBOL) {
+          letterIndex = notOpenedLetterIndexes[getRandomNumber(0, notOpenedLetterIndexes.length)]
+          randomLetterFromRightAnswer = state.quizes[quizId][questionId].rightAnswer[letterIndex]
+        }
       }
+
       const openedLetters = [...state.quizes[quizId][questionId].openedLetters]
       openedLetters[letterIndex] = {
         value: randomLetterFromRightAnswer,
@@ -134,13 +146,15 @@ export const actions: ActionTree<UserState, RootState> = {
         value: randomLetterFromRightAnswer
       })
 
-      await dispatch('subPoints')
-
+      // We coherently update user's data: Firstly we update their quizes, secondly - points
       await this.$fire
         .database
         .ref(`users/${this.$fire.auth.currentUser?.uid}/quizes`)
         .set({
           ...state.quizes
+        })
+        .then(() => {
+          dispatch('subPoints')
         })
         .catch((error) => console.log(error))
     }
@@ -235,6 +249,17 @@ export const getters: GetterTree<UserState, RootState> = {
     return openedLetters
       .map((letter: QuizQuestionLetter) => letter.value)
       .join('')
+  },
+
+  indexesOfNotOpenedLetters: (state) => (quizId: string, questionId: number): number[] => {
+    const { openedLetters } = state.quizes[quizId][questionId]
+    const indexes: number[] = []
+    openedLetters.forEach((letter: QuizQuestionLetter, index: number) => {
+      if (letter.value === EMPTY_LETTER_BOX_SYMBOL) {
+        indexes.push(index)
+      }
+    })
+    return indexes
   }
 }
 

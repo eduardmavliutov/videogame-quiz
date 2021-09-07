@@ -33,6 +33,7 @@ export interface EditLetterPayload {
   quizId: string;
   questionId: number;
   value: number;
+  openedByHint?: boolean;
 }
 
 export interface SetQuizesPayload {
