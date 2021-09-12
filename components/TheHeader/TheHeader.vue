@@ -143,7 +143,6 @@ export default class TheHeader extends Vue {
   align-items: center;
   flex-flow: row nowrap;
   background: $main-color;
-  backdrop-filter: blur(2px);
   box-shadow: $box-shadow--dark;
   transition: all 0.4s ease-in;
   height: 5.5rem;

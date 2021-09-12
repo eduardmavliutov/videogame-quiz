@@ -6,6 +6,7 @@
       :key="quizId"
       :title="quizes[quizId].title"
       :image="quizes[quizId].image"
+      :published="quizes[quizId].published"
       class="v-grid-item"
     />
   </v-grid>

@@ -145,7 +145,7 @@ export default class ActiveQuestionPage extends Vue {
         stagger: 0.1,
         backgroundColor: 'rgb(255, 216, 72)',
         color: 'black',
-        ease: 'bounce.out',
+        ease: 'bounce.out'
       }).to('.opened-letter', {
         y: 0,
         scale: 1,
@@ -158,7 +158,7 @@ export default class ActiveQuestionPage extends Vue {
         stagger: 0.1,
         backgroundColor: 'rgb(255, 216, 72)',
         color: 'black',
-        ease: 'bounce.out',
+        ease: 'bounce.out'
       })
       this.questionWasCounted = true
       this.markQuestionAsDone({
@@ -177,12 +177,12 @@ export default class ActiveQuestionPage extends Vue {
         duration: 0.5,
         stagger: 0.1,
         backgroundColor: 'red',
-        ease: 'SteppedEase.config(12)',
+        ease: 'SteppedEase.config(12)'
       }).to('.opened-letter', {
         duration: 0.5,
         stagger: 0.1,
         backgroundColor: 'black',
-        ease: 'SteppedEase.config(12)',
+        ease: 'SteppedEase.config(12)'
       })
     }
   }
