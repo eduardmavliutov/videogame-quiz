@@ -22,7 +22,7 @@
       <div class="user-info__finished-quizes">
         <img
           width="16px"
-          src="~@/assets/icons/completed-quizes.svg"
+          src="~@/assets/icons/trophy.svg"
           alt="completed-quizes"
           class="user-info__stat-image-quizes"
           :class="{ animate: animateCompletedQuizes }"

@@ -197,6 +197,14 @@ export const getters: GetterTree<UserState, RootState> = {
     return completedCounter
   },
 
+  isQuizCompleted: (state) => (quizId: string): boolean => {
+    // if user has not participated in given quiz we return false
+    if (!state.quizes[quizId]) {
+      return false
+    }
+    return state.quizes[quizId].every((question: ParticipatedQuestion) => question.done)
+  },
+
   /**
    * Retrieves user`s email
    * @param state 
