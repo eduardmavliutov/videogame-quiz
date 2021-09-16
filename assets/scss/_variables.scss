@@ -28,7 +28,8 @@ $line-height-mobile--320px: 1.3rem;
 
 // Box shadows
 $box-shadow--default: 0 0 5px 5px $color-lightgrey;
-$box-shadow--dark: 0 0 5px 5px $color-dark;
+$box-shadow--buttons: 3px 6px 4px 1px $color-dark;
+$box-shadow--dark: 3px 6px 10px 5px $color-dark;
 $box-shadow--white: 0 0 5px 5px $color-white;
 
 // Font-family

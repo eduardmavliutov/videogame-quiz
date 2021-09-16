@@ -45,17 +45,17 @@ export default class VButton extends Vue {
   font-size: 1rem;
   font-weight: 600;
   border: 1px solid $color-white;
-  transition: 0.2s all ease;
+  transition: 0.3s all ease;
   flex-shrink: 1;
   position: relative;
 
   &:hover {
-    box-shadow: 0 0 5px 2px $color-white;
-    border: 1px solid gray;
+    box-shadow: $box-shadow--buttons;
+    transform: scale(1.1);
   }
 
   &:active {
-    box-shadow: 0 0 5px 2px $color-white;
+    box-shadow: 2px 4px 5px 2px $color-white;
     border: 1px solid gray;
     color: $color-white;
     background-color: rgba(128, 128, 128, 0.513);

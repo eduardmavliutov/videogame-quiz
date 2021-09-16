@@ -69,6 +69,7 @@ export default class QuizQuestion extends Vue {
   width: 15rem;
   overflow: hidden;
   text-decoration: none;
+  box-shadow: $box-shadow--dark;
 
   @include mobile {
     max-width: 10rem;
@@ -79,7 +80,9 @@ export default class QuizQuestion extends Vue {
   }
 
   &:hover {
-    box-shadow: $box-shadow--white;
+    .quiz-question__image {
+      transform: scale(1.1);
+    }
   }
 
   &__inner {
@@ -89,6 +92,7 @@ export default class QuizQuestion extends Vue {
   &__image {
     width: 100%;
     height: 100%;
+    transition: 0.3s all ease-out;
   }
 
   &__done-icon {
