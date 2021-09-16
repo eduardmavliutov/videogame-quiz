@@ -29,6 +29,7 @@
             Login
           </v-button>
           <v-button
+            v-if="!isAuthLoading"
             type="submit"
             :loading="isAuthLoading"
             :disabled="isAuthenticated"
