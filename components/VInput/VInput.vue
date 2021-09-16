@@ -14,7 +14,7 @@
       class="v-input__input"
       :class="classes"
       :disabled="disabled"
-      @input="$emit('update:model', $event.target.value)"
+      @input="inputHandler($event.target.value)"
     />
     <transition name="error">
       <small
@@ -38,6 +38,7 @@ export default class VInput extends Vue {
   @Prop({ required: false, type: String, default: 'white' }) labelColor!: string
   @Prop({ required: false, type: Boolean, default: false }) disabled!: boolean
   @Prop({ required: true }) model!: string
+  @Prop({ required: false, type: Boolean, default: false }) toLower!: boolean
 
   get inputId (): string {
     return `${this.name}${Math.random()}`
@@ -47,6 +48,10 @@ export default class VInput extends Vue {
     return {
       'v-input__input--error': this.errors.length > 0
     }
+  }
+
+  private inputHandler (value: string): void {
+    this.$emit('update:model', this.toLower ? value.toLowerCase(): value)
   }
 }
 </script>

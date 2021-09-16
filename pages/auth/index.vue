@@ -11,6 +11,7 @@
           type="text"
           :errors="emailErrors"
           :model.sync="form.email"
+          :toLower="true"
         />
         <v-input
           name="Password"
