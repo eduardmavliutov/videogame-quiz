@@ -51,7 +51,7 @@ export interface AddPointsPayload {
   points: number;
 }
 
-export interface UpdateUserName {
+export interface UpdateUserNamePayload {
   name?: string;
 }
 

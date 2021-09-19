@@ -34,7 +34,7 @@ import VPage from '@/components/VPage/VPage.vue'
 import VInput from '@/components/VInput/VInput.vue'
 import VButton from '@/components/VButton/VButton.vue'
 import { namespace } from 'vuex-class'
-import { UpdateUserName } from '@/types/store/user/user.interface'
+import { UpdateUserNamePayload } from '@/types/store/user/user.interface'
 
 const userModule = namespace('user')
 
@@ -48,12 +48,12 @@ const userModule = namespace('user')
 })
 export default class UserSettingsPage extends Vue {
   @userModule.State('email') email!: string
-  @userModule.Action('updateUserName') updateUserName!: (payload: UpdateUserName) => void
+  @userModule.Action('updateUserName') updateUserName!: (payload: UpdateUserNamePayload) => void
 
   private name = this.$store.state.user.name
   private loading = false
 
-  async onFormSubmit (): Promise<void> {
+  private async onFormSubmit (): Promise<void> {
     this.loading = true
     if (this.name.trim()) {
       await this.updateUserName({

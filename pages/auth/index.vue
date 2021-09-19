@@ -160,7 +160,7 @@ export default class Auth extends Vue {
   /**
    * Submit handler for auth form
    */
-  submitHandler (): void {
+  private submitHandler (): void {
     this.$v.$touch()
     if (!this.$v.$invalid) {
       this.submitType === 'login'
@@ -173,7 +173,7 @@ export default class Auth extends Vue {
    * Signs up a new user, then creates a user directory using received created user id.
    * Puts received tokens and user info in store
    */
-  async signUpHandler (): Promise<void> {
+  private async signUpHandler (): Promise<void> {
     const email = this.form.email.trim().toLowerCase()
     const password = this.form.password
 
@@ -216,7 +216,7 @@ export default class Auth extends Vue {
   /**
    * Logins existing user, then fetches their data. Stores authdata and userdata in the store
    */
-  async loginHandler (): Promise<void> {
+  private async loginHandler (): Promise<void> {
     const email = this.form.email.trim().toLowerCase()
     const password = this.form.password
 
@@ -250,7 +250,7 @@ export default class Auth extends Vue {
    * @param {string} message - text that is to be shown,
    * @param {string} style - class that will be applied to the given message (info/error)
    */
-  showMessage (message: string, style: string): void {
+  private showMessage (message: string, style: string): void {
     this.message = message
     this.messageStyle = style
     setTimeout(() => {

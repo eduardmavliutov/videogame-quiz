@@ -14,7 +14,7 @@
         :value="title"
         class="quiz-card__title-input"
         @input="titleInputHandler($event.target.value)"
-      />
+      >
     </header>
     <hr class="quiz-card__line" />
     <croppa
@@ -69,7 +69,11 @@ export default class AdminQuizCard extends Vue {
 
   private isEditMode = false
 
-  private cropImageButtonHandler () {
+  /**
+   * Method is triggered if 'Crop' button is clicked. Updates image's v-model
+   * in parent component
+   */
+  private cropImageButtonHandler (): void {
     const croppedImage = this.myCroppa.generateDataUrl()
     this.$emit('update:image', {
       src: croppedImage,
@@ -78,19 +82,33 @@ export default class AdminQuizCard extends Vue {
     this.isEditMode = false
   }
 
-  private titleInputHandler (value: string) {
+  /**
+   * Updates title's v-model in parent component
+   */
+  private titleInputHandler (value: string): void {
     this.$emit('update:title', value.trim())
   }
 
-  private editButtonHandler () {
+  /**
+   * Sets 'isEditMode' variable to true if 'Edit' button
+   * is clicked
+   */
+  private editButtonHandler (): void {
     this.isEditMode = true
   }
 
-  private cancelButtonHandler () {
+  /**
+   * Sets 'isEditMode' to false and refreshes Croppa component
+   * if 'Cancel' button is clicked
+   */
+  private cancelButtonHandler (): void {
     this.isEditMode = false
     this.myCroppa.refresh()
   }
 
+  /**
+   * Sets 'isEditMode' variable to true if we are creating new quiz
+   */
   created () {
     if (this.$route.params.id === 'new') {
       this.isEditMode = true

@@ -41,20 +41,32 @@ export default class QuizPage extends Vue {
   @userModule.Getter('isQuizParticipated') isQuizParticipated!: (quizId: string) => boolean
   @userModule.Getter('quizes') quizes!: ParticipatedQuizes
 
+  /**
+   * Retrieves quiz object from the store basing on quiz id from
+   * the route params
+   * @returns {Quiz} quiz
+   */
   private get activeQuiz (): Quiz {
-    return this.quiz(`${this.$route.params.quizId}`)
+    return this.quiz(this.quizId)
   }
 
+  /**
+   * Retrieves quiz id from the route params
+   * @returns {string} quizId
+   */
   private get quizId (): string {
     return this.$route.params.quizId;
   }
 
-  private quizQuestionClickHandler (questionId: number) {
-    const quizId = this.$route.params.quizId
+  /**
+   * Method is triggered whem user clickes quiz question
+   * @param {number} questionId - id of the question user clicked on
+   */
+  private quizQuestionClickHandler (questionId: number): void {
     this.$router.push({
       name: 'quiz-question',
       params: {
-        quiz: quizId,
+        quiz: this.quizId,
         questionId: `${questionId}`
       }
     })

@@ -35,6 +35,7 @@
 import { ImageProps } from '@/types/image'
 import { Component, Prop, Vue } from 'nuxt-property-decorator'
 import { namespace } from 'vuex-class'
+import { CssClasses } from '@/types/css-classes'
 
 const userModule = namespace('user')
 
@@ -48,11 +49,20 @@ export default class QuizListItem extends Vue {
   @userModule.Getter('isQuizCompleted') isQuizCompleted!: (quizId: string) => boolean
   @userModule.Getter('isAuthenticated') isAuthenticated!: boolean
 
-  private get isQuizDone () {
+  /**
+   * Defines whether quiz is done or not
+   * @return {boolean} true if user is logged in and the quiz is completed,
+   * otherwise - false
+   */
+  private get isQuizDone (): boolean {
     return this.isAuthenticated && this.isQuizCompleted(this.id)
   }
 
-  private get classes () {
+  /**
+   * Basing on prop values retrieves all css classes for component
+   * @returns {CssClasses} object defining what classes will be applied
+   */
+  private get classes (): CssClasses {
     return {
       'quiz-list-item': true,
       'quiz-list-item__published': this.published,

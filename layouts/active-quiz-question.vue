@@ -51,18 +51,30 @@ export default class ActiveQuizQuesionLayout extends Vue {
    * Computes active quiz question id for title
    * @returns {number} active quiz question id
    */
-  get activeQuestionIdForTitle (): number {
+  private get activeQuestionIdForTitle (): number {
     return this.questionId + 1
   }
 
+  /**
+   * Retrieves the current active quiz
+   * @returns {Quiz} current active quiz
+   */
   private get activeQuiz (): Quiz {
     return this.quiz(this.quizId)
   }
 
+  /**
+   * Retrieves a quiz id from the route params
+   * @returns {string} quiz id from the route params
+   */
   private get quizId (): string {
     return this.$route.params.quizId
   }
 
+  /**
+   * Retrieves a question id from the route params converted to Number
+   * @returns {number} question id
+   */
   private get questionId (): number {
     return Number(this.$route.params.questionId)
   }
@@ -70,7 +82,7 @@ export default class ActiveQuizQuesionLayout extends Vue {
   /**
    * Navigates to previous quiz question and resets questionWasCounted property
    */
-  previousQuizQuestionHandler (): void {
+  private previousQuizQuestionHandler (): void {
     if (this.questionId >= 1) {
       this.$router.push({
         name: 'quiz-question',
@@ -85,7 +97,7 @@ export default class ActiveQuizQuesionLayout extends Vue {
   /**
    * Navigates to next quiz question and resets questionWasCounted property
    */
-  nextQuizQuestionHandler (): void {
+  private nextQuizQuestionHandler (): void {
     const currentQuizLength = this.activeQuiz.questions.length
     if (this.questionId < (currentQuizLength - 1)) {
       this.$router.push({

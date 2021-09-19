@@ -8,13 +8,11 @@
       <button
         class="question-control-panel__previous-button"
         @click="$emit('previous-question')"
-      >
-      </button>
+      ></button>
       <button
         class="question-control-panel__next-button"
         @click="$emit('next-question')"
-      >
-      </button>
+      ></button>
     </div>
   </transition>
 </template>

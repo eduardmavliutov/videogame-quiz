@@ -1,52 +1,50 @@
 <template>
-  <client-only>
-    <header class="header">
-      <div class="header__logo">
-        <nuxt-link to="/">
-          <img
-            class="header__logo-image"
-            src="@/assets/images/gpad.png"
-            alt="logo-image"
-          >
-        </nuxt-link>
-        <h1 class="header__logo-title">Videogame Quiz!</h1>
-        <v-title
-          :title="quizTitle"
-          primary
-          class="header__logo-title--mobile"
-        />
-      </div>
-      <nuxt-link
-        v-if="showAdminRoute"
-        :to="{ name: 'admin-quizes' }"
-        class="header__admin-link"
-      >
-        Admin
-      </nuxt-link>
-      <div class="header__auth">
-        <transition
-          name="header__auth"
-          mode="out-in"
+  <header class="header">
+    <div class="header__logo">
+      <nuxt-link to="/">
+        <img
+          class="header__logo-image"
+          src="@/assets/images/gpad.png"
+          alt="logo-image"
         >
-          <user-info
-            v-if="isAuthenticated"
-            :user-name="activeUser"
-            :points="points"
-            :completed-quizes="completedQuizes"
-            @logout="logoutHandler"
-            @settings="settingsHandler"
-          />
-          <nuxt-link
-            v-else
-            class="header__auth-button"
-            to="/auth"
-          >
-            Login
-          </nuxt-link>
-        </transition>
-      </div>
-    </header>
-  </client-only>
+      </nuxt-link>
+      <h1 class="header__logo-title">Videogame Quiz!</h1>
+      <v-title
+        :title="quizTitle"
+        primary
+        class="header__logo-title--mobile"
+      />
+    </div>
+    <nuxt-link
+      v-if="showAdminRoute"
+      :to="{ name: 'admin-quizes' }"
+      class="header__admin-link"
+    >
+      Admin
+    </nuxt-link>
+    <div class="header__auth">
+      <transition
+        name="header__auth"
+        mode="out-in"
+      >
+        <user-info
+          v-if="isAuthenticated"
+          :user-name="activeUser"
+          :points="points"
+          :completed-quizes="completedQuizes"
+          @logout="logoutHandler"
+          @settings="settingsHandler"
+        />
+        <nuxt-link
+          v-else
+          class="header__auth-button"
+          to="/auth"
+        >
+          Login
+        </nuxt-link>
+      </transition>
+    </div>
+  </header>
 </template>
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
@@ -78,7 +76,7 @@ export default class TheHeader extends Vue {
    * Retrieves current user`s name if there is one set or their email
    * @returns {string} user`s name or email
    */
-  get activeUser (): string {
+  private get activeUser (): string {
     return this.userName || this.userEmail
   }
 
@@ -87,7 +85,7 @@ export default class TheHeader extends Vue {
    * @returns {string} the title of current quiz or default app title (depending on presence
    * of `quizId` param in $route)
    */
-  get quizTitle (): string {
+  private get quizTitle (): string {
     return this.$route.params.quizId && this.$route.params.questionId
       ? this.quiz(this.$route.params.quizId).title
       : 'Videogame Quiz'
@@ -97,7 +95,7 @@ export default class TheHeader extends Vue {
    * Defines whether to show link to admin panel or not
    * @returns {boolean} true if current user's email is admin's email, otherwise - false
    */
-  get showAdminRoute (): boolean {
+  private get showAdminRoute (): boolean {
     if (!this.isAuthenticated) {
       return false
     }
@@ -107,7 +105,7 @@ export default class TheHeader extends Vue {
   /**
    * Handler for logout event
    */
-  logoutHandler (): void {
+  private logoutHandler (): void {
     this.logout()
     if (this.$route.path !== '/') {
       this.$router.push({
@@ -117,9 +115,9 @@ export default class TheHeader extends Vue {
   }
 
   /**
-   * Handler-router to user settings
+   * Redirects to user settings
    */
-  settingsHandler (): void {
+  private settingsHandler (): void {
     this.$router.push({
       name: 'user-settings'
     })

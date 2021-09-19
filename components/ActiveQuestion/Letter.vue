@@ -9,6 +9,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'nuxt-property-decorator'
 import { SPACE_SYMBOL } from '@/helpers/constants'
+import { CssClasses } from '@/types/css-classes'
 
 @Component({})
 export default class QuizQuestionLetter extends Vue {
@@ -16,11 +17,19 @@ export default class QuizQuestionLetter extends Vue {
   @Prop({ required: false, type: String }) type!: string
   @Prop({ required: false, type: Boolean, default: false }) openedByHint!: boolean
 
-  get isSpace () {
+  /**
+   * Defines whether current 'letter' value is a space or not
+   * @returns {boolean} true if letter's value is a space, otherwise - false
+   */
+  private get isSpace (): boolean {
     return this.letter === SPACE_SYMBOL
   }
 
-  get classes () {
+  /**
+   * Basing on prop values retrieves all css classes for component
+   * @returns {CssClasses} object defining what classes will be applied
+   */
+  private get classes (): CssClasses {
     return {
       'space': !!this.isSpace,
       'opened-letter': this.type === 'opened-letter',

@@ -4,7 +4,7 @@ import {
   CreateParticipatedQuizPayload,
   EditLetterPayload,
   MarkQuestionDonePayload,
-  UpdateUserName,
+  UpdateUserNamePayload,
   UserState,
   ParticipatedQuestion,
   SetUserPayload,
@@ -20,11 +20,17 @@ import {
   QuizQuestion,
   QuizQuestionLetter
 } from '@/types/store/quiz/quiz.interface'
-import { GetterTree, MutationTree, ActionTree } from 'vuex'
+import { GetterTree, MutationTree, ActionTree, ActionContext } from 'vuex'
 import firebase from 'firebase'
 import { getRandomNumber } from '@/helpers/utils'
 
 export const actions: ActionTree<UserState, RootState> = {
+  /**
+   * Creates participated quiz for user if user opens that quiz for
+   * the first time: commits a mutation and sends the data to Firebase database
+   * @param {ActionContext} context
+   * @param {CreateParticipatedQuizPayload} payload
+   */
   async createParticipatedQuiz(
     { state, commit },
     payload: CreateParticipatedQuizPayload
@@ -39,18 +45,30 @@ export const actions: ActionTree<UserState, RootState> = {
       })
   },
 
+  /**
+   * Adds a letter from the letter pool to opened letters of current quiz question.
+   * Commits a mutation and sends the data to Firebase database
+   * @param {ActionContext} context 
+   * @param {EditLetterPayload} payload
+   */
   async addLetter({ commit, state }, payload: EditLetterPayload): Promise<void> {
     commit('ADD_LETTER', payload)
 
     await this.$fire
-        .database
-        .ref(`users/${this.$fire.auth.currentUser?.uid}/quizes`)
-        .set({
-          ...state.quizes
-        })
-        .catch((error) => console.log(error))
+      .database
+      .ref(`users/${this.$fire.auth.currentUser?.uid}/quizes`)
+      .set({
+        ...state.quizes
+      })
+      .catch((error) => console.log(error))
   },
 
+  /**
+   * Removes a letter from the opened letters to the letter pool of current quiz question.
+   * Commits a mutation and sends the data to Firebase database
+   * @param {ActionContext} context 
+   * @param {EditLetterPayload} payload
+   */
   async removeLetter({ state, commit }, payload: EditLetterPayload): Promise<void> {
     commit('REMOVE_LETTER', payload)
 
@@ -62,6 +80,11 @@ export const actions: ActionTree<UserState, RootState> = {
       })
   },
 
+  /**
+   * Marks a question as 'Done': commits a mutation and sends the data to Firebase database
+   * @param {ActionContext} context 
+   * @param {MarkQuestionDonePayload} payload
+   */
   async markQuestionAsDone({ commit, state }, payload: MarkQuestionDonePayload) {
     commit('MARK_QUESTION_AS_DONE', payload)
     
@@ -73,6 +96,11 @@ export const actions: ActionTree<UserState, RootState> = {
       })
   },
 
+  /**
+   * Adds points for asnwered question.
+   * Commits a mutation and sends the data to Firebase database
+   * @param {ActionContext} context
+   */
   async addPoints({ state, commit }): Promise<void> {
     commit('SET_POINTS', { points: state.points + 10 })
     
@@ -82,6 +110,11 @@ export const actions: ActionTree<UserState, RootState> = {
       .set(state.points)
   },
 
+  /**
+   * Substracts points for using tip.
+   * Commits a mutation and sends the data to Firebase database
+   * @param {ActionContext} context
+   */
   async subPoints({ state, commit }): Promise<void> {
     commit('SET_POINTS', { points: state.points - 10 })
     
@@ -91,11 +124,25 @@ export const actions: ActionTree<UserState, RootState> = {
       .set(state.points)
   },
 
+  /**
+   * Action fetches user's data. Then it subscribes for any changes in Firebase
+   * database: if any change is detected in the database that change will be fetched
+   * and then commited to the store
+   * @param {ActionContext} context 
+   * @param {FetchUserData} payload
+   */
   async fetchUserData ({ dispatch }, payload: FetchUserData) {
     const result = await this.$fire.database.ref(`/users/${payload.userId}`)
     await dispatch('subscribeUserModule', { reference: result })
   },
 
+  /**
+   * Subscribes for any changes in Firebase database:
+   * if any change is detected in the database that change will be fetched
+   * and then commited to the store
+   * @param {ActionContext} context 
+   * @param {SubscribeUserModulePayload} payload
+   */
   async subscribeUserModule({ commit }, payload: SubscribeUserModulePayload) {
     await payload.reference.on('value', (snapshot: firebase.database.DataSnapshot) => {
       const { email, name, points, quizes = [] } = snapshot.val()
@@ -108,6 +155,12 @@ export const actions: ActionTree<UserState, RootState> = {
     })
   },
 
+  /**
+   * Action is triggered when user uses a tip:
+   * commits a mutation and sends the data to Firebase database
+   * @param {ActionContext} context 
+   * @param {UseTipPayload} payload
+   */
   async useTip({ commit, dispatch, state, getters }, { quizId, questionId }: UseTipPayload): Promise<void> {
     const notOpenedLetterIndexes = getters['indexesOfNotOpenedLetters'](quizId, questionId)
     if (state.points > 0 && notOpenedLetterIndexes.length > 0) {
@@ -160,6 +213,10 @@ export const actions: ActionTree<UserState, RootState> = {
     }
   },
 
+  /**
+   * Action is triggered on logout
+   * @param {ActionContext} context
+   */
   async logout({ commit }): Promise<void> {
     await this.$fire
       .auth
@@ -170,7 +227,14 @@ export const actions: ActionTree<UserState, RootState> = {
     commit('REMOVE_USER')
   },
 
-  async updateUserName({ commit }, payload: UpdateUserName): Promise<void> {
+  /**
+   * Action is triggered when user changes their name.
+   * Commits a mutation and sends the data to Firebase database
+   * @param {ActionContext} context 
+   * @param {UpdateUserNamePayload} payload
+   */
+  async updateUserName({ commit }, payload: UpdateUserNamePayload): Promise<void> {
+    commit('SET_NAME', payload)
     await this.$fire
       .database
       .ref(`users/${this.$fire.auth.currentUser?.uid}/name`)
@@ -197,6 +261,11 @@ export const getters: GetterTree<UserState, RootState> = {
     return completedCounter
   },
 
+  /**
+   * Defines whether quiz is completed or not
+   * @param {string} quizId - id of the quiz we want to check
+   * @returns {boolean} true if the quiz is completed, otherwise - false
+   */
   isQuizCompleted: (state) => (quizId: string): boolean => {
     // if user has not participated in given quiz we return false
     if (!state.quizes[quizId]) {
@@ -259,6 +328,13 @@ export const getters: GetterTree<UserState, RootState> = {
       .join('')
   },
 
+  /**
+   * Computes an array of indexed of the letters that are not opened
+   * in the given question of the given quiz
+   * @param {string} quizId 
+   * @param {number} questionId
+   * @returns {number[]}
+   */
   indexesOfNotOpenedLetters: (state) => (quizId: string, questionId: number): number[] => {
     const { openedLetters } = state.quizes[quizId][questionId]
     const indexes: number[] = []
@@ -364,6 +440,10 @@ export const mutations: MutationTree<UserState> = {
 
   SET_POINTS(state, payload: AddPointsPayload) {
     state.points = payload.points
+  },
+  
+  SET_NAME(state, payload: UpdateUserNamePayload) {
+    state.name = `${payload.name}`
   }
 }
 

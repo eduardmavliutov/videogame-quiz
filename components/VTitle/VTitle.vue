@@ -13,6 +13,7 @@
 </template>
 <script lang="ts">
 import { Vue, Prop, Component } from 'nuxt-property-decorator'
+import { CssClasses } from '@/types/css-classes'
 
 @Component({})
 export default class VTitle extends Vue {
@@ -23,9 +24,9 @@ export default class VTitle extends Vue {
   /**
    * Computed property for getting object with classes that
    * will be applied to title
-   * @returns {object} js-object with classes
+   * @returns {CssClasses} js-object with classes
    */
-  private get classes (): { [key: string]: boolean } {
+  private get classes (): CssClasses {
     return {
       'v-title': true,
       'visually-hidden-mobile': this.hideInMobileMode,

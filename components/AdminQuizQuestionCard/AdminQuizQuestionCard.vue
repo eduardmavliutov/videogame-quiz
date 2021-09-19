@@ -26,7 +26,7 @@
         :value="rightAnswer"
         class="quiz-question-card__title-input"
         @input="rightAnswerInputHandler($event.target.value)"
-      />
+      >
     </footer>
     <div
       v-if="isEditMode"
@@ -77,11 +77,19 @@ export default class AdminQuizQuestionCard extends Vue {
 
   private isEditMode = false
 
+  /**
+   * Computes current question's number 
+   * @returns {string} computed question's number
+   */
   private get questionNumber (): string {
     return `#${this.questionId + 1}`
   }
 
-  private saveQuestionButtonHandler () {
+  /**
+   * Method is triggered if 'Save' button is pressed. Updates
+   * image's v-model in parent component and turnes off edit mode'
+   */
+  private saveQuestionButtonHandler (): void {
     const croppedImage = this.myCroppa.generateDataUrl()
     this.$emit('update:image', {
       src: croppedImage,
@@ -90,25 +98,42 @@ export default class AdminQuizQuestionCard extends Vue {
     this.isEditMode = false
   }
 
+  /**
+   * Updates rightAnswer's v-model in parent component trimming its value first
+   */
   private rightAnswerInputHandler (value: string): void {
     this.$emit('update:rightAnswer', value.trim().toLowerCase())
   }
 
-  private editButtonHandler () {
+  /**
+   * Turnes off the edit mode
+   */
+  private editButtonHandler (): void {
     this.isEditMode = true
   }
 
-  private deleteButtonHandler () {
+  /**
+   * Method is triggered when 'Delete' button is pressed. Emits
+   * 'delete-question' event to a parent component
+   */
+  private deleteButtonHandler (): void {
     if (confirm('Are you sure?')) {
       this.$emit('delete-question', this.questionId)
     }
   }
 
-  private cancelButtonHandler () {
+  /**
+   * Sets 'isEditMode' to false and refreshes Croppa component
+   * if 'Cancel' button is clicked
+   */
+  private cancelButtonHandler (): void {
     this.isEditMode = false
     this.myCroppa.refresh()
   }
 
+  /**
+   * Sets 'isEditMode' variable to true if we are creating new quiz
+   */
   created () {
     if (this.$route.params.id === 'new') {
       this.isEditMode = true

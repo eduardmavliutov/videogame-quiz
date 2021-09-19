@@ -27,6 +27,7 @@ const quizModule = namespace('quiz')
 })
 export default class Home extends Vue {
   @quizModule.Getter('quizes') quizes!: Quizes
+  
   private loading = false
 }
 </script>

@@ -19,6 +19,7 @@
 </template>
 <script lang="ts">
 import { Vue, Component, Prop } from 'nuxt-property-decorator'
+import { CssClasses } from '@/types/css-classes'
 
 @Component
 export default class VButton extends Vue {
@@ -26,14 +27,15 @@ export default class VButton extends Vue {
   @Prop({ required: false, type: Boolean, default: false }) disabled!: boolean
   @Prop({ required: false, type: Boolean, default: false }) loading!: boolean
 
-  get classes (): string {
-    const classes = []
-
-    if (this.disabled) {
-      classes.push('v-button--disabled')
+  /**
+   * Basing on prop values retrieves all css classes for component
+   * @returns {CssClasses} object defining what classes will be applied
+   */
+  private get classes (): CssClasses {
+    return {
+      'v-button': true,
+      'v-button--disabled': this.disabled
     }
-
-    return classes.join(' ')
   }
 }
 </script>

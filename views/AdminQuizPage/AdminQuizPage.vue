@@ -144,7 +144,11 @@ export default class AdminQuizPage extends Vue {
   private quiz = {} as AdminQuiz
   private loading = false
 
-  get validationErrors (): string[] {
+  /**
+   * Retrieves an array of validation errors that will be displayed to the user
+   * @returns {string[]} array of errors
+   */
+  private get validationErrors (): string[] {
     const errors = []
 
     if (this.$v.quiz.title?.$dirty && !this.$v.quiz.title?.required) {
@@ -176,18 +180,35 @@ export default class AdminQuizPage extends Vue {
     return errors
   }
 
-  get pageTitle (): string {
+  /**
+   * Retrieves opened quiz's title
+   * @returns {string} opened quiz's title or 'New quiz'
+   */
+  private get pageTitle (): string {
     return this.quiz.title || 'New quiz'
   }
 
-  get isNewQuiz (): boolean {
+  /**
+   * Defines whether it is a new quiz or not
+   * basing on 'id' param of the current route
+   * @returns {boolean} true if 'id' param is 'new',
+   * otherwise - false
+   */
+  private get isNewQuiz (): boolean {
     return this.$route.params.id === 'new'
   }
 
-  get createButtonText (): string {
+  /**
+   * Defines the text of 'Create' button
+   * @returns {string} 'Create' or 'Save'
+   */
+  private get createButtonText (): string {
     return this.isNewQuiz ? 'Create' : 'Save'
   }
 
+  /**
+   * Method is triggered when user presses 'Create' button
+   */
   private async createQuizHandler (): Promise<void> {
     this.$v.$touch()
     if (!this.$v.$invalid) {
@@ -209,6 +230,9 @@ export default class AdminQuizPage extends Vue {
     }
   }
 
+  /**
+   * Method is triggered when user presses 'Save' button
+   */
   private async saveQuizHandler (): Promise<void> {
     this.$v.$touch()
     if (!this.$v.$invalid) {
@@ -229,6 +253,9 @@ export default class AdminQuizPage extends Vue {
     }
   }
 
+  /**
+   * Method is triggered when user presses 'Publish' button
+   */
   private async publishButtonHandler (): Promise<void> {
     if (confirm('Are you sure?')) {
       this.$v.$touch()
@@ -253,6 +280,9 @@ export default class AdminQuizPage extends Vue {
     }
   }
 
+  /**
+   * Method is triggered when user presses 'Add' button
+   */
   private addButtonHandler (): void {
     this.quiz.questions.push({
       image: {
@@ -263,6 +293,9 @@ export default class AdminQuizPage extends Vue {
     })
   }
 
+  /**
+   * Method is triggered when user presses 'Delete' button
+   */
   private deleteQuestionHandler (questionId: number): void {
     this.quiz.questions = this.quiz.questions.filter((_: AdminQuizQuestion, index: number) => index !== questionId)
   }

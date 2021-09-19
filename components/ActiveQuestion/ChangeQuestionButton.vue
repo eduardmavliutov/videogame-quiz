@@ -12,7 +12,11 @@ import { Component, Vue, Prop } from 'nuxt-property-decorator'
 export default class ChangeQuestionButton extends Vue {
   @Prop({ required: true, type: String }) type!: string
 
-  get classes () {
+  /**
+   * Computes button's class name basing on its type
+   * @return {string} computed button's class name
+   */
+  private get classes (): string {
     return `change-question-button--${this.type}`
   }
 }

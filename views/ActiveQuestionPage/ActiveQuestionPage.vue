@@ -15,7 +15,7 @@
           <button
             class="quiz-active-question__tip-button--mobile"
             @click="tipButtonHandler()"
-          />
+          ></button>
         </div>
         <div
           v-if="!activeQuizQuestion.done"
@@ -110,6 +110,10 @@ export default class ActiveQuestionPage extends Vue {
    */
   private questionWasCounted = false
 
+  /**
+   * Retrieves quiz object from the store basing on quiz id
+   * @returns {Quiz} quiz
+   */
   private get quiz (): Quiz {
     return this.getQuiz(this.quizId)
   }
@@ -118,11 +122,11 @@ export default class ActiveQuestionPage extends Vue {
    * Retrieves participated question from the store
    * @returns {ParticipatedQuestion} current participated quiz question
    */
-  get activeQuizQuestion (): ParticipatedQuestion {
+  private get activeQuizQuestion (): ParticipatedQuestion {
     return this.participatedQuestion(this.quizId, this.questionId)
   }
 
-  get questionImage (): ImageProps {
+  private get questionImage (): ImageProps {
     return this.quiz.questions[this.questionId].image
   }
 
@@ -191,7 +195,7 @@ export default class ActiveQuestionPage extends Vue {
    * Letter pool click handler. When is called it dispatches
    * an action to add clicked letter to opened letters pool
    */
-  addLetterHandler (index: number): void {
+  private addLetterHandler (index: number): void {
     this.addLetter({
       questionId: this.questionId,
       quizId: this.quizId,
@@ -203,7 +207,7 @@ export default class ActiveQuestionPage extends Vue {
    * Opened letters click handler. When is called it dispatches
    * an action to remove clicked letter from opened letters pool
    */
-  removeLetterHandler (index: number, openedByHint: boolean): void {
+  private removeLetterHandler (index: number, openedByHint: boolean): void {
     if (!openedByHint) {
       this.removeLetter({
         questionId: this.questionId,
@@ -216,7 +220,7 @@ export default class ActiveQuestionPage extends Vue {
   /**
    * Navigates to previous quiz question and resets questionWasCounted property
    */
-  previousQuizQuestionHandler (): void {
+  private previousQuizQuestionHandler (): void {
     if (this.questionId >= 1) {
       this.$router.push({
         name: 'quiz-question',
@@ -231,7 +235,7 @@ export default class ActiveQuestionPage extends Vue {
   /**
    * Navigates to next quiz question and resets questionWasCounted property
    */
-  nextQuizQuestionHandler (): void {
+  private nextQuizQuestionHandler (): void {
     const currentQuizLength = this.quiz.questions.length
     if (this.questionId < (currentQuizLength - 1)) {
       this.$router.push({
@@ -247,7 +251,7 @@ export default class ActiveQuestionPage extends Vue {
   /**
    * Handler for 'Tip' button. Active if the active question is not done yet
    */
-  tipButtonHandler (): void {
+  private tipButtonHandler (): void {
     if (!this.activeQuizQuestion.done) {
       this.useTip({
         quizId: this.quizId,

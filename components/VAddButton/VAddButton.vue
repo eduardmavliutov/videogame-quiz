@@ -3,7 +3,7 @@
     type="button"
     class="v-add-button"
     @click="$emit('add')"
-  />
+  ></button>
 </template>
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'

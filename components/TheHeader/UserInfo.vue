@@ -12,12 +12,14 @@
       <div class="user-info__points">
         <img
           width="16px"
-          src="~@/assets/icons/points.svg"
+          src="@/assets/icons/points.svg"
           alt="points"
           class="user-info__stat-image-points"
           :class="{ animate: animateCoin }"
         >
-        <span class="user-info__points-counter">{{ animatedPoints }}</span>
+        <span class="user-info__points-counter">
+          {{ animatedPoints }}
+        </span>
       </div>
       <div class="user-info__finished-quizes">
         <img
@@ -27,7 +29,9 @@
           class="user-info__stat-image-quizes"
           :class="{ animate: animateCompletedQuizes }"
         >
-        <span class="user-info__finished-quizes-counter">{{ animatedCompletedQuizes }}</span>
+        <span class="user-info__finished-quizes-counter">
+          {{ animatedCompletedQuizes }}
+        </span>
       </div>
     </div>
     <transition
@@ -65,24 +69,15 @@ export default class UserInfo extends Vue {
   @Prop({ required: true, type: Number }) points!: number
   @Prop({ required: true, type: Number }) completedQuizes!: number
 
-
+  /**
+   * Default points counter's value
+   */
   private pointsToDisplay = 0
 
   /**
-   * Points that will be displayed to user
+   * Default completed quizes counter's value
    */
-  private get animatedPoints () {
-    return this.pointsToDisplay.toFixed(0)
-  }
-
   private completedQuizesToDisplay = 0
-
-  /**
-   * Completed quizes counter that will be displayed to user
-   */
-  private get animatedCompletedQuizes () {
-    return this.completedQuizesToDisplay.toFixed(0)
-  }
 
   /**
    * Defines whether animation for points image
@@ -100,6 +95,20 @@ export default class UserInfo extends Vue {
    * Defines whether to show user menu or not
    */
   private showUserMenu = false
+
+  /**
+   * Points that will be displayed to user
+   */
+  private get animatedPoints (): string {
+    return this.pointsToDisplay.toFixed(0)
+  }
+
+  /**
+   * Completed quizes counter that will be displayed to user
+   */
+  private get animatedCompletedQuizes (): string {
+    return this.completedQuizesToDisplay.toFixed(0)
+  }
 
   /**
    * Watcher for 'points' property
@@ -126,21 +135,26 @@ export default class UserInfo extends Vue {
   }
 
   /**
-   * Handler for clicking on 'Edit profile' in settings menu
+   * Method is triggeres when user clickes
+   * 'Edit profile' in settings menu
    */
-  editProfileClickHandler () {
+  private editProfileClickHandler (): void {
     this.showUserMenu = false
     this.$emit('settings')
   }
 
   /**
-   * Handler for clicking on 'Logout' in settings menu
+   * Method is triggeres when user clickes 
+   * 'Logout' in settings menu
    */
-  logoutClickHandler () {
+  private logoutClickHandler (): void {
     this.showUserMenu = false
     this.$emit('logout')
   }
 
+  /**
+   * Hooke hides user menu
+   */
   beforeRouteLeave (_: Route, __: Route, next: NavigationGuardNext) {
     this.showUserMenu = false
     next()

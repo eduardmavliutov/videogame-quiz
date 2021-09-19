@@ -15,7 +15,7 @@
       :class="classes"
       :disabled="disabled"
       @input="inputHandler($event.target.value)"
-    />
+    >
     <transition name="error">
       <small
         v-if="errors.length"
@@ -40,16 +40,28 @@ export default class VInput extends Vue {
   @Prop({ required: true }) model!: string
   @Prop({ required: false, type: Boolean, default: false }) toLower!: boolean
 
-  get inputId (): string {
+  /**
+   * Retrieves an id for input
+   * @returns {string} computed id for input
+   */
+  private get inputId (): string {
     return `${this.name}${Math.random()}`
   }
 
-  get classes (): CssClasses {
+  /**
+   * Basing on prop values retrieves all css classes for component
+   * @returns {CssClasses} object defining what classes will be applied
+   */
+  private get classes (): CssClasses {
     return {
       'v-input__input--error': this.errors.length > 0
     }
   }
 
+  /**
+   * Updates v-model of 'model' prop in parent component
+   * @param {string} value - current value of the input
+   */
   private inputHandler (value: string): void {
     this.$emit('update:model', this.toLower ? value.toLowerCase(): value)
   }
