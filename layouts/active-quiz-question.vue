@@ -79,8 +79,6 @@ export default class ActiveQuizQuesionLayout extends Vue {
           questionId: `${this.questionId - 1}`
         }
       })
-      // ! TODO надо проверить, что этот параметр сбрасывается при переключении вопроса
-      // this.questionWasCounted = false
     }
   }
 
@@ -97,8 +95,6 @@ export default class ActiveQuizQuesionLayout extends Vue {
           questionId: `${this.questionId + 1}`
         }
       })
-      // ! TODO надо проверить, что этот параметр сбрасывается при переключении вопроса
-      // this.questionWasCounted = false
     }
   }
 }

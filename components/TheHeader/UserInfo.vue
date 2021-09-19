@@ -291,22 +291,21 @@ export default class UserInfo extends Vue {
       }
     }
   }
-}
-// TODO: Переместить внутрь основных стилей
-.menu {
-  &-enter,
-  &-leave-to {
-    opacity: 0;
-    transform: translateY(-5rem);
-  }
-  &-enter-to,
-  &-leave {
-    opacity: 1;
-    transform: translateY(0rem);
-  }
-  &-enter-active,
-  &-leave-active {
-    transition: 0.2s all ease-in-out;
+  .menu {
+    &-enter,
+    &-leave-to {
+      opacity: 0;
+      transform: translateY(-5rem);
+    }
+    &-enter-to,
+    &-leave {
+      opacity: 1;
+      transform: translateY(0rem);
+    }
+    &-enter-active,
+    &-leave-active {
+      transition: 0.2s all ease-in-out;
+    }
   }
 }
 </style>

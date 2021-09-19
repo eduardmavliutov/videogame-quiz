@@ -51,6 +51,7 @@ h2 {
   }
 }
 
+// For hiding h1-h6 elements
 .visually-hidden {
   position: absolute;
   clip: rect(0 0 0 0);
@@ -69,6 +70,7 @@ h2 {
   }
 }
 
+// Default transitions for route changes
 .route-change {
   &-enter-active,
   &-leave-active {
@@ -85,21 +87,7 @@ h2 {
   }
 }
 
-@keyframes left {
-  0% {
-    opacity: 1;
-  }
-
-  70% {
-    opacity: 0;
-    transform: translateX(-60%);
-  }
-
-  80% {
-    transform: translateX(120%);
-  }
-}
-
+// Transitions for route changes between quiz questions
 .route-change {
   &-left {
     &-enter-active,
@@ -147,6 +135,7 @@ h2 {
   }
 }
 
+// Styles fro vue-croppa component
 .croppa-container {
   position: relative;
   display: flex;
