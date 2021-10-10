@@ -1,15 +1,38 @@
 <template>
-  <div v-if="primary">
-    <h1 :class="classes">
-      {{ title }}
-    </h1>
-  </div>
-  <h2
-    v-else
-    :class="classes"
+  <div
+    v-if="isAdmin"
+    class="v-title__admin-wrapper"
   >
-    {{ title }}
-  </h2>
+    <nuxt-link
+      v-for="link in breadcrumbs"
+      :key="link.title"
+      class="v-title--admin-link"
+      :to="{
+        name: link.to
+      }"
+    >
+      {{ link.title }}
+    </nuxt-link>
+    <h2 :class="classes">
+      {{ title }}
+    </h2>
+  </div>
+  <div
+    v-else
+    class="v-title__wrapper"
+  >
+    <div v-if="primary">
+      <h1 :class="classes">
+        {{ title }}
+      </h1>
+    </div>
+    <h2
+      v-else
+      :class="classes"
+    >
+      {{ title }}
+    </h2>
+  </div>
 </template>
 <script lang="ts">
 import { Vue, Prop, Component } from 'nuxt-property-decorator'
@@ -33,6 +56,35 @@ export default class VTitle extends Vue {
       'v-title--primary': this.primary,
       'v-title--secondary': !this.primary
     }
+  }
+
+  /**
+   * Defines whether we are in admin panel or not
+   * @returns {boolean} true if we are on admin page, otherwise - false
+   */
+  private get isAdmin (): boolean {
+    return this.$route.path.includes('admin')
+  }
+
+  /**
+   * Retrieves breadcrums array for title on admin page
+   * @returns {array} array of breadcrumbs basing on current page
+   */
+  private get breadcrumbs (): { title: string, to: string }[] {
+    const breadcrumbs = []
+    breadcrumbs.push({
+      title: 'Home page / ',
+      to: 'index'
+    })
+
+    if (this.$route.name === 'admin-quizes-id') {
+      breadcrumbs.push({
+        title: 'Admin quizes / ',
+        to: 'admin-quizes'
+      })
+    }
+
+    return breadcrumbs
   }
 }
 </script>
@@ -69,6 +121,31 @@ export default class VTitle extends Vue {
     @include mobile {
       margin: 1rem 0rem;
     }
+  }
+
+  &--admin-link {
+    margin: 0;
+    padding: 0;
+    font-size: $font-size-title-desktop--secondary;
+    font-weight: 600;
+    color: $color-complementary--dark;
+  }
+
+  &__admin-wrapper {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: url("~@/assets/images/white-brush-stroke.png") 50% 50%;
+    background-size: cover;
+  }
+
+  &__wrapper {
+    margin: 0;
+    padding: 0;
+    width: 100%;
   }
 }
 </style>
