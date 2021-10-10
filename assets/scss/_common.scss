@@ -39,7 +39,7 @@ h2 {
 
   &::after {
     content: "";
-    background: border-box url("~@/assets/images/bricks-bg.jpeg") repeat;
+    background: border-box url("~@/assets/images/bricks-bg.jpeg") $main-color repeat;
     background-size: cover;
     opacity: 0.65;
     top: 0;
