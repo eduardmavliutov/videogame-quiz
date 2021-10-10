@@ -17,7 +17,7 @@ export default {
     manifest: {
       name: 'Videogame Quiz',
       short_name: 'Videogame Quiz',
-      start_url: 'http://localhost:3000/', // TODO after deployment
+      start_url: 'https://video-game-quizzz.web.app/',
       lang: 'en',
       description: 'Love games? Let\'s check it!'
     },
