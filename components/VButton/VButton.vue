@@ -50,6 +50,7 @@ export default class VButton extends Vue {
   transition: 0.3s all ease;
   flex-shrink: 1;
   position: relative;
+  color: $color-black;
 
   &:hover {
     box-shadow: $box-shadow--buttons;
