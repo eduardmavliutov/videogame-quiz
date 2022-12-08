@@ -1,6 +1,6 @@
 # videogame-quiz
 
-Quiz for videogame lovers (as I am). Optimized for mobile browsers. Currently in development. Release is coming soon! Stack: Nuxt, Vuex, TypeScript, Firebase, GSAP.
+Quiz for videogame lovers (as I am). Stack: Nuxt, Vuex, TypeScript, Firebase, GSAP.
 
 ## Build Setup
 
